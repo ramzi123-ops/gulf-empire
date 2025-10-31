@@ -1,9 +1,16 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
+from apps.users.views import manage_addresses, add_address, edit_address, delete_address
 
 app_name = 'users'
 
 urlpatterns = [
+    # Address Management
+    path('addresses/', manage_addresses, name='manage_addresses'),
+    path('addresses/add/', add_address, name='add_address'),
+    path('addresses/<int:address_id>/edit/', edit_address, name='edit_address'),
+    path('addresses/<int:address_id>/delete/', delete_address, name='delete_address'),
+    
     # Password Reset Flow
     path(
         'password-reset/',

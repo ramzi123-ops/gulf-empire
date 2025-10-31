@@ -1,0 +1,87 @@
+<div id="cart-totals" class="bg-white rounded-lg shadow-sm p-6 sticky top-4">
+    
+    <!-- Header -->
+    <h2 class="text-xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">ملخص الطلب</h2>
+    
+    <!-- Summary Items -->
+    <div class="space-y-4 mb-6">
+        
+        <!-- Subtotal -->
+        <div class="flex justify-between items-center">
+            <span class="text-gray-600">المجموع الفرعي</span>
+            <span class="font-semibold text-gray-900">{{ cart.get_subtotal }} د.ك</span>
+        </div>
+        
+        <!-- Shipping -->
+        <div class="flex justify-between items-center">
+            <span class="text-gray-600">تكلفة التوصيل</span>
+            {% if cart.get_subtotal >= 50 %}
+            <span class="font-semibold text-green-600">مجاناً</span>
+            {% else %}
+            <span class="font-semibold text-gray-900">{{ cart.get_shipping_cost }} د.ك</span>
+            {% endif %}
+        </div>
+        
+        <!-- Free Shipping Banner -->
+        {% if cart.get_subtotal < 50 %}
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <p class="text-sm text-blue-800">
+                <span class="font-semibold">احصل على توصيل مجاني!</span><br>
+                أضف منتجات بقيمة <span class="font-bold">{{ cart.get_free_shipping_remaining }} د.ك</span> أخرى
+            </p>
+        </div>
+        {% endif %}
+        
+        <!-- Total Items -->
+        <div class="flex justify-between items-center pt-4 border-t border-gray-200">
+            <span class="text-gray-600">عدد المنتجات</span>
+            <span class="font-semibold text-gray-900">{{ cart.get_total_items }}</span>
+        </div>
+        
+    </div>
+    
+    <!-- Total -->
+    <div class="flex justify-between items-center py-4 border-t border-gray-200 mb-6">
+        <span class="text-lg font-bold text-gray-900">المجموع الكلي</span>
+        <span class="text-2xl font-bold text-primary">{{ cart.get_total }} د.ك</span>
+    </div>
+    
+    <!-- Checkout Button -->
+    <a href="{% url 'orders:checkout' %}" 
+       class="block w-full bg-primary hover:bg-primary/90 text-white text-center font-bold py-3 px-6 rounded-lg transition-colors mb-3">
+        إتمام الطلب
+    </a>
+    
+    <!-- Continue Shopping Link -->
+    <a href="{% url 'store:product_list' %}" 
+       class="block w-full text-center text-gray-600 hover:text-gray-900 font-semibold py-2 transition-colors">
+        متابعة التسوق
+    </a>
+    
+    <!-- Trust Badges -->
+    <div class="mt-6 pt-6 border-t border-gray-200 space-y-3">
+        
+        <div class="flex items-center gap-3 text-sm text-gray-600">
+            <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>دفع آمن ومشفر</span>
+        </div>
+        
+        <div class="flex items-center gap-3 text-sm text-gray-600">
+            <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>توصيل سريع وآمن</span>
+        </div>
+        
+        <div class="flex items-center gap-3 text-sm text-gray-600">
+            <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
+            </svg>
+            <span>سياسة إرجاع مرنة</span>
+        </div>
+        
+    </div>
+    
+</div>

@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}دفتر العناوين - الإمبراطور الخليجي{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">دفتر العناوين</h1>
+        <p class="text-gray-600">إدارة عناوين التوصيل الخاصة بك</p>
+    </div>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="mb-6 space-y-3">
+        {% for message in messages %}
+        <div class="{% if message.tags == 'success' %}bg-green-50 border-green-200 text-green-800{% elif message.tags == 'error' %}bg-red-50 border-red-200 text-red-800{% else %}bg-blue-50 border-blue-200 text-blue-800{% endif %} border rounded-lg p-4">
+            <div class="flex items-center">
+                <svg class="w-5 h-5 ms-2" fill="currentColor" viewBox="0 0 20 20">
+                    {% if message.tags == 'success' %}
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    {% else %}
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                    {% endif %}
+                </svg>
+                <p class="font-medium">{{ message }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Address List Section -->
+        <div class="lg:col-span-2">
+            
+            <!-- Add Address Button -->
+            <div class="mb-6">
+                <button 
+                    id="add-btn"
+                    hx-get="{% url 'users:add_address' %}"
+                    hx-target="#address-form-container"
+                    hx-swap="innerHTML"
+                    class="bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-lg transition-colors inline-flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    إضافة عنوان جديد
+                </button>
+            </div>
+
+            <!-- Form Container -->
+            <div id="address-form-container" class="mb-6"></div>
+
+            <!-- Address List Container -->
+            <div id="address-list-container">
+                {% include 'users/partials/address_list.html' %}
+            </div>
+
+        </div>
+
+        <!-- Sidebar Info -->
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-lg shadow-sm p-6 sticky top-4">
+                <h3 class="font-semibold text-gray-900 mb-4">معلومات مفيدة</h3>
+                
+                <div class="space-y-4 text-sm text-gray-600">
+                    <div class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-primary flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                        </svg>
+                        <div>
+                            <p class="font-semibold text-gray-900 mb-1">العنوان الافتراضي</p>
+                            <p>يتم استخدام العنوان الافتراضي تلقائياً عند إتمام الطلبات</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-primary flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
+                        </svg>
+                        <div>
+                            <p class="font-semibold text-gray-900 mb-1">رقم الهاتف</p>
+                            <p>تأكد من إدخال رقم هاتف صحيح للتواصل عند التوصيل</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-primary flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                        </svg>
+                        <div>
+                            <p class="font-semibold text-gray-900 mb-1">معلومات إضافية</p>
+                            <p>يمكنك إضافة إرشادات للتوصيل أو علامات مميزة</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- HTMX Event Listeners -->
+<script>
+    // Clear form when address is added/updated
+    document.body.addEventListener('addressAdded', function() {
+        document.getElementById('address-form-container').innerHTML = '';
+    });
+    
+    document.body.addEventListener('addressUpdated', function() {
+        document.getElementById('address-form-container').innerHTML = '';
+    });
+</script>
+{% endblock %}

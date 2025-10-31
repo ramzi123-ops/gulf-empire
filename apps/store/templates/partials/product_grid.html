@@ -64,23 +64,26 @@
             <p class="text-xs text-red-600 mb-3">• غير متوفر</p>
             {% endif %}
             
-            <!-- Add to Cart Button -->
-            <button 
-                {% if product.is_in_stock %}
+            <!-- Add to Cart Form -->
+            {% if product.is_in_stock %}
+            <form 
                 hx-post="{% url 'orders:add_to_cart' product.id %}" 
-                hx-target="#cart-icon" 
-                hx-swap="outerHTML"
-                class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors"
-                {% else %}
+                hx-target="#mini-cart" 
+                hx-swap="outerHTML">
+                {% csrf_token %}
+                <button 
+                    type="submit"
+                    class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors">
+                    إضافة إلى السلة
+                </button>
+            </form>
+            {% else %}
+            <button 
                 disabled
-                class="w-full bg-gray-300 text-gray-500 font-semibold py-2.5 px-4 rounded-lg cursor-not-allowed"
-                {% endif %}>
-                {% if product.is_in_stock %}
-                إضافة إلى السلة
-                {% else %}
+                class="w-full bg-gray-300 text-gray-500 font-semibold py-2.5 px-4 rounded-lg cursor-not-allowed">
                 غير متوفر
-                {% endif %}
             </button>
+            {% endif %}
             
         </div>
         

@@ -124,22 +124,26 @@
                 
                 <!-- Add to Cart Form -->
                 <div class="flex gap-3">
-                    <button 
-                        {% if product.is_in_stock %}
+                    {% if product.is_in_stock %}
+                    <form 
+                        class="flex-1"
                         hx-post="{% url 'orders:add_to_cart' product.id %}" 
-                        hx-target="#cart-icon" 
-                        hx-swap="outerHTML"
-                        class="flex-1 bg-primary hover:bg-primary/90 text-white font-bold py-4 px-6 rounded-lg transition-colors text-lg"
-                        {% else %}
+                        hx-target="#mini-cart" 
+                        hx-swap="outerHTML">
+                        {% csrf_token %}
+                        <button 
+                            type="submit"
+                            class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 px-6 rounded-lg transition-colors text-lg">
+                            إضافة إلى السلة
+                        </button>
+                    </form>
+                    {% else %}
+                    <button 
                         disabled
-                        class="flex-1 bg-gray-300 text-gray-500 font-bold py-4 px-6 rounded-lg cursor-not-allowed text-lg"
-                        {% endif %}>
-                        {% if product.is_in_stock %}
-                        إضافة إلى السلة
-                        {% else %}
+                        class="flex-1 bg-gray-300 text-gray-500 font-bold py-4 px-6 rounded-lg cursor-not-allowed text-lg">
                         غير متوفر
-                        {% endif %}
                     </button>
+                    {% endif %}
                 </div>
                 
             </div>

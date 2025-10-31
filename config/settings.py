@@ -157,3 +157,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Get these from your Stripe Dashboard: https://dashboard.stripe.com/apikeys
 STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY', 'pk_test_your_publishable_key_here')
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', 'sk_test_your_secret_key_here')
+# Webhook secret for verifying webhook signatures from Stripe
+# Get this from: https://dashboard.stripe.com/webhooks
+STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', 'whsec_your_webhook_secret_here')

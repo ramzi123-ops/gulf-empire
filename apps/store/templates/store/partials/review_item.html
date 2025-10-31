@@ -1,0 +1,44 @@
+{% load static %}
+
+<div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+    <!-- Review Header -->
+    <div class="flex items-start justify-between mb-4">
+        <div class="flex items-center gap-3">
+            <!-- User Avatar -->
+            <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-bold text-lg">
+                {{ review.user.username|slice:":1"|upper }}
+            </div>
+            
+            <!-- User Info -->
+            <div>
+                <p class="font-semibold text-gray-900">{{ review.user.username }}</p>
+                <p class="text-sm text-gray-500">{{ review.created_at|date:"d/m/Y" }}</p>
+            </div>
+        </div>
+        
+        <!-- Verified Purchase Badge -->
+        {% if review.is_verified_purchase %}
+        <span class="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full">
+            مشتري موثق
+        </span>
+        {% endif %}
+    </div>
+    
+    <!-- Rating Stars -->
+    <div class="flex items-center gap-1 mb-3">
+        {% for star in review.stars_filled %}
+        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+        </svg>
+        {% endfor %}
+        {% for star in review.stars_empty %}
+        <svg class="w-5 h-5 text-gray-300 fill-current" viewBox="0 0 20 20">
+            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+        </svg>
+        {% endfor %}
+        <span class="text-sm text-gray-600 ms-2">({{ review.rating }}/5)</span>
+    </div>
+    
+    <!-- Review Comment -->
+    <p class="text-gray-700 leading-relaxed">{{ review.comment }}</p>
+</div>

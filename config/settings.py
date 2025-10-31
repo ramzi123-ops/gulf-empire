@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'apps.orders',
     'apps.inventory',
     'apps.payments',
+    'apps.dashboard',
     # ... any other apps you made ...
 ]
 

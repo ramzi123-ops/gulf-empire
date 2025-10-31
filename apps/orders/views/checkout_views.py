@@ -3,9 +3,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import transaction
 from django.utils.translation import gettext as _
+from django.conf import settings
+import stripe
 
 from apps.orders.models import Cart, Order, OrderItem
 from apps.users.models import Address
+from apps.payments.models import Payment
+
+# Configure Stripe
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 @login_required
@@ -83,17 +89,42 @@ def checkout(request):
                         price=cart_item.unit_price
                     )
                 
+                # Create Stripe PaymentIntent
+                amount_in_fils = int(total * 1000)  # Convert KWD to fils (1 KWD = 1000 fils)
+                
+                payment_intent = stripe.PaymentIntent.create(
+                    amount=amount_in_fils,
+                    currency='kwd',
+                    metadata={
+                        'order_id': order.id,
+                        'order_number': order.order_number,
+                        'user_id': request.user.id,
+                    },
+                    description=f'Order #{order.order_number}'
+                )
+                
+                # Create Payment record
+                Payment.objects.create(
+                    order=order,
+                    stripe_payment_intent_id=payment_intent.id,
+                    amount=total,
+                    currency='KWD',
+                    status='pending',
+                    metadata={
+                        'payment_intent': payment_intent.id,
+                        'client_secret': payment_intent.client_secret,
+                    }
+                )
+                
+                # Store client_secret in session for payment page
+                request.session['payment_intent_client_secret'] = payment_intent.client_secret
+                request.session['order_id'] = order.id
+                
                 # Clear the cart
                 cart.items.all().delete()
                 
-                # Success message
-                messages.success(
-                    request,
-                    _('Order #{order_number} created successfully!').format(order_number=order.order_number)
-                )
-                
-                # Redirect to payment step
-                return redirect('orders:payment', order_id=order.id)
+                # Redirect to payment page
+                return redirect('payments:payment_process', order_id=order.id)
         
         except Exception as e:
             messages.error(request, _('An error occurred while creating your order. Please try again.'))

@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ product.name }} - الإمبراطور الخليجي{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm text-gray-600 mb-8">
+        <a href="{% url 'store:product_list' %}" class="hover:text-primary">المنتجات</a>
+        <span>‹</span>
+        <a href="?category={{ product.category.slug }}" class="hover:text-primary">{{ product.category.name }}</a>
+        <span>‹</span>
+        <span class="text-gray-900">{{ product.name }}</span>
+    </nav>
+
+    <!-- Product Details Section -->
+    <div class="bg-white rounded-lg shadow-sm p-6 md:p-8 mb-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+            
+            <!-- Product Images -->
+            <div>
+                <!-- Main Image -->
+                <div class="mb-4 rounded-lg overflow-hidden border border-gray-200">
+                    <img 
+                        id="main-product-image"
+                        src="{{ product.main_image.url }}" 
+                        alt="{{ product.name }}"
+                        class="w-full h-96 object-cover">
+                </div>
+                
+                <!-- Thumbnail Gallery -->
+                {% if product_images|length > 1 %}
+                <div class="grid grid-cols-4 gap-2">
+                    {% for image in product_images %}
+                    <button 
+                        onclick="document.getElementById('main-product-image').src='{{ image.url }}'"
+                        class="rounded-lg overflow-hidden border-2 border-gray-200 hover:border-primary transition-colors">
+                        <img src="{{ image.url }}" alt="{{ product.name }}" class="w-full h-20 object-cover">
+                    </button>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Product Info -->
+            <div>
+                
+                <!-- Badges -->
+                <div class="flex flex-wrap gap-2 mb-4">
+                    {% if product.is_new_arrival %}
+                    <span class="bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full">جديد</span>
+                    {% endif %}
+                    {% if product.is_featured %}
+                    <span class="bg-yellow-500 text-white text-xs font-semibold px-3 py-1 rounded-full">مميز</span>
+                    {% endif %}
+                    {% if product.discount_percentage > 0 %}
+                    <span class="bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full">-{{ product.discount_percentage }}% تخفيض</span>
+                    {% endif %}
+                </div>
+                
+                <!-- Product Name -->
+                <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ product.name }}</h1>
+                
+                <!-- Category & Brand -->
+                <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="font-semibold">الفئة:</span>
+                        <a href="?category={{ product.category.slug }}" class="text-primary hover:underline">{{ product.category.name }}</a>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-semibold">العلامة:</span>
+                        <a href="?brand={{ product.brand.slug }}" class="text-primary hover:underline">{{ product.brand.name }}</a>
+                    </div>
+                </div>
+                
+                <!-- SKU -->
+                <p class="text-sm text-gray-600 mb-6">
+                    <span class="font-semibold">رمز المنتج:</span> {{ product.sku }}
+                </p>
+                
+                <!-- Price -->
+                <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="text-4xl font-bold text-primary">{{ product.final_price }}</span>
+                        <span class="text-2xl text-gray-600">د.ك</span>
+                        {% if product.sale_price %}
+                        <span class="text-xl text-gray-500 line-through">{{ product.price }} د.ك</span>
+                        {% endif %}
+                    </div>
+                    {% if product.sale_price %}
+                    <p class="text-sm text-green-600 font-semibold">وفر {{ product.price|floatformat:2|add:"-"|add:product.sale_price|floatformat:2 }} د.ك</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Stock Status -->
+                <div class="mb-6">
+                    {% if product.is_in_stock %}
+                        {% if product.is_low_stock %}
+                        <div class="flex items-center gap-2 text-orange-600">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="font-semibold">كمية محدودة متبقية!</span>
+                        </div>
+                        {% else %}
+                        <div class="flex items-center gap-2 text-green-600">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="font-semibold">متوفر في المخزون</span>
+                        </div>
+                        {% endif %}
+                    {% else %}
+                    <div class="flex items-center gap-2 text-red-600">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="font-semibold">غير متوفر حالياً</span>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Add to Cart Form -->
+                <div class="flex gap-3">
+                    <button 
+                        {% if product.is_in_stock %}
+                        hx-post="{% url 'orders:add_to_cart' product.id %}" 
+                        hx-target="#cart-icon" 
+                        hx-swap="outerHTML"
+                        class="flex-1 bg-primary hover:bg-primary/90 text-white font-bold py-4 px-6 rounded-lg transition-colors text-lg"
+                        {% else %}
+                        disabled
+                        class="flex-1 bg-gray-300 text-gray-500 font-bold py-4 px-6 rounded-lg cursor-not-allowed text-lg"
+                        {% endif %}>
+                        {% if product.is_in_stock %}
+                        إضافة إلى السلة
+                        {% else %}
+                        غير متوفر
+                        {% endif %}
+                    </button>
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Tabs Section -->
+    <div class="bg-white rounded-lg shadow-sm p-6 md:p-8 mb-8">
+        
+        <!-- Tab Headers -->
+        <div class="border-b border-gray-200 mb-6">
+            <nav class="flex gap-6">
+                <button 
+                    onclick="showTab('description')" 
+                    id="tab-description"
+                    class="tab-button border-b-2 border-primary text-primary pb-3 font-semibold">
+                    الوصف
+                </button>
+                <button 
+                    onclick="showTab('specifications')" 
+                    id="tab-specifications"
+                    class="tab-button border-b-2 border-transparent text-gray-600 hover:text-gray-900 pb-3 font-semibold">
+                    المواصفات
+                </button>
+                {% if product.compatible_makes or product.compatible_models %}
+                <button 
+                    onclick="showTab('compatibility')" 
+                    id="tab-compatibility"
+                    class="tab-button border-b-2 border-transparent text-gray-600 hover:text-gray-900 pb-3 font-semibold">
+                    التوافق
+                </button>
+                {% endif %}
+            </nav>
+        </div>
+        
+        <!-- Tab Content -->
+        <div id="content-description" class="tab-content">
+            <div class="prose prose-lg max-w-none">
+                <p class="text-gray-700 leading-relaxed">{{ product.description|linebreaks }}</p>
+            </div>
+        </div>
+        
+        <div id="content-specifications" class="tab-content hidden">
+            {% if product.specifications.all %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {% for spec in product.specifications.all %}
+                <div class="flex justify-between items-center py-3 px-4 bg-gray-50 rounded-lg">
+                    <span class="font-semibold text-gray-900">{{ spec.name }}</span>
+                    <span class="text-gray-700">{{ spec.value }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-gray-600">لا توجد مواصفات متاحة لهذا المنتج.</p>
+            {% endif %}
+        </div>
+        
+        {% if product.compatible_makes or product.compatible_models %}
+        <div id="content-compatibility" class="tab-content hidden">
+            <div class="space-y-4">
+                {% if product.compatible_makes %}
+                <div>
+                    <h3 class="font-semibold text-gray-900 mb-2">الماركات المتوافقة:</h3>
+                    <p class="text-gray-700">{{ product.compatible_makes }}</p>
+                </div>
+                {% endif %}
+                {% if product.compatible_models %}
+                <div>
+                    <h3 class="font-semibold text-gray-900 mb-2">الموديلات المتوافقة:</h3>
+                    <p class="text-gray-700">{{ product.compatible_models }}</p>
+                </div>
+                {% endif %}
+                {% if product.year_from or product.year_to %}
+                <div>
+                    <h3 class="font-semibold text-gray-900 mb-2">السنوات:</h3>
+                    <p class="text-gray-700">{{ product.year_from|default:"لا يوجد" }} - {{ product.year_to|default:"لا يوجد" }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        
+    </div>
+
+    <!-- Related Products -->
+    {% if related_products %}
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">منتجات مشابهة</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for related in related_products %}
+            <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+                <a href="{% url 'store:product_detail' related.slug %}" class="block">
+                    <img src="{{ related.main_image.url }}" alt="{{ related.name }}" class="w-full h-48 object-cover">
+                </a>
+                <div class="p-4">
+                    <a href="{% url 'store:product_detail' related.slug %}" class="block font-semibold text-gray-900 hover:text-primary mb-2 line-clamp-2">
+                        {{ related.name }}
+                    </a>
+                    <div class="flex items-center gap-2">
+                        <span class="text-lg font-bold text-primary">{{ related.final_price }} د.ك</span>
+                        {% if related.sale_price %}
+                        <span class="text-sm text-gray-500 line-through">{{ related.price }} د.ك</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+function showTab(tabName) {
+    // Hide all content
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.add('hidden');
+    });
+    
+    // Remove active state from all buttons
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.classList.remove('border-primary', 'text-primary');
+        button.classList.add('border-transparent', 'text-gray-600');
+    });
+    
+    // Show selected content
+    document.getElementById('content-' + tabName).classList.remove('hidden');
+    
+    // Add active state to selected button
+    const activeButton = document.getElementById('tab-' + tabName);
+    activeButton.classList.add('border-primary', 'text-primary');
+    activeButton.classList.remove('border-transparent', 'text-gray-600');
+}
+</script>
+{% endblock %}

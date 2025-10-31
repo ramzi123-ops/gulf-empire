@@ -1,6 +1,8 @@
-from django.shortcuts import render, get_object_or_404
-from django.db.models import Q
-from apps.store.models import Product, Category, Brand
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.db.models import Q, Avg
+from apps.store.models import Product, Category, Brand, Review
 
 
 def product_list(request):
@@ -108,10 +110,73 @@ def product_detail(request, slug):
     if product.image_4:
         product_images.append(product.image_4)
 
+    # Get approved reviews
+    reviews = product.reviews.filter(is_approved=True).select_related('user').order_by('-created_at')
+
+    # Calculate average rating
+    avg_rating = reviews.aggregate(Avg('rating'))['rating__avg'] or 0
+
+    # Check if current user has already reviewed this product
+    user_has_reviewed = False
+    if request.user.is_authenticated:
+        user_has_reviewed = product.reviews.filter(user=request.user).exists()
+
     context = {
         'product': product,
         'related_products': related_products,
         'product_images': product_images,
+        'reviews': reviews,
+        'avg_rating': avg_rating,
+        'user_has_reviewed': user_has_reviewed,
     }
 
     return render(request, 'store/product_detail.html', context)
+
+
+@login_required
+def add_review(request, product_id):
+    """
+    إضافة مراجعة للمنتج
+    Add a review to a product
+    """
+    if request.method != 'POST':
+        return redirect('store:product_list')
+
+    product = get_object_or_404(Product, id=product_id, is_active=True)
+
+    # Check if user has already reviewed this product
+    if Review.objects.filter(product=product, user=request.user).exists():
+        messages.error(request, 'لقد قمت بمراجعة هذا المنتج من قبل')
+        return redirect('store:product_detail', slug=product.slug)
+
+    # Get form data
+    rating = request.POST.get('rating')
+    comment = request.POST.get('comment')
+
+    # Validate
+    if not rating or not comment:
+        messages.error(request, 'يرجى ملء جميع الحقول')
+        return redirect('store:product_detail', slug=product.slug)
+
+    try:
+        rating = int(rating)
+        if rating < 1 or rating > 5:
+            raise ValueError
+    except (ValueError, TypeError):
+        messages.error(request, 'التقييم غير صالح')
+        return redirect('store:product_detail', slug=product.slug)
+
+    # Create review
+    review = Review.objects.create(
+        product=product,
+        user=request.user,
+        rating=rating,
+        comment=comment
+    )
+
+    # If HTMX request, return partial
+    if request.htmx:
+        return render(request, 'store/partials/review_item.html', {'review': review})
+
+    messages.success(request, 'تم إضافة مراجعتك بنجاح!')
+    return redirect('store:product_detail', slug=product.slug)

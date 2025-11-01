@@ -1,0 +1,108 @@
+<nav class="bg-white shadow-md sticky top-0 z-50" dir="rtl">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+            <!-- Logo -->
+            <div class="flex-shrink-0">
+                <a href="{% url 'store:product_list' %}" class="text-2xl font-bold text-blue-600">
+                    <span class="text-yellow-500">إمبراطور</span> الخليج
+                </a>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="hidden md:flex items-center space-x-reverse space-x-8">
+                <a href="{% url 'store:product_list' %}" class="text-gray-700 hover:text-blue-600 transition">
+                    المنتجات
+                </a>
+                <a href="#" class="text-gray-700 hover:text-blue-600 transition">
+                    التصنيفات
+                </a>
+                <a href="#" class="text-gray-700 hover:text-blue-600 transition">
+                    العروض
+                </a>
+                <a href="#" class="text-gray-700 hover:text-blue-600 transition">
+                    من نحن
+                </a>
+            </div>
+
+            <!-- User Actions -->
+            <div class="flex items-center space-x-reverse space-x-4">
+                <!-- Search -->
+                <button class="text-gray-700 hover:text-blue-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
+
+                <!-- Cart -->
+                <a href="{% url 'orders:cart' %}" class="relative text-gray-700 hover:text-blue-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        0
+                    </span>
+                </a>
+
+                <!-- User Menu -->
+                {% if user.is_authenticated %}
+                    <div class="relative group">
+                        <button class="flex items-center space-x-reverse space-x-2 text-gray-700 hover:text-blue-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            <span class="hidden md:inline">{{ user.get_full_name|default:user.username }}</span>
+                        </button>
+                        
+                        <!-- Dropdown Menu -->
+                        <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">الملف الشخصي</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">طلباتي</a>
+                            <a href="{% url 'users:manage_addresses' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">العناوين</a>
+                            {% if user.is_staff %}
+                                <a href="{% url 'dashboard:home' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">لوحة التحكم</a>
+                            {% endif %}
+                            <hr class="my-1">
+                            <a href="{% url 'users:logout' %}" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">تسجيل الخروج</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <a href="{% url 'users:login' %}" class="text-gray-700 hover:text-blue-600">
+                        تسجيل الدخول
+                    </a>
+                {% endif %}
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-gray-700 hover:text-blue-600" id="mobile-menu-button">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="{% url 'store:product_list' %}" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100">
+                    المنتجات
+                </a>
+                <a href="#" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100">
+                    التصنيفات
+                </a>
+                <a href="#" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100">
+                    العروض
+                </a>
+                <a href="#" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100">
+                    من نحن
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script>
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-button')?.addEventListener('click', function() {
+        document.getElementById('mobile-menu')?.classList.toggle('hidden');
+    });
+</script>

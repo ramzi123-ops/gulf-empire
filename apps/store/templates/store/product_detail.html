@@ -132,7 +132,7 @@
                         {% csrf_token %}
                         <button 
                             type="submit"
-                            class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 px-6 rounded-lg transition-colors text-lg">
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg transition-colors text-lg">
                             إضافة إلى السلة
                         </button>
                     </form>
@@ -159,7 +159,7 @@
                 <button 
                     onclick="showTab('description')" 
                     id="tab-description"
-                    class="tab-button border-b-2 border-primary text-primary pb-3 font-semibold">
+                    class="tab-button border-b-2 border-blue-600 text-blue-600 pb-3 font-semibold">
                     الوصف
                 </button>
                 <button 
@@ -272,10 +272,10 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">التقييم *</label>
                         <div class="flex gap-2" id="rating-stars">
                             {% for i in "12345" %}
-                            <input type="radio" name="rating" value="{{ forloop.counter }}" id="star-{{ forloop.counter }}" class="hidden peer/star{{ forloop.counter }}" required>
+                            <input type="radio" name="rating" value="{{ forloop.counter }}" id="star-{{ forloop.counter }}" class="hidden" required>
                             <label 
                                 for="star-{{ forloop.counter }}" 
-                                class="cursor-pointer transition-colors peer-checked/star{{ forloop.counter }}:text-yellow-400 hover:text-yellow-400">
+                                class="cursor-pointer transition-colors star-label">
                                 <svg class="w-8 h-8 fill-current text-gray-300" viewBox="0 0 20 20">
                                     <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
                                 </svg>
@@ -299,7 +299,7 @@
                     <!-- Submit Button -->
                     <button 
                         type="submit"
-                        class="bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
                         إرسال المراجعة
                     </button>
                 </form>
@@ -371,7 +371,7 @@ function showTab(tabName) {
     
     // Remove active state from all buttons
     document.querySelectorAll('.tab-button').forEach(button => {
-        button.classList.remove('border-primary', 'text-primary');
+        button.classList.remove('border-blue-600', 'text-blue-600');
         button.classList.add('border-transparent', 'text-gray-600');
     });
     
@@ -380,8 +380,48 @@ function showTab(tabName) {
     
     // Add active state to selected button
     const activeButton = document.getElementById('tab-' + tabName);
-    activeButton.classList.add('border-primary', 'text-primary');
+    activeButton.classList.add('border-blue-600', 'text-blue-600');
     activeButton.classList.remove('border-transparent', 'text-gray-600');
 }
+
+// Star rating functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const stars = document.querySelectorAll('.star-label');
+    const inputs = document.querySelectorAll('input[name="rating"]');
+    
+    stars.forEach((star, index) => {
+        star.addEventListener('click', function() {
+            // Update all stars up to clicked one
+            stars.forEach((s, i) => {
+                const svg = s.querySelector('svg');
+                if (i <= index) {
+                    svg.classList.remove('text-gray-300');
+                    svg.classList.add('text-yellow-400');
+                } else {
+                    svg.classList.remove('text-yellow-400');
+                    svg.classList.add('text-gray-300');
+                }
+            });
+        });
+        
+        star.addEventListener('mouseenter', function() {
+            // Highlight stars on hover
+            stars.forEach((s, i) => {
+                const svg = s.querySelector('svg');
+                if (i <= index) {
+                    svg.classList.add('text-yellow-300');
+                }
+            });
+        });
+        
+        star.addEventListener('mouseleave', function() {
+            // Remove hover effect
+            stars.forEach((s) => {
+                const svg = s.querySelector('svg');
+                svg.classList.remove('text-yellow-300');
+            });
+        });
+    });
+});
 </script>
 {% endblock %}

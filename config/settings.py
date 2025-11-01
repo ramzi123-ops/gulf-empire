@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     "django_htmx",
+    "tailwind",
     # Our custom apps
     'apps.users',
     'apps.store',

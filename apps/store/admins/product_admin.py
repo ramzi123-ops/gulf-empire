@@ -1,5 +1,6 @@
 from django.contrib import admin
 from apps.store.models import Product, ProductSpecification
+from apps.inventory.models import InventoryItem
 
 
 class ProductSpecificationInline(admin.TabularInline):
@@ -10,6 +11,20 @@ class ProductSpecificationInline(admin.TabularInline):
     extra = 1
     fields = ['name', 'value', 'order']
     ordering = ['order', 'name']
+
+
+class InventoryItemInline(admin.StackedInline):
+    """
+    Inline admin for inventory management
+    """
+    model = InventoryItem
+    extra = 0
+    max_num = 1
+    can_delete = False
+    fields = ['quantity', 'low_stock_threshold', 'created_at', 'updated_at']
+    readonly_fields = ['created_at', 'updated_at']
+    verbose_name = 'إدارة المخزون'
+    verbose_name_plural = 'إدارة المخزون'
 
 
 @admin.register(Product)
@@ -58,6 +73,7 @@ class ProductAdmin(admin.ModelAdmin):
     ]
     inlines = [
         ProductSpecificationInline,
+        InventoryItemInline,
     ]
     fieldsets = (
         ('المعلومات الأساسية', {

@@ -105,11 +105,12 @@ def update_cart_item(request, item_id):
     action = request.POST.get('action', 'set')
     
     if action == 'increase':
-        if cart_item.quantity < cart_item.product.stock_quantity:
+        # Check against inventory stock
+        if cart_item.quantity < cart_item.product.stock:
             cart_item.increase_quantity(1)
             messages.success(request, 'تم تحديث الكمية')
         else:
-            messages.error(request, 'لا يمكن زيادة الكمية أكثر من المتوفر')
+            messages.error(request, 'لا توجد كمية كافية في المخزون')
     
     elif action == 'decrease':
         cart_item.decrease_quantity(1)
@@ -124,8 +125,8 @@ def update_cart_item(request, item_id):
             if quantity < 1:
                 cart_item.delete()
                 messages.success(request, 'تم حذف المنتج من السلة')
-            elif quantity > cart_item.product.stock_quantity:
-                messages.error(request, f'الكمية المتوفرة هي {cart_item.product.stock_quantity} فقط')
+            elif quantity > cart_item.product.stock:
+                messages.error(request, f'لا توجد كمية كافية في المخزون')
             else:
                 cart_item.quantity = quantity
                 cart_item.save()

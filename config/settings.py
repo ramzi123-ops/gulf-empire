@@ -52,6 +52,11 @@ INSTALLED_APPS = [
 # Custom User Model
 AUTH_USER_MODEL = 'users.User'
 
+# Login/Logout URLs
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'store:product_list'
+LOGOUT_REDIRECT_URL = 'store:product_list'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

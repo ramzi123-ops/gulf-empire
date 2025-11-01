@@ -5,6 +5,23 @@ from apps.users.views import manage_addresses, add_address, edit_address, delete
 app_name = 'users'
 
 urlpatterns = [
+    # Authentication
+    path(
+        'login/',
+        auth_views.LoginView.as_view(
+            template_name='users/login.html',
+            redirect_authenticated_user=True,
+        ),
+        name='login'
+    ),
+    path(
+        'logout/',
+        auth_views.LogoutView.as_view(
+            next_page='store:product_list',
+        ),
+        name='logout'
+    ),
+    
     # Address Management
     path('addresses/', manage_addresses, name='manage_addresses'),
     path('addresses/add/', add_address, name='add_address'),

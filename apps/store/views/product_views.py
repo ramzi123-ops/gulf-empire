@@ -79,7 +79,7 @@ def product_list(request):
 
     # Check if this is an HTMX request
     if request.htmx:
-        return render(request, 'store/partials/product_grid.html', context)
+        return render(request, 'partials/product_grid.html', context)
 
     return render(request, 'store/product_list.html', context)
 

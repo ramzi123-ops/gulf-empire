@@ -20,7 +20,7 @@
                 {% if product.discount_percentage > 0 %}
                 <span class="bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full">-{{ product.discount_percentage }}%</span>
                 {% endif %}
-                {% if not product.is_in_stock %}
+                {% if not product.has_stock %}
                 <span class="bg-gray-500 text-white text-xs font-semibold px-3 py-1 rounded-full">نفد المخزون</span>
                 {% endif %}
             </div>
@@ -54,18 +54,16 @@
             </div>
             
             <!-- Stock Status -->
-            {% if product.is_in_stock %}
-                {% if product.is_low_stock %}
-                <p class="text-xs text-orange-600 mb-3">• كمية محدودة متبقية</p>
-                {% else %}
-                <p class="text-xs text-green-600 mb-3">• متوفر في المخزون</p>
-                {% endif %}
-            {% else %}
+            {% if product.stock == 0 %}
             <p class="text-xs text-red-600 mb-3">• غير متوفر</p>
+            {% elif product.stock > 0 and product.stock <= product.inventory.low_stock_threshold %}
+            <p class="text-xs text-orange-600 mb-3">• يتبقى {{ product.stock }} فقط</p>
+            {% elif product.stock > product.inventory.low_stock_threshold %}
+            <p class="text-xs text-green-600 mb-3">• متوفر في المخزون</p>
             {% endif %}
             
             <!-- Add to Cart Form -->
-            {% if product.is_in_stock %}
+            {% if product.has_stock %}
             <form 
                 hx-post="{% url 'orders:add_to_cart' product.id %}" 
                 hx-target="#mini-cart" 
@@ -74,13 +72,13 @@
                 <button 
                     type="submit"
                     class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors">
-                    إضافة إلى السلة
+                    إضافษ إلى السلة
                 </button>
             </form>
             {% else %}
             <button 
                 disabled
-                class="w-full bg-gray-300 text-gray-500 font-semibold py-2.5 px-4 rounded-lg cursor-not-allowed">
+                class="w-full bg-gray-400 text-gray-600 font-semibold py-2.5 px-4 rounded-lg cursor-not-allowed">
                 غير متوفر
             </button>
             {% endif %}

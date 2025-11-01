@@ -1,4 +1,4 @@
-from apps.orders.models import Cart
+﻿from apps.orders.models import Cart
 
 
 def get_cart(request):

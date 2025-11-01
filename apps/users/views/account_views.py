@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+﻿from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
@@ -41,7 +41,7 @@ def add_address(request):
         city = request.POST.get('city')
         state = request.POST.get('state', '')
         postal_code = request.POST.get('postal_code', '')
-        country = request.POST.get('country', 'الكويت')
+        country = request.POST.get('country', 'السعودية')
         additional_info = request.POST.get('additional_info', '')
         is_default = request.POST.get('is_default') == 'on'
         
@@ -109,7 +109,7 @@ def edit_address(request, address_id):
         address.city = request.POST.get('city', address.city)
         address.state = request.POST.get('state', '')
         address.postal_code = request.POST.get('postal_code', '')
-        address.country = request.POST.get('country', 'الكويت')
+        address.country = request.POST.get('country', 'السعودية')
         address.additional_info = request.POST.get('additional_info', '')
         address.is_default = request.POST.get('is_default') == 'on'
         

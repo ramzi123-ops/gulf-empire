@@ -1,4 +1,4 @@
-# Import views from your main payment views file
+﻿# Import views from your main payment views file
 #
 # IMPORTANT: I am guessing the names are 'payment_process' and 'payment_cancelled'.
 # You MUST check your payment_views.py file to confirm the actual function names.

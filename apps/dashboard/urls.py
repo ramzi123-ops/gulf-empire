@@ -1,4 +1,4 @@
-from django.urls import path
+﻿from django.urls import path
 from .views import main_views, order_views
 
 app_name = 'dashboard'

@@ -1,4 +1,4 @@
-from django.urls import path
+﻿from django.urls import path
 from django.contrib.auth import views as auth_views
 from apps.users.views import manage_addresses, add_address, edit_address, delete_address
 

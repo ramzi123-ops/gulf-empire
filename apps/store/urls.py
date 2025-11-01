@@ -1,4 +1,4 @@
-from django.urls import path
+﻿from django.urls import path
 from apps.store.views import product_list, product_detail, add_review
 
 app_name = 'store'

@@ -1,4 +1,4 @@
-from django.db import models
+﻿from django.db import models
 from django.conf import settings
 
 
@@ -57,7 +57,7 @@ class Address(models.Model):
     )
     country = models.CharField(
         max_length=100,
-        default="الكويت",
+        default="السعودية",
         verbose_name="الدولة"
     )
     additional_info = models.TextField(

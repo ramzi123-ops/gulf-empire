@@ -1,4 +1,4 @@
-from django.urls import path
+﻿from django.urls import path
 from apps.orders.views import add_to_cart, update_cart_item, remove_from_cart, view_cart
 from apps.orders.views.checkout_views import checkout
 

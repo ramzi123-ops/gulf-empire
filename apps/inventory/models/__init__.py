@@ -1,4 +1,4 @@
-from .stock import InventoryItem
+﻿from .stock import InventoryItem
 
 __all__ = [
     'InventoryItem',

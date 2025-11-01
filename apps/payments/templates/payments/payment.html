@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 {% load static %}
 
 {% block title %}الدفع - الإمبراطور الخليجي{% endblock %}
@@ -98,7 +98,7 @@
                     <button type="submit" 
                             id="submit-button"
                             class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                        <span id="button-text">إتمام الدفع - {{ order.total_price }} د.ك</span>
+                        <span id="button-text">إتمام الدفع - {{ order.total_price }} ر.س</span>
                         <span id="spinner" class="hidden">
                             <svg class="animate-spin inline-block w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -146,13 +146,13 @@
                 <div class="space-y-3 mb-6 pb-6 border-b border-gray-200">
                     <div class="flex justify-between items-center text-sm">
                         <span class="text-gray-600">المجموع الفرعي</span>
-                        <span class="font-semibold text-gray-900">{{ order.get_subtotal }} د.ك</span>
+                        <span class="font-semibold text-gray-900">{{ order.get_subtotal }} ر.س</span>
                     </div>
                     
                     <div class="flex justify-between items-center text-sm">
                         <span class="text-gray-600">تكلفة التوصيل</span>
                         {% if order.shipping_cost > 0 %}
-                        <span class="font-semibold text-gray-900">{{ order.shipping_cost }} د.ك</span>
+                        <span class="font-semibold text-gray-900">{{ order.shipping_cost }} ر.س</span>
                         {% else %}
                         <span class="font-semibold text-green-600">مجاناً</span>
                         {% endif %}
@@ -162,7 +162,7 @@
                 <!-- Total -->
                 <div class="flex justify-between items-center mb-6">
                     <span class="text-lg font-bold text-gray-900">المجموع الكلي</span>
-                    <span class="text-2xl font-bold text-primary">{{ order.total_price }} د.ك</span>
+                    <span class="text-2xl font-bold text-primary">{{ order.total_price }} ر.س</span>
                 </div>
                 
                 <!-- Delivery Address -->

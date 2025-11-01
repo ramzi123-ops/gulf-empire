@@ -1,4 +1,4 @@
-"""
+﻿"""
 Orders App Admin Registration
 
 App Name: orders

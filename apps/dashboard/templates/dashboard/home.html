@@ -1,4 +1,4 @@
-{% extends "base_admin.html" %}
+﻿{% extends "base_admin.html" %}
 
 {% block title %}لوحة التحكم - الإمبراطور الخليجي{% endblock %}
 
@@ -34,8 +34,8 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-sm text-gray-600 mb-1">إجمالي الإيرادات</p>
-                <p class="text-3xl font-bold text-gray-900">{{ total_revenue }} د.ك</p>
-                <p class="text-sm text-gray-500 mt-1">{{ weekly_revenue }} د.ك هذا الأسبوع</p>
+                <p class="text-3xl font-bold text-gray-900">{{ total_revenue }} ر.س</p>
+                <p class="text-sm text-gray-500 mt-1">{{ weekly_revenue }} ر.س هذا الأسبوع</p>
             </div>
             <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                 <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,7 +185,7 @@
                         </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="font-semibold text-gray-900">{{ order.total_price }} د.ك</span>
+                        <span class="font-semibold text-gray-900">{{ order.total_price }} ر.س</span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         {% if order.status == 'pending' %}

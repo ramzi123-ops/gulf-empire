@@ -1,4 +1,4 @@
-"""
+﻿"""
 Store App Admin Registration
 
 This file is the entry point for Django's admin autodiscovery.

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 {% load static %}
 
 {% block title %}{{ product.name }} - الإمبراطور الخليجي{% endblock %}
@@ -84,13 +84,13 @@
                 <div class="bg-gray-50 rounded-lg p-6 mb-6">
                     <div class="flex items-center gap-3 mb-2">
                         <span class="text-4xl font-bold text-primary">{{ product.final_price }}</span>
-                        <span class="text-2xl text-gray-600">د.ك</span>
+                        <span class="text-2xl text-gray-600">ر.س</span>
                         {% if product.sale_price %}
-                        <span class="text-xl text-gray-500 line-through">{{ product.price }} د.ك</span>
+                        <span class="text-xl text-gray-500 line-through">{{ product.price }} ر.س</span>
                         {% endif %}
                     </div>
                     {% if product.sale_price %}
-                    <p class="text-sm text-green-600 font-semibold">وفر {{ product.price|floatformat:2|add:"-"|add:product.sale_price|floatformat:2 }} د.ك</p>
+                    <p class="text-sm text-green-600 font-semibold">وفر {{ product.price|floatformat:2|add:"-"|add:product.sale_price|floatformat:2 }} ر.س</p>
                     {% endif %}
                 </div>
                 
@@ -348,9 +348,9 @@
                         {{ related.name }}
                     </a>
                     <div class="flex items-center gap-2">
-                        <span class="text-lg font-bold text-primary">{{ related.final_price }} د.ك</span>
+                        <span class="text-lg font-bold text-primary">{{ related.final_price }} ر.س</span>
                         {% if related.sale_price %}
-                        <span class="text-sm text-gray-500 line-through">{{ related.price }} د.ك</span>
+                        <span class="text-sm text-gray-500 line-through">{{ related.price }} ر.س</span>
                         {% endif %}
                     </div>
                 </div>

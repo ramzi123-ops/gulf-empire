@@ -1,4 +1,4 @@
-{% extends "base_admin.html" %}
+﻿{% extends "base_admin.html" %}
 
 {% block title %}تفاصيل الطلب {{ order.order_number }} - لوحة التحكم{% endblock %}
 
@@ -84,10 +84,10 @@
                                 <span class="text-gray-900">{{ item.quantity }}</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="text-gray-900">{{ item.price }} د.ك</span>
+                                <span class="text-gray-900">{{ item.price }} ر.س</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="font-semibold text-gray-900">{{ item.get_total_price }} د.ك</span>
+                                <span class="font-semibold text-gray-900">{{ item.get_total_price }} ر.س</span>
                             </td>
                         </tr>
                         {% endfor %}
@@ -95,15 +95,15 @@
                     <tfoot class="bg-gray-50 border-t-2 border-gray-300">
                         <tr>
                             <td colspan="3" class="px-6 py-4 text-end font-semibold text-gray-700">المجموع الفرعي:</td>
-                            <td class="px-6 py-4 font-semibold text-gray-900">{{ order.get_subtotal }} د.ك</td>
+                            <td class="px-6 py-4 font-semibold text-gray-900">{{ order.get_subtotal }} ر.س</td>
                         </tr>
                         <tr>
                             <td colspan="3" class="px-6 py-4 text-end font-semibold text-gray-700">رسوم الشحن:</td>
-                            <td class="px-6 py-4 font-semibold text-gray-900">{{ order.shipping_cost }} د.ك</td>
+                            <td class="px-6 py-4 font-semibold text-gray-900">{{ order.shipping_cost }} ر.س</td>
                         </tr>
                         <tr class="bg-gray-100">
                             <td colspan="3" class="px-6 py-4 text-end text-lg font-bold text-gray-900">المجموع الإجمالي:</td>
-                            <td class="px-6 py-4 text-lg font-bold text-primary">{{ order.total_price }} د.ك</td>
+                            <td class="px-6 py-4 text-lg font-bold text-primary">{{ order.total_price }} ر.س</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -297,7 +297,7 @@
                     <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">فشل</span>
                     {% endif %}
                 </div>
-                <p class="text-xs text-gray-600">المبلغ: <span class="font-semibold">{{ payment.amount }} د.ك</span></p>
+                <p class="text-xs text-gray-600">المبلغ: <span class="font-semibold">{{ payment.amount }} ر.س</span></p>
                 <p class="text-xs text-gray-600">التاريخ: {{ payment.created_at|date:"Y-m-d H:i" }}</p>
                 {% if payment.transaction_id %}
                 <p class="text-xs text-gray-600 font-mono">ID: {{ payment.transaction_id }}</p>

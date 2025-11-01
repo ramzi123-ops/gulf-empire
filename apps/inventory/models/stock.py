@@ -1,4 +1,4 @@
-from django.db import models
+﻿from django.db import models
 from apps.store.models import Product
 
 

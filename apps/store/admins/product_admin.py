@@ -1,4 +1,4 @@
-from django.contrib import admin
+﻿from django.contrib import admin
 from apps.store.models import Product, ProductSpecification
 from apps.inventory.models import InventoryItem
 

@@ -1,4 +1,4 @@
-{% extends "base_admin.html" %}
+﻿{% extends "base_admin.html" %}
 
 {% block title %}قائمة الطلبات - لوحة التحكم{% endblock %}
 
@@ -135,7 +135,7 @@
                         <span class="text-gray-900">{{ order.get_total_items }}</span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="font-semibold text-gray-900">{{ order.total_price }} د.ك</span>
+                        <span class="font-semibold text-gray-900">{{ order.total_price }} ر.س</span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         {% if order.status == 'pending' %}

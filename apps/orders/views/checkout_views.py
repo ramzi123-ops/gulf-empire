@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+﻿from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import transaction
@@ -90,11 +90,11 @@ def checkout(request):
                     )
                 
                 # Create Stripe PaymentIntent
-                amount_in_fils = int(total * 1000)  # Convert KWD to fils (1 KWD = 1000 fils)
+                amount_in_fils = int(total * 1000)  # Convert SAR to fils (1 SAR = 1000 fils)
                 
                 payment_intent = stripe.PaymentIntent.create(
                     amount=amount_in_fils,
-                    currency='kwd',
+                    currency='SAR',
                     metadata={
                         'order_id': order.id,
                         'order_number': order.order_number,
@@ -108,7 +108,7 @@ def checkout(request):
                     order=order,
                     stripe_payment_intent_id=payment_intent.id,
                     amount=total,
-                    currency='KWD',
+                    currency='SAR',
                     status='pending',
                     metadata={
                         'payment_intent': payment_intent.id,

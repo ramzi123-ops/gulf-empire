@@ -1,4 +1,4 @@
-from apps.orders.utils import get_cart
+﻿from apps.orders.utils import get_cart
 
 
 def cart_context(request):

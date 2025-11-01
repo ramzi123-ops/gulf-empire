@@ -1,4 +1,4 @@
-from django.db import models
+﻿from django.db import models
 from apps.orders.models import Order
 
 
@@ -47,7 +47,7 @@ class Payment(models.Model):
     
     currency = models.CharField(
         max_length=3,
-        default='KWD',
+        default='SAR',
         verbose_name='العملة'
     )
     

@@ -1,4 +1,4 @@
-<div id="cart-totals" class="bg-white rounded-lg shadow-sm p-6 sticky top-4">
+﻿<div id="cart-totals" class="bg-white rounded-lg shadow-sm p-6 sticky top-4">
     
     <!-- Header -->
     <h2 class="text-xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">ملخص الطلب</h2>
@@ -9,7 +9,7 @@
         <!-- Subtotal -->
         <div class="flex justify-between items-center">
             <span class="text-gray-600">المجموع الفرعي</span>
-            <span class="font-semibold text-gray-900">{{ cart.get_subtotal }} د.ك</span>
+            <span class="font-semibold text-gray-900">{{ cart.get_subtotal }} ر.س</span>
         </div>
         
         <!-- Shipping -->
@@ -18,7 +18,7 @@
             {% if cart.get_subtotal >= 50 %}
             <span class="font-semibold text-green-600">مجاناً</span>
             {% else %}
-            <span class="font-semibold text-gray-900">{{ cart.get_shipping_cost }} د.ك</span>
+            <span class="font-semibold text-gray-900">{{ cart.get_shipping_cost }} ر.س</span>
             {% endif %}
         </div>
         
@@ -27,7 +27,7 @@
         <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
             <p class="text-sm text-blue-800">
                 <span class="font-semibold">احصل على توصيل مجاني!</span><br>
-                أضف منتجات بقيمة <span class="font-bold">{{ cart.get_free_shipping_remaining }} د.ك</span> أخرى
+                أضف منتجات بقيمة <span class="font-bold">{{ cart.get_free_shipping_remaining }} ر.س</span> أخرى
             </p>
         </div>
         {% endif %}
@@ -43,7 +43,7 @@
     <!-- Total -->
     <div class="flex justify-between items-center py-4 border-t border-gray-200 mb-6">
         <span class="text-lg font-bold text-gray-900">المجموع الكلي</span>
-        <span class="text-2xl font-bold text-primary">{{ cart.get_total }} د.ك</span>
+        <span class="text-2xl font-bold text-primary">{{ cart.get_total }} ر.س</span>
     </div>
     
     <!-- Checkout Button -->

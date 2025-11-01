@@ -1,12 +1,20 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="m-0 p-0">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}الإمبراطور الخليجي{% endblock %}</title>
     
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
+    
+    <!-- Remove default margins -->
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
     
     <script src="{% static 'js/htmx.min.js' %}"></script>
     
@@ -23,7 +31,7 @@
     
     {% block extra_css %}{% endblock %}
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-gray-50 font-sans m-0">
 
     {% include "partials/navbar.html" %}
     

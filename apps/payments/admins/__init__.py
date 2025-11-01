@@ -1,4 +1,4 @@
-"""
+﻿"""
 Payments App Admin Registration
 
 App Name: payments

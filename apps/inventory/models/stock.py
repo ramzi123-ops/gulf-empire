@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 from apps.store.models import Product
 
 
@@ -14,36 +13,36 @@ class InventoryItem(models.Model):
         Product,
         on_delete=models.CASCADE,
         related_name='inventory',
-        verbose_name=_('Product')
+        verbose_name='المنتج'
     )
     
     # Stock fields
     quantity = models.PositiveIntegerField(
         default=0,
-        verbose_name=_('Quantity'),
-        help_text=_('Current stock quantity')
+        verbose_name='الكمية',
+        help_text='كمية المخزون الحالية'
     )
     
     low_stock_threshold = models.PositiveIntegerField(
         default=10,
-        verbose_name=_('Low Stock Threshold'),
-        help_text=_('Minimum quantity before low stock alert')
+        verbose_name='حد المخزون المنخفض',
+        help_text='الحد الأدنى قبل تنبيه المخزون المنخفض'
     )
     
     # Timestamps
     created_at = models.DateTimeField(
         auto_now_add=True,
-        verbose_name=_('Created At')
+        verbose_name='تاريخ الإنشاء'
     )
     
     updated_at = models.DateTimeField(
         auto_now=True,
-        verbose_name=_('Updated At')
+        verbose_name='تاريخ التحديث'
     )
     
     class Meta:
-        verbose_name = _('Inventory Item')
-        verbose_name_plural = _('Inventory Items')
+        verbose_name = 'عنصر مخزون'
+        verbose_name_plural = 'عناصر المخزون'
         ordering = ['product__name']
         indexes = [
             models.Index(fields=['product']),
@@ -70,11 +69,11 @@ class InventoryItem(models.Model):
         Get readable stock status
         """
         if self.is_out_of_stock():
-            return _('Out of Stock')
+            return 'نفد المخزون'
         elif self.is_low_stock():
-            return _('Low Stock')
+            return 'مخزون منخفض'
         else:
-            return _('In Stock')
+            return 'متوفر'
     
     def add_stock(self, quantity):
         """

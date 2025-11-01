@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 from apps.orders.models import Order
 
 
@@ -9,12 +8,12 @@ class Payment(models.Model):
     """
     
     STATUS_CHOICES = [
-        ('pending', _('Pending')),
-        ('processing', _('Processing')),
-        ('succeeded', _('Succeeded')),
-        ('failed', _('Failed')),
-        ('cancelled', _('Cancelled')),
-        ('refunded', _('Refunded')),
+        ('pending', 'قيد الانتظار'),
+        ('processing', 'قيد المعالجة'),
+        ('succeeded', 'نجح'),
+        ('failed', 'فشل'),
+        ('cancelled', 'ملغي'),
+        ('refunded', 'مسترد'),
     ]
     
     # Relationships
@@ -22,81 +21,81 @@ class Payment(models.Model):
         Order,
         on_delete=models.CASCADE,
         related_name='payments',
-        verbose_name=_('Order')
+        verbose_name='الطلب'
     )
     
     # Stripe information
     stripe_payment_intent_id = models.CharField(
         max_length=255,
         unique=True,
-        verbose_name=_('Stripe Payment Intent ID')
+        verbose_name='معرف نية الدفع Stripe'
     )
     
     stripe_charge_id = models.CharField(
         max_length=255,
         blank=True,
         null=True,
-        verbose_name=_('Stripe Charge ID')
+        verbose_name='معرف الشحنة Stripe'
     )
     
     # Payment details
     amount = models.DecimalField(
         max_digits=10,
         decimal_places=3,
-        verbose_name=_('Amount')
+        verbose_name='المبلغ'
     )
     
     currency = models.CharField(
         max_length=3,
         default='KWD',
-        verbose_name=_('Currency')
+        verbose_name='العملة'
     )
     
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
         default='pending',
-        verbose_name=_('Payment Status')
+        verbose_name='حالة الدفع'
     )
     
     # Additional information
     payment_method = models.CharField(
         max_length=50,
         blank=True,
-        verbose_name=_('Payment Method')
+        verbose_name='طريقة الدفع'
     )
     
     error_message = models.TextField(
         blank=True,
-        verbose_name=_('Error Message')
+        verbose_name='رسالة الخطأ'
     )
     
     metadata = models.JSONField(
         default=dict,
         blank=True,
-        verbose_name=_('Metadata')
+        verbose_name='البيانات الوصفية'
     )
     
     # Timestamps
     created_at = models.DateTimeField(
         auto_now_add=True,
-        verbose_name=_('Created At')
+        verbose_name='تاريخ الإنشاء'
     )
     
     updated_at = models.DateTimeField(
         auto_now=True,
-        verbose_name=_('Updated At')
+        verbose_name='تاريخ التحديث'
     )
     
     paid_at = models.DateTimeField(
         null=True,
         blank=True,
-        verbose_name=_('Paid At')
+        verbose_name='تاريخ الدفع'
     )
     
     class Meta:
-        verbose_name = _('Payment')
-        verbose_name_plural = _('Payments')
+        verbose_name = 'دفعة'
+        verbose_name_plural = 'المدفوعات'
         ordering = ['-created_at']
         indexes = [
             models.Index(fields=['-created_at']),

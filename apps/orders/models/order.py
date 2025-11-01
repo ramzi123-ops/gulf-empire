@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-from django.utils.translation import gettext_lazy as _
 from apps.store.models import Product
 from apps.users.models import Address
 
@@ -11,19 +10,19 @@ class Order(models.Model):
     """
     
     STATUS_CHOICES = [
-        ('pending', _('Pending')),
-        ('confirmed', _('Confirmed')),
-        ('processing', _('Processing')),
-        ('shipped', _('Shipped')),
-        ('delivered', _('Delivered')),
-        ('cancelled', _('Cancelled')),
+        ('pending', 'قيد الانتظار'),
+        ('confirmed', 'مؤكد'),
+        ('processing', 'قيد المعالجة'),
+        ('shipped', 'تم الشحن'),
+        ('delivered', 'تم التوصيل'),
+        ('cancelled', 'ملغي'),
     ]
     
     PAYMENT_STATUS_CHOICES = [
-        ('pending', _('Pending')),
-        ('paid', _('Paid')),
-        ('failed', _('Failed')),
-        ('refunded', _('Refunded')),
+        ('pending', 'قيد الانتظار'),
+        ('paid', 'مدفوع'),
+        ('failed', 'فشل'),
+        ('refunded', 'مسترد'),
     ]
     
     # Relationships
@@ -31,34 +30,34 @@ class Order(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='orders',
-        verbose_name=_('User')
+        verbose_name='المستخدم'
     )
     
     address = models.ForeignKey(
         Address,
         on_delete=models.PROTECT,
         related_name='orders',
-        verbose_name=_('Delivery Address')
+        verbose_name='عنوان التوصيل'
     )
     
     # Order details
     order_number = models.CharField(
         max_length=50,
         unique=True,
-        verbose_name=_('Order Number')
+        verbose_name='رقم الطلب'
     )
     
     total_price = models.DecimalField(
         max_digits=10,
         decimal_places=3,
-        verbose_name=_('Total Price')
+        verbose_name='السعر الإجمالي'
     )
     
     shipping_cost = models.DecimalField(
         max_digits=10,
         decimal_places=3,
         default=0,
-        verbose_name=_('Shipping Cost')
+        verbose_name='تكلفة الشحن'
     )
     
     # Status fields
@@ -66,36 +65,36 @@ class Order(models.Model):
         max_length=20,
         choices=STATUS_CHOICES,
         default='pending',
-        verbose_name=_('Order Status')
+        verbose_name='حالة الطلب'
     )
     
     payment_status = models.CharField(
         max_length=20,
         choices=PAYMENT_STATUS_CHOICES,
         default='pending',
-        verbose_name=_('Payment Status')
+        verbose_name='حالة الدفع'
     )
     
     # Additional information
     notes = models.TextField(
         blank=True,
-        verbose_name=_('Order Notes')
+        verbose_name='ملاحظات الطلب'
     )
     
     # Timestamps
     created_at = models.DateTimeField(
         auto_now_add=True,
-        verbose_name=_('Created At')
+        verbose_name='تاريخ الإنشاء'
     )
     
     updated_at = models.DateTimeField(
         auto_now=True,
-        verbose_name=_('Updated At')
+        verbose_name='تاريخ التحديث'
     )
     
     class Meta:
-        verbose_name = _('Order')
-        verbose_name_plural = _('Orders')
+        verbose_name = 'طلب'
+        verbose_name_plural = 'الطلبات'
         ordering = ['-created_at']
         indexes = [
             models.Index(fields=['-created_at']),
@@ -148,47 +147,47 @@ class OrderItem(models.Model):
         Order,
         on_delete=models.CASCADE,
         related_name='items',
-        verbose_name=_('Order')
+        verbose_name='الطلب'
     )
     
     product = models.ForeignKey(
         Product,
         on_delete=models.PROTECT,
         related_name='order_items',
-        verbose_name=_('Product')
+        verbose_name='المنتج'
     )
     
     # Item details (snapshot at time of order)
     product_name = models.CharField(
         max_length=200,
-        verbose_name=_('Product Name')
+        verbose_name='اسم المنتج'
     )
     
     product_sku = models.CharField(
         max_length=100,
-        verbose_name=_('Product SKU')
+        verbose_name='رمز المنتج'
     )
     
     quantity = models.PositiveIntegerField(
         default=1,
-        verbose_name=_('Quantity')
+        verbose_name='الكمية'
     )
     
     price = models.DecimalField(
         max_digits=10,
         decimal_places=3,
-        verbose_name=_('Unit Price')
+        verbose_name='سعر الوحدة'
     )
     
     # Timestamps
     created_at = models.DateTimeField(
         auto_now_add=True,
-        verbose_name=_('Created At')
+        verbose_name='تاريخ الإضافة'
     )
     
     class Meta:
-        verbose_name = _('Order Item')
-        verbose_name_plural = _('Order Items')
+        verbose_name = 'عنصر الطلب'
+        verbose_name_plural = 'عناصر الطلب'
         ordering = ['id']
         indexes = [
             models.Index(fields=['order', 'product']),

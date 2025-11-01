@@ -204,6 +204,24 @@ class Product(models.Model):
         super().save(*args, **kwargs)
 
     @property
+    def stock(self):
+        """
+        Get inventory quantity from InventoryItem
+        Falls back to stock_quantity if no inventory item exists
+        """
+        try:
+            return self.inventory.quantity
+        except:
+            return 0
+    
+    @property
+    def has_stock(self):
+        """
+        Check if product has stock available
+        """
+        return self.stock > 0
+    
+    @property
     def is_in_stock(self):
         """Check if product is in stock"""
         return self.stock_quantity > 0

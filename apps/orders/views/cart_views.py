@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.views.decorators.http import require_POST
+from django.http import HttpResponse
 from apps.store.models import Product
 from apps.orders.models import CartItem
 from apps.orders.utils import get_cart
@@ -22,12 +23,19 @@ def add_to_cart(request, product_id):
     # Get the product
     product = get_object_or_404(Product, id=product_id, is_active=True)
     
-    # Check if product is in stock
-    if not product.is_in_stock:
-        messages.error(request, 'عذراً، هذا المنتج غير متوفر حالياً')
-        return render(request, 'partials/cart_icon.html', {
-            'cart': get_cart(request)
-        })
+    # Check if product has stock using inventory system
+    if not product.has_stock:
+        # Return HTMX OOB error toast
+        error_html = '''
+        <div hx-swap-oob="true" id="toast-message" 
+             class="fixed top-4 start-4 z-50 flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg shadow-lg">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="font-semibold">عذراً، هذا المنتج غير متوفر حالياً</span>
+        </div>
+        '''
+        return HttpResponse(error_html)
     
     # Get or create the cart
     cart = get_cart(request)
@@ -40,16 +48,24 @@ def add_to_cart(request, product_id):
     except (ValueError, TypeError):
         quantity = 1
     
-    # Check stock availability
+    # Check stock availability using inventory system
     cart_item = cart.items.filter(product=product).first()
-    current_quantity = cart_item.quantity if cart_item else 0
-    new_total = current_quantity + quantity
+    quantity_in_cart = cart_item.quantity if cart_item else 0
+    new_total = quantity_in_cart + quantity
     
-    if new_total > product.stock_quantity:
-        messages.error(request, f'عذراً، الكمية المتوفرة من هذا المنتج هي {product.stock_quantity} فقط')
-        return render(request, 'partials/cart_icon.html', {
-            'cart': cart
-        })
+    # Validate against inventory stock
+    if new_total > product.stock:
+        # Return HTMX OOB error toast
+        error_html = '''
+        <div hx-swap-oob="true" id="toast-message" 
+             class="fixed top-4 start-4 z-50 flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg shadow-lg">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="font-semibold">لا توجد كمية كافية في المخزون</span>
+        </div>
+        '''
+        return HttpResponse(error_html)
     
     # Add or update cart item
     if cart_item:

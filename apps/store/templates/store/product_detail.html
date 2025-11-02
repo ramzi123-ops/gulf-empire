@@ -132,7 +132,7 @@
                         {% csrf_token %}
                         <button 
                             type="submit"
-                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg transition-colors text-lg">
+                            class="w-full bg-primary hover:bg-primary-700 text-white font-bold py-4 px-6 rounded-lg transition-colors text-lg">
                             إضافة إلى السلة
                         </button>
                     </form>
@@ -159,7 +159,7 @@
                 <button 
                     onclick="showTab('description')" 
                     id="tab-description"
-                    class="tab-button border-b-2 border-blue-600 text-blue-600 pb-3 font-semibold">
+                    class="tab-button border-b-2 border-primary text-primary pb-3 font-semibold">
                     الوصف
                 </button>
                 <button 
@@ -299,7 +299,7 @@
                     <!-- Submit Button -->
                     <button 
                         type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                        class="bg-primary hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
                         إرسال المراجعة
                     </button>
                 </form>
@@ -371,7 +371,7 @@ function showTab(tabName) {
     
     // Remove active state from all buttons
     document.querySelectorAll('.tab-button').forEach(button => {
-        button.classList.remove('border-blue-600', 'text-blue-600');
+        button.classList.remove('border-primary', 'text-primary');
         button.classList.add('border-transparent', 'text-gray-600');
     });
     
@@ -380,7 +380,7 @@ function showTab(tabName) {
     
     // Add active state to selected button
     const activeButton = document.getElementById('tab-' + tabName);
-    activeButton.classList.add('border-blue-600', 'text-blue-600');
+    activeButton.classList.add('border-primary', 'text-primary');
     activeButton.classList.remove('border-transparent', 'text-gray-600');
 }
 

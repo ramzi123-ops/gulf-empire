@@ -30,7 +30,7 @@
                             name="search" 
                             value="{{ search_query|default:'' }}"
                             placeholder="ابحث عن منتج..."
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                         <button type="submit" class="hidden">بحث</button>
                     </form>
                 </div>
@@ -42,14 +42,14 @@
                         <a href="{% url 'store:product_list' %}" 
                            hx-get="{% url 'store:product_list' %}" 
                            hx-target="#product-grid"
-                           class="block py-2 px-3 rounded-lg text-sm transition-colors {% if not current_category %}bg-blue-600 text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+                           class="block py-2 px-3 rounded-lg text-sm transition-colors {% if not current_category %}bg-primary text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
                             جميع الفئات
                         </a>
                         {% for category in categories %}
                         <a href="?category={{ category.slug }}" 
                            hx-get="?category={{ category.slug }}" 
                            hx-target="#product-grid"
-                           class="block py-2 px-3 rounded-lg text-sm transition-colors {% if current_category == category.slug %}bg-blue-600 text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+                           class="block py-2 px-3 rounded-lg text-sm transition-colors {% if current_category == category.slug %}bg-primary text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
                             {{ category.name }}
                         </a>
                         {% endfor %}
@@ -70,7 +70,7 @@
                                 hx-get="{% url 'store:product_list' %}" 
                                 hx-target="#product-grid"
                                 hx-include="[name='category'],[name='search']"
-                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                class="rounded border-gray-300 text-primary focus:ring-primary-500">
                             <span class="text-sm text-gray-700">{{ brand.name }}</span>
                         </label>
                         {% endfor %}
@@ -89,7 +89,7 @@
                                 hx-get="{% url 'store:product_list' %}" 
                                 hx-target="#product-grid"
                                 hx-include="[name='category'],[name='brand'],[name='search']"
-                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                class="rounded border-gray-300 text-primary focus:ring-primary-500">
                             <span class="text-sm text-gray-700">العروض</span>
                         </label>
                         <label class="flex items-center space-x-2 space-x-reverse cursor-pointer">
@@ -100,7 +100,7 @@
                                 hx-get="{% url 'store:product_list' %}" 
                                 hx-target="#product-grid"
                                 hx-include="[name='category'],[name='brand'],[name='search']"
-                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                class="rounded border-gray-300 text-primary focus:ring-primary-500">
                             <span class="text-sm text-gray-700">المنتجات المميزة</span>
                         </label>
                         <label class="flex items-center space-x-2 space-x-reverse cursor-pointer">
@@ -111,7 +111,7 @@
                                 hx-get="{% url 'store:product_list' %}" 
                                 hx-target="#product-grid"
                                 hx-include="[name='category'],[name='brand'],[name='search']"
-                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                class="rounded border-gray-300 text-primary focus:ring-primary-500">
                             <span class="text-sm text-gray-700">وصل حديثاً</span>
                         </label>
                     </div>
@@ -133,7 +133,7 @@
                     hx-get="{% url 'store:product_list' %}" 
                     hx-target="#product-grid"
                     hx-include="[name='category'],[name='brand'],[name='search']"
-                    class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                    class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm">
                     <option value="newest">الأحدث</option>
                     <option value="oldest">الأقدم</option>
                     <option value="price_asc">السعر: من الأقل للأعلى</option>

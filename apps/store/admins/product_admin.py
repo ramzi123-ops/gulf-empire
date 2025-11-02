@@ -40,7 +40,6 @@ class ProductAdmin(admin.ModelAdmin):
         'brand',
         'price',
         'sale_price',
-        'stock_quantity',
         'is_active',
         'is_featured',
         'created_at',
@@ -96,12 +95,6 @@ class ProductAdmin(admin.ModelAdmin):
                 'price',
                 'sale_price',
                 'cost_price',
-            )
-        }),
-        ('المخزون', {
-            'fields': (
-                'stock_quantity',
-                'low_stock_threshold',
             )
         }),
         ('تفاصيل المنتج', {

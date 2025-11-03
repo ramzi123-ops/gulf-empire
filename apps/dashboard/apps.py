@@ -8,4 +8,4 @@ class DashboardConfig(AppConfig):
     icon = 'fa fa-gauge'  # FontAwesome icon
     divider_title = "لوحة التحكم"  # Section divider title
     priority = 200  # Sidebar ordering (higher = top)
-    hide = True  # Hide from sidebar (custom dashboard URLs)
+    hide = False  # Show in sidebar

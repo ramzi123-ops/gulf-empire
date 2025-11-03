@@ -172,3 +172,53 @@ STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', 'sk_test_your_secret_key
 # Webhook secret for verifying webhook signatures from Stripe
 # Get this from: https://dashboard.stripe.com/webhooks
 STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', 'whsec_your_webhook_secret_here')
+
+# ============================================================================
+# Django Daisy (Admin Panel) Configuration
+# ============================================================================
+DAISY_SETTINGS = {
+    # Branding
+    'SITE_TITLE': 'إمبراطور الخليج',
+    'SITE_HEADER': 'إدارة إمبراطور الخليج',
+    'INDEX_TITLE': 'مرحباً بك في لوحة التحكم',
+    'SITE_LOGO': '/static/img/logo.png',  # Update with your actual logo path
+    
+    # Customization
+    'EXTRA_STYLES': [
+        # '/static/css/output.css',  # Your Tailwind CSS with DaisyUI
+    ],
+    'EXTRA_SCRIPTS': [],
+    'LOAD_FULL_STYLES': True,  # Load complete DaisyUI library
+    'SHOW_CHANGELIST_FILTER': True,  # Auto-open filter sidebar
+    'DONT_SUPPORT_ME': True,  # Hide GitHub link
+    'SIDEBAR_FOOTNOTE': '© 2025 إمبراطور الخليج - جميع الحقوق محفوظة',
+    
+    # Theme Configuration
+    'DEFAULT_THEME': 'gulfemperor',  # Your custom theme
+    'DEFAULT_THEME_DARK': 'dark',
+    'SHOW_THEME_SELECTOR': True,
+    'THEME_LIST': [
+        {'name': 'فاتح', 'value': 'light'},
+        {'name': 'داكن', 'value': 'dark'},
+    ],
+    
+    # Third-Party App Customization (Django built-in apps)
+    'APPS_REORDER': {
+        'auth': {
+            'hide': True,  # Hide auth app (users managed in custom users app)
+        },
+        'contenttypes': {
+            'hide': True,  # Hide content types from sidebar
+        },
+        'sessions': {
+            'hide': True,  # Hide sessions from sidebar
+        },
+        'apps.dashboard': {
+            'icon': 'fa-solid fa-gauge',
+            'name': 'لوحة التحكم',
+            'hide': True,
+            'divider_title': "لوحة التحكم",
+            'priority': 200,
+        },
+    },
+}

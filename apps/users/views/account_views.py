@@ -1,8 +1,69 @@
-﻿from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
-from apps.users.models import Address
+from django.core.paginator import Paginator
+from apps.users.models import Address, Profile
+from apps.orders.models import Order
+
+
+@login_required
+def profile_view(request):
+    """
+    الملف الشخصي للمستخدم مع سجل الطلبات
+    User profile with order history
+    """
+    # Get or create user profile
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    
+    # Handle profile update
+    if request.method == 'POST':
+        # Update user info
+        request.user.first_name = request.POST.get('first_name', request.user.first_name)
+        request.user.last_name = request.POST.get('last_name', request.user.last_name)
+        request.user.email = request.POST.get('email', request.user.email)
+        request.user.save()
+        
+        # Update profile info
+        profile.bio = request.POST.get('bio', profile.bio)
+        date_of_birth = request.POST.get('date_of_birth')
+        if date_of_birth:
+            profile.date_of_birth = date_of_birth
+        
+        profile.newsletter_subscribed = request.POST.get('newsletter_subscribed') == 'on'
+        profile.sms_notifications = request.POST.get('sms_notifications') == 'on'
+        profile.email_notifications = request.POST.get('email_notifications') == 'on'
+        
+        # Handle avatar upload
+        if 'avatar' in request.FILES:
+            profile.avatar = request.FILES['avatar']
+        
+        profile.save()
+        messages.success(request, 'تم تحديث الملف الشخصي بنجاح')
+        return redirect('users:profile')
+    
+    # Get user orders with pagination
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    paginator = Paginator(orders, 10)  # 10 orders per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    # Calculate order statistics
+    total_orders = orders.count()
+    completed_orders = orders.filter(status='delivered').count()
+    pending_orders = orders.filter(status__in=['pending', 'processing', 'shipped']).count()
+    cancelled_orders = orders.filter(status='cancelled').count()
+    
+    context = {
+        'profile': profile,
+        'orders': page_obj,
+        'total_orders': total_orders,
+        'completed_orders': completed_orders,
+        'pending_orders': pending_orders,
+        'cancelled_orders': cancelled_orders,
+    }
+    
+    return render(request, 'users/profile.html', context)
 
 
 @login_required

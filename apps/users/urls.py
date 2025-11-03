@@ -1,6 +1,6 @@
-﻿from django.urls import path
+from django.urls import path
 from django.contrib.auth import views as auth_views
-from apps.users.views import manage_addresses, add_address, edit_address, delete_address
+from apps.users.views import profile_view, manage_addresses, add_address, edit_address, delete_address
 
 app_name = 'users'
 
@@ -21,6 +21,9 @@ urlpatterns = [
         ),
         name='logout'
     ),
+    
+    # User Profile
+    path('profile/', profile_view, name='profile'),
     
     # Address Management
     path('addresses/', manage_addresses, name='manage_addresses'),

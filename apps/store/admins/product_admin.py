@@ -18,8 +18,9 @@ class InventoryItemInline(admin.StackedInline):
     Inline admin for inventory management
     """
     model = InventoryItem
-    extra = 0
+    extra = 1  # Changed from 0 to 1 to show form for new products
     max_num = 1
+    min_num = 1  # Require at least one inventory item
     can_delete = False
     fields = ['quantity', 'low_stock_threshold', 'created_at', 'updated_at']
     readonly_fields = ['created_at', 'updated_at']

@@ -42,12 +42,15 @@ class ProductAdmin(admin.ModelAdmin):
         'sale_price',
         'is_active',
         'is_featured',
+        'is_new_arrival',
+        'is_coming_soon',
         'created_at',
     ]
     list_filter = [
         'is_active',
         'is_featured',
         'is_new_arrival',
+        'is_coming_soon',
         'category',
         'brand',
         'created_at',
@@ -132,6 +135,7 @@ class ProductAdmin(admin.ModelAdmin):
                 'is_active',
                 'is_featured',
                 'is_new_arrival',
+                'is_coming_soon',
             )
         }),
         ('التواريخ', {

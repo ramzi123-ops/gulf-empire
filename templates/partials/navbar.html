@@ -3,7 +3,7 @@
         <div class="flex justify-between items-center h-16">
             <!-- Logo -->
             <div class="flex-shrink-0">
-                <a href="{% url 'store:product_list' %}" class="text-2xl font-bold text-white">
+                <a href="{% url 'store:home' %}" class="text-2xl font-bold text-white">
                     <span class="text-yellow-500">إمبراطور</span> الخليج
                 </a>
             </div>
@@ -87,6 +87,9 @@
         <!-- Mobile Menu -->
         <div class="md:hidden hidden" id="mobile-menu">
             <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="{% url 'store:home' %}" class="block px-3 py-2 rounded-md text-white hover:bg-secondary-700">
+                    الرئيسية
+                </a>
                 <a href="{% url 'store:product_list' %}" class="block px-3 py-2 rounded-md text-white hover:bg-secondary-700">
                     المنتجات
                 </a>

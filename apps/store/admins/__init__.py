@@ -12,6 +12,7 @@ so registration happens automatically when they are imported.
 from .taxonomy_admin import CategoryAdmin, BrandAdmin
 from .product_admin import ProductAdmin, ProductSpecificationInline
 from .review_admin import ReviewAdmin
+from .media_admin import AdvertisementAdmin, GalleryAdmin
 
 # Explicitly export all admin classes
 __all__ = [
@@ -20,4 +21,6 @@ __all__ = [
     'ProductAdmin',
     'ProductSpecificationInline',
     'ReviewAdmin',
+    'AdvertisementAdmin',
+    'GalleryAdmin',
 ]

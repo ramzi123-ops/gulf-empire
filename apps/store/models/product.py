@@ -173,6 +173,11 @@ class Product(models.Model):
         default=False,
         verbose_name="وصل حديثاً"
     )
+    is_coming_soon = models.BooleanField(
+        default=False,
+        verbose_name="قريباً",
+        help_text="المنتجات القادمة قريباً"
+    )
 
     # Timestamps
     created_at = models.DateTimeField(

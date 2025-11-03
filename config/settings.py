@@ -32,6 +32,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django_daisy',
+    # 'jazzmin',
+    # 'jet',
     'django.contrib.admin',
     'django.contrib.humanize',  
     'django.contrib.auth',

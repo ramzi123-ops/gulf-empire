@@ -1,0 +1,350 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}الصفحة الرئيسية - إمبراطور الخليج{% endblock %}
+
+{% block content %}
+<div dir="rtl">
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-secondary to-secondary-700 text-white py-20">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                    مرحباً بكم في <span class="text-yellow-400">إمبراطور الخليج</span>
+                </h1>
+                <p class="text-xl mb-8 text-gray-100">
+                    وجهتك الموثوقة لقطع غيار السيارات عالية الجودة بأفضل الأسعار
+                </p>
+                <div class="flex gap-4">
+                    <a href="{% url 'store:product_list' %}" class="bg-yellow-500 hover:bg-yellow-600 text-secondary font-bold py-3 px-8 rounded-lg transition-colors">
+                        تصفح المنتجات
+                    </a>
+                    <a href="#categories" class="bg-white/10 hover:bg-white/20 text-white font-bold py-3 px-8 rounded-lg border border-white/30 transition-colors">
+                        استكشف الفئات
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-3">تصفح حسب الفئة</h2>
+                <p class="text-gray-600">اختر الفئة المناسبة لاحتياجاتك</p>
+            </div>
+
+            {% if categories %}
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {% for category in categories %}
+                <a href="{% url 'store:product_list' %}?category={{ category.slug }}" class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 text-center group">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                        <svg class="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 group-hover:text-primary transition-colors">{{ category.name }}</h3>
+                    <p class="text-sm text-gray-500 mt-1">{{ category.products.count }} منتج</p>
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="text-center mt-8">
+                <a href="{% url 'store:product_list' %}" class="text-primary hover:text-primary/80 font-semibold">
+                    عرض جميع الفئات ←
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- All Products Section -->
+    {% if all_products %}
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">تسوق الآن</h2>
+                    <p class="text-gray-600">اكتشف جميع منتجاتنا</p>
+                </div>
+                <a href="{% url 'store:product_list' %}" class="text-primary hover:text-primary/80 font-semibold hidden md:block">
+                    عرض الكل ←
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for product in all_products %}
+                {% include 'store/partials/product_card.html' with product=product %}
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-8">
+                <a href="{% url 'store:product_list' %}" class="inline-block bg-primary hover:bg-primary/90 text-white font-bold py-3 px-8 rounded-lg transition-colors">
+                    عرض جميع المنتجات ←
+                </a>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Featured Products Section (مميز) -->
+    {% if featured_products %}
+    <section class="py-16 bg-gradient-to-br from-yellow-50 to-orange-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">المنتجات المميزة</h2>
+                    <p class="text-gray-600">أفضل المنتجات المختارة لك</p>
+                </div>
+                <a href="{% url 'store:product_list' %}?featured=true" class="text-primary hover:text-primary/80 font-semibold hidden md:block">
+                    عرض الكل ←
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for product in featured_products %}
+                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="مميز" badge_color="yellow" %}
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-8 md:hidden">
+                <a href="{% url 'store:product_list' %}?featured=true" class="text-primary hover:text-primary/80 font-semibold">
+                    عرض جميع المنتجات المميزة ←
+                </a>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Featured Products with Discount (مميز مع خصم) -->
+    {% if featured_sale_products %}
+    <section class="py-16 bg-gradient-to-br from-purple-50 to-pink-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">مميز مع خصم</h2>
+                    <p class="text-gray-600">منتجات مميزة بعروض حصرية</p>
+                </div>
+                <a href="{% url 'store:product_list' %}?featured=true&on_sale=true" class="text-primary hover:text-primary/80 font-semibold hidden md:block">
+                    عرض الكل ←
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for product in featured_sale_products %}
+                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="مميز" badge_color="yellow" %}
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-8 md:hidden">
+                <a href="{% url 'store:product_list' %}?featured=true&on_sale=true" class="text-primary hover:text-primary/80 font-semibold">
+                    عرض جميع المنتجات المميزة مع خصم ←
+                </a>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- New Arrivals Section (وصل حديثاً) -->
+    {% if new_arrivals %}
+    <section class="py-16 bg-gradient-to-br from-blue-50 to-primary/5">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">وصل حديثاً</h2>
+                    <p class="text-gray-600">أحدث المنتجات في متجرنا</p>
+                </div>
+                <a href="{% url 'store:product_list' %}?new_arrival=true" class="text-primary hover:text-primary/80 font-semibold hidden md:block">
+                    عرض الكل ←
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for product in new_arrivals %}
+                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="جديد" badge_color="green" %}
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-8 md:hidden">
+                <a href="{% url 'store:product_list' %}?new_arrival=true" class="text-primary hover:text-primary/80 font-semibold">
+                    عرض جميع المنتجات الجديدة ←
+                </a>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Brands Section -->
+    {% if brands %}
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-3">العلامات التجارية</h2>
+                <p class="text-gray-600">نتعامل مع أفضل العلامات التجارية العالمية</p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                {% for brand in brands %}
+                <a href="{% url 'store:product_list' %}?brand={{ brand.slug }}" class="bg-gray-50 rounded-lg p-6 hover:shadow-md transition-all group">
+                    {% if brand.logo %}
+                    <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="w-full h-20 object-contain grayscale group-hover:grayscale-0 transition-all">
+                    {% else %}
+                    <div class="w-full h-20 flex items-center justify-center bg-white rounded">
+                        <span class="text-xl font-bold text-gray-400 group-hover:text-primary transition-colors">{{ brand.name }}</span>
+                    </div>
+                    {% endif %}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Sale Products Section (العروض) -->
+    {% if sale_products %}
+    <section class="py-16 bg-gradient-to-br from-red-50 to-orange-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">العروض الخاصة</h2>
+                    <p class="text-gray-600">خصومات وعروض لا تفوت</p>
+                </div>
+                <a href="{% url 'store:product_list' %}?on_sale=true" class="text-primary hover:text-primary/80 font-semibold hidden md:block">
+                    عرض الكل ←
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for product in sale_products %}
+                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="خصم" badge_color="red" %}
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-8 md:hidden">
+                <a href="{% url 'store:product_list' %}?on_sale=true" class="text-primary hover:text-primary/80 font-semibold">
+                    عرض جميع العروض ←
+                </a>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Most Sold Products Section -->
+    {% if most_sold_products %}
+    <section class="py-16 bg-gradient-to-br from-green-50 to-teal-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">الأكثر مبيعاً</h2>
+                    <p class="text-gray-600">المنتجات الأكثر طلباً من عملائنا</p>
+                </div>
+                <a href="{% url 'store:product_list' %}" class="text-primary hover:text-primary/80 font-semibold hidden md:block">
+                    عرض الكل ←
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for product in most_sold_products %}
+                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="الأكثر مبيعاً" badge_color="green" %}
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-8 md:hidden">
+                <a href="{% url 'store:product_list' %}" class="text-primary hover:text-primary/80 font-semibold">
+                    عرض جميع المنتجات ←
+                </a>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Coming Soon Section (قريباً) -->
+    {% if coming_soon_products %}
+    <section class="py-16 bg-gradient-to-br from-indigo-50 to-blue-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">قريباً</h2>
+                    <p class="text-gray-600">منتجات جديدة ستصل قريباً</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for product in coming_soon_products %}
+                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="قريباً" badge_color="blue" coming_soon=True %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Latest Products Section -->
+    {% if latest_products %}
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">أحدث المنتجات</h2>
+                    <p class="text-gray-600">تصفح آخر إضافاتنا</p>
+                </div>
+                <a href="{% url 'store:product_list' %}" class="text-primary hover:text-primary/80 font-semibold hidden md:block">
+                    عرض الكل ←
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for product in latest_products %}
+                {% include 'store/partials/product_card.html' with product=product %}
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-8 md:hidden">
+                <a href="{% url 'store:product_list' %}" class="text-primary hover:text-primary/80 font-semibold">
+                    عرض جميع المنتجات ←
+                </a>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Features Section -->
+    <section class="py-16 bg-gradient-to-br from-gray-50 to-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">ضمان الجودة</h3>
+                    <p class="text-gray-600">جميع منتجاتنا أصلية ومضمونة 100%</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">توصيل سريع</h3>
+                    <p class="text-gray-600">خدمة توصيل سريعة لجميع مناطق المملكة</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">دعم فني</h3>
+                    <p class="text-gray-600">فريق دعم متخصص لمساعدتك على مدار الساعة</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock %}

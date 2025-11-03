@@ -1,0 +1,42 @@
+{% load static %}
+
+{% if footer_ads %}
+<section class="bg-gray-100 py-8">
+    <div class="container mx-auto px-4">
+        <div class="grid md:grid-cols-{{ footer_ads.count }} gap-6">
+            {% for ad in footer_ads %}
+            <div class="bg-white rounded-lg shadow-md overflow-hidden group">
+                {% if ad.link_url %}
+                <a href="{{ ad.link_url }}" 
+                   {% if ad.open_in_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
+                   onclick="trackAdClick({{ ad.id }})"
+                   class="block">
+                {% endif %}
+                    
+                    <div class="relative overflow-hidden h-48">
+                        <img src="{{ ad.image.url }}" 
+                             alt="{{ ad.title }}" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                    </div>
+                    
+                    <div class="p-4 text-center">
+                        <h3 class="font-bold text-lg text-gray-900 mb-2">{{ ad.title }}</h3>
+                        {% if ad.subtitle %}
+                        <p class="text-sm text-gray-600 mb-3">{{ ad.subtitle }}</p>
+                        {% endif %}
+                        {% if ad.link_url and ad.link_text %}
+                        <span class="inline-block bg-primary hover:bg-primary/90 text-white font-semibold text-sm py-2 px-6 rounded-lg transition-colors">
+                            {{ ad.link_text }}
+                        </span>
+                        {% endif %}
+                    </div>
+                
+                {% if ad.link_url %}
+                </a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}

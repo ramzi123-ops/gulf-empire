@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}معرض الصور - إمبراطور الخليج{% endblock %}
+
+{% block content %}
+<div class="bg-gray-50 min-h-screen" dir="rtl">
+    
+    <!-- Page Header -->
+    <section class="bg-gradient-to-r from-secondary to-secondary-700 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-4">معرض الصور</h1>
+            <p class="text-xl text-gray-200">لمحة عن أعمالنا ومنتجاتنا وفعالياتنا</p>
+        </div>
+    </section>
+
+    <div class="container mx-auto px-4 py-12">
+        
+        <!-- Category Filter -->
+        <div class="mb-8">
+            <div class="flex flex-wrap gap-3 justify-center">
+                <a href="{% url 'store:gallery' %}" 
+                   class="px-6 py-2 rounded-full font-semibold transition-colors {% if not current_category %}bg-primary text-white{% else %}bg-white text-gray-700 hover:bg-gray-100{% endif %}">
+                    الكل
+                </a>
+                {% for cat_value, cat_label in categories %}
+                <a href="?category={{ cat_value }}" 
+                   class="px-6 py-2 rounded-full font-semibold transition-colors {% if current_category == cat_value %}bg-primary text-white{% else %}bg-white text-gray-700 hover:bg-gray-100{% endif %}">
+                    {{ cat_label }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Gallery Grid -->
+        {% if gallery_items %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {% for image in gallery_items %}
+            <div class="gallery-item group relative overflow-hidden rounded-lg shadow-md hover:shadow-2xl transition-all duration-300 aspect-square cursor-pointer"
+                 data-image="{{ image.image.url }}"
+                 data-title="{{ image.title }}"
+                 data-description="{{ image.description }}"
+                 onclick="openLightbox(this)">
+                
+                <img src="{{ image.image.url }}" 
+                     alt="{{ image.title }}" 
+                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
+                        <h3 class="font-bold text-lg mb-1">{{ image.title }}</h3>
+                        {% if image.description %}
+                        <p class="text-sm text-gray-200 line-clamp-2">{{ image.description }}</p>
+                        {% endif %}
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-xs bg-primary px-2 py-1 rounded">
+                                {{ image.get_category_display }}
+                            </span>
+                            {% if image.tags %}
+                            {% for tag in image.get_tags_list|slice:":2" %}
+                            <span class="text-xs bg-white/20 px-2 py-1 rounded">
+                                {{ tag }}
+                            </span>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Zoom Icon -->
+                <div class="absolute top-3 left-3 bg-white/80 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                    <svg class="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
+                    </svg>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if gallery_items.has_other_pages %}
+        <div class="mt-12 flex justify-center">
+            <div class="flex gap-2">
+                {% if gallery_items.has_previous %}
+                <a href="?page=1{% if current_category %}&category={{ current_category }}{% endif %}" 
+                   class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                    الأولى
+                </a>
+                <a href="?page={{ gallery_items.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}" 
+                   class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                    السابقة
+                </a>
+                {% endif %}
+
+                <span class="px-4 py-2 bg-primary text-white rounded-lg">
+                    صفحة {{ gallery_items.number }} من {{ gallery_items.paginator.num_pages }}
+                </span>
+
+                {% if gallery_items.has_next %}
+                <a href="?page={{ gallery_items.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}" 
+                   class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                    التالية
+                </a>
+                <a href="?page={{ gallery_items.paginator.num_pages }}{% if current_category %}&category={{ current_category }}{% endif %}" 
+                   class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                    الأخيرة
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% else %}
+        <!-- Empty State -->
+        <div class="text-center py-20">
+            <svg class="w-24 h-24 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <h3 class="text-2xl font-bold text-gray-700 mb-2">لا توجد صور</h3>
+            <p class="text-gray-500">لم نجد أي صور في هذه الفئة</p>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div id="lightbox" class="fixed inset-0 bg-black/95 z-50 hidden items-center justify-center" onclick="closeLightbox()">
+    <button class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors" onclick="closeLightbox()">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+    </button>
+
+    <div class="container mx-auto px-4 max-w-5xl" onclick="event.stopPropagation()">
+        <img id="lightbox-image" src="" alt="" class="w-full h-auto max-h-[80vh] object-contain mb-4">
+        <div class="text-white text-center">
+            <h3 id="lightbox-title" class="text-2xl font-bold mb-2"></h3>
+            <p id="lightbox-description" class="text-gray-300"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openLightbox(element) {
+        const lightbox = document.getElementById('lightbox');
+        const image = document.getElementById('lightbox-image');
+        const title = document.getElementById('lightbox-title');
+        const description = document.getElementById('lightbox-description');
+
+        image.src = element.dataset.image;
+        image.alt = element.dataset.title;
+        title.textContent = element.dataset.title;
+        description.textContent = element.dataset.description;
+
+        lightbox.classList.remove('hidden');
+        lightbox.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        const lightbox = document.getElementById('lightbox');
+        lightbox.classList.add('hidden');
+        lightbox.classList.remove('flex');
+        document.body.style.overflow = '';
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeLightbox();
+        }
+    });
+</script>
+{% endblock %}

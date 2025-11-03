@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.db.models import Count, Sum, Q
-from apps.store.models import Product, Category, Brand
+from django.utils import timezone
+from apps.store.models import Product, Category, Brand, Advertisement, Gallery
 
 
 def home(request):
@@ -62,6 +63,40 @@ def home(request):
         is_active=True
     ).select_related('category', 'brand').order_by('-created_at')[:12]
     
+    # Get active advertisements by placement
+    now = timezone.now()
+    ad_filter = Q(is_active=True) & (
+        Q(start_date__isnull=True) | Q(start_date__lte=now)
+    ) & (
+        Q(end_date__isnull=True) | Q(end_date__gte=now)
+    )
+    
+    hero_ads = Advertisement.objects.filter(
+        ad_filter, placement='hero'
+    ).order_by('display_order')[:5]
+    
+    sidebar_ads = Advertisement.objects.filter(
+        ad_filter, placement='sidebar'
+    ).order_by('display_order')[:3]
+    
+    middle_ads = Advertisement.objects.filter(
+        ad_filter, placement='middle'
+    ).order_by('display_order')[:2]
+    
+    footer_ads = Advertisement.objects.filter(
+        ad_filter, placement='footer'
+    ).order_by('display_order')[:3]
+    
+    popup_ads = Advertisement.objects.filter(
+        ad_filter, placement='popup'
+    ).order_by('display_order')[:1]
+    
+    # Get featured gallery images
+    featured_gallery = Gallery.objects.filter(
+        is_active=True,
+        is_featured=True
+    ).order_by('display_order')[:6]
+    
     context = {
         'categories': categories,
         'brands': brands,
@@ -72,6 +107,12 @@ def home(request):
         'most_sold_products': most_sold_products,
         'coming_soon_products': coming_soon_products,
         'all_products': all_products,
+        'hero_ads': hero_ads,
+        'sidebar_ads': sidebar_ads,
+        'middle_ads': middle_ads,
+        'footer_ads': footer_ads,
+        'popup_ads': popup_ads,
+        'featured_gallery': featured_gallery,
     }
     
     return render(request, 'store/home.html', context)

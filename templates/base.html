@@ -10,9 +10,31 @@
     
     <!-- Remove default margins -->
     <style>
-        html, body {
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow-x: hidden;
+        }
+        body {
+            padding-top: 0 !important;
+            margin-top: 0 !important;
+        }
+        body::before, body::after {
+            display: none !important;
+        }
+        nav, nav:first-child {
+            margin-top: 0 !important;
+        }
+        main, main > *, main > * > * {
+            margin-top: 0 !important;
+        }
+        .container:first-child {
+            margin-top: 0 !important;
         }
     </style>
     
@@ -31,14 +53,14 @@
     
     {% block extra_css %}{% endblock %}
 </head>
-<body class="bg-gray-50 font-sans m-0">
+<body class="bg-gray-50 font-sans" style="margin: 0 !important; padding: 0 !important;">
 
     {% include "partials/navbar.html" %}
     
     <!-- Toast Message Container (for HTMX OOB swaps) -->
     <div id="toast-message"></div>
 
-    <main class="min-h-screen">
+    <main style="margin: 0; padding: 0;">
         {% block content %}
         {% endblock %}
     </main>

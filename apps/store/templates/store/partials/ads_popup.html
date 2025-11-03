@@ -1,0 +1,103 @@
+{% load static %}
+
+{% if popup_ads %}
+{% with ad=popup_ads.0 %}
+<!-- Popup Modal -->
+<div id="ad-popup" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center" style="backdrop-filter: blur(4px);">
+    <div class="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 overflow-hidden" onclick="event.stopPropagation()">
+        
+        <!-- Close Button -->
+        <button onclick="closeAdPopup()" class="absolute top-4 right-4 z-10 bg-white/90 hover:bg-white text-gray-800 rounded-full p-2 transition-colors shadow-lg">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+
+        {% if ad.link_url %}
+        <a href="{{ ad.link_url }}" 
+           {% if ad.open_in_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
+           onclick="trackAdClick({{ ad.id }}); closeAdPopup();"
+           class="block">
+        {% endif %}
+            
+            <!-- Image -->
+            <div class="relative">
+                <img src="{{ ad.image.url }}" 
+                     alt="{{ ad.title }}" 
+                     class="w-full h-auto max-h-96 object-cover">
+            </div>
+            
+            <!-- Content -->
+            <div class="p-8 text-center">
+                <h2 class="text-3xl font-bold text-gray-900 mb-3">{{ ad.title }}</h2>
+                {% if ad.subtitle %}
+                <p class="text-xl text-gray-700 mb-4">{{ ad.subtitle }}</p>
+                {% endif %}
+                {% if ad.description %}
+                <p class="text-gray-600 mb-6">{{ ad.description }}</p>
+                {% endif %}
+                {% if ad.link_url and ad.link_text %}
+                <span class="inline-block bg-primary hover:bg-primary/90 text-white font-bold py-3 px-8 rounded-lg transition-colors">
+                    {{ ad.link_text }}
+                </span>
+                {% endif %}
+            </div>
+        
+        {% if ad.link_url %}
+        </a>
+        {% endif %}
+
+        <!-- Don't show again -->
+        <div class="px-8 pb-6 text-center">
+            <label class="inline-flex items-center text-sm text-gray-600 cursor-pointer">
+                <input type="checkbox" id="dont-show-popup" class="rounded border-gray-300 text-primary focus:ring-primary mr-2">
+                <span>لا تظهر هذا مرة أخرى</span>
+            </label>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const popup = document.getElementById('ad-popup');
+        const dontShowCheckbox = document.getElementById('dont-show-popup');
+        const popupKey = 'ad_popup_{{ ad.id }}_dismissed';
+        
+        // Check if user dismissed this popup before
+        if (!localStorage.getItem(popupKey)) {
+            // Show popup after 3 seconds
+            setTimeout(() => {
+                popup.classList.remove('hidden');
+                popup.classList.add('flex');
+                document.body.style.overflow = 'hidden';
+            }, 3000);
+        }
+
+        window.closeAdPopup = function() {
+            // Check if "don't show again" is checked
+            if (dontShowCheckbox.checked) {
+                localStorage.setItem(popupKey, 'true');
+            }
+            
+            popup.classList.add('hidden');
+            popup.classList.remove('flex');
+            document.body.style.overflow = '';
+        };
+
+        // Close on clicking outside
+        popup.addEventListener('click', function(e) {
+            if (e.target === popup) {
+                closeAdPopup();
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !popup.classList.contains('hidden')) {
+                closeAdPopup();
+            }
+        });
+    })();
+</script>
+{% endwith %}
+{% endif %}

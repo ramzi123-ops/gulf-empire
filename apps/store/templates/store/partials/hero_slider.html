@@ -1,0 +1,205 @@
+{% load static %}
+
+{% if hero_ads %}
+<section class="relative overflow-hidden bg-gradient-to-r from-secondary to-secondary-700" dir="rtl">
+    <div class="hero-slider relative">
+        {% for ad in hero_ads %}
+        <div class="hero-slide {% if forloop.first %}active{% endif %} absolute inset-0 transition-opacity duration-700 {% if not forloop.first %}opacity-0{% endif %}">
+            <!-- Background Image -->
+            <div class="absolute inset-0">
+                <picture>
+                    {% if ad.mobile_image %}
+                    <source media="(max-width: 768px)" srcset="{{ ad.mobile_image.url }}">
+                    {% endif %}
+                    <img src="{{ ad.image.url }}" alt="{{ ad.title }}" class="w-full h-full object-cover">
+                </picture>
+                <div class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent"></div>
+            </div>
+
+            <!-- Content -->
+            <div class="container mx-auto px-4 relative z-10 h-full flex items-center">
+                <div class="max-w-2xl text-white py-20">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-4 animate-fade-in-up">
+                        {{ ad.title }}
+                    </h1>
+                    {% if ad.subtitle %}
+                    <p class="text-xl md:text-2xl mb-6 animate-fade-in-up animation-delay-200">
+                        {{ ad.subtitle }}
+                    </p>
+                    {% endif %}
+                    {% if ad.description %}
+                    <p class="text-lg mb-8 text-gray-200 animate-fade-in-up animation-delay-400">
+                        {{ ad.description }}
+                    </p>
+                    {% endif %}
+                    {% if ad.link_url %}
+                    <a href="{{ ad.link_url }}" 
+                       {% if ad.open_in_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
+                       onclick="trackAdClick({{ ad.id }})"
+                       class="inline-block bg-yellow-500 hover:bg-yellow-600 text-secondary font-bold py-3 px-8 rounded-lg transition-colors animate-fade-in-up animation-delay-600">
+                        {{ ad.link_text|default:"تسوق الآن" }}
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Slider Controls -->
+    {% if hero_ads.count > 1 %}
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex gap-3">
+        {% for ad in hero_ads %}
+        <button class="slider-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-colors {% if forloop.first %}!bg-white{% endif %}" 
+                data-slide="{{ forloop.counter0 }}"></button>
+        {% endfor %}
+    </div>
+
+    <!-- Navigation Arrows -->
+    <button class="slider-prev absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full transition-all backdrop-blur-sm">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+    </button>
+    <button class="slider-next absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 text-white p-3 rounded-full transition-all backdrop-blur-sm">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+    </button>
+    {% endif %}
+</section>
+
+<style>
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .animate-fade-in-up {
+        animation: fadeInUp 0.8s ease-out;
+    }
+    
+    .animation-delay-200 {
+        animation-delay: 0.2s;
+        opacity: 0;
+        animation-fill-mode: forwards;
+    }
+    
+    .animation-delay-400 {
+        animation-delay: 0.4s;
+        opacity: 0;
+        animation-fill-mode: forwards;
+    }
+    
+    .animation-delay-600 {
+        animation-delay: 0.6s;
+        opacity: 0;
+        animation-fill-mode: forwards;
+    }
+
+    .hero-slider {
+        height: 600px;
+    }
+    
+    @media (max-width: 768px) {
+        .hero-slider {
+            height: 400px;
+        }
+    }
+</style>
+
+<script>
+    // Hero Slider
+    (function() {
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        const prevBtn = document.querySelector('.slider-prev');
+        const nextBtn = document.querySelector('.slider-next');
+        let currentSlide = 0;
+        let slideInterval;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('opacity-0', i !== index);
+                slide.classList.toggle('active', i === index);
+            });
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('!bg-white', i === index);
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // Auto-play
+        function startAutoPlay() {
+            slideInterval = setInterval(nextSlide, 5000);
+        }
+
+        function stopAutoPlay() {
+            clearInterval(slideInterval);
+        }
+
+        // Event listeners
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                nextSlide();
+                stopAutoPlay();
+                startAutoPlay();
+            });
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                prevSlide();
+                stopAutoPlay();
+                startAutoPlay();
+            });
+        }
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentSlide = index;
+                showSlide(currentSlide);
+                stopAutoPlay();
+                startAutoPlay();
+            });
+        });
+
+        // Start auto-play if more than one slide
+        if (slides.length > 1) {
+            startAutoPlay();
+        }
+
+        // Track ad views
+        const activeAd = document.querySelector('.hero-slide.active');
+        if (activeAd) {
+            // Track view for first ad (implement AJAX call if needed)
+        }
+    })();
+
+    // Track ad click
+    function trackAdClick(adId) {
+        // Implement AJAX call to increment click count
+        fetch(`/api/ads/${adId}/click/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        }).catch(err => console.log('Failed to track click'));
+    }
+</script>
+{% endif %}

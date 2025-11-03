@@ -1,0 +1,47 @@
+{% load static %}
+
+{% if middle_ads %}
+<section class="py-8">
+    <div class="container mx-auto px-4">
+        {% for ad in middle_ads %}
+        <div class="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-xl overflow-hidden shadow-lg mb-6">
+            {% if ad.link_url %}
+            <a href="{{ ad.link_url }}" 
+               {% if ad.open_in_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
+               onclick="trackAdClick({{ ad.id }})"
+               class="block">
+            {% endif %}
+                
+                <div class="grid md:grid-cols-2 gap-6 items-center">
+                    <!-- Image -->
+                    <div class="relative overflow-hidden h-64 md:h-auto">
+                        <img src="{{ ad.image.url }}" 
+                             alt="{{ ad.title }}" 
+                             class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="p-8">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-3">{{ ad.title }}</h2>
+                        {% if ad.subtitle %}
+                        <p class="text-xl text-gray-700 mb-4">{{ ad.subtitle }}</p>
+                        {% endif %}
+                        {% if ad.description %}
+                        <p class="text-gray-600 mb-6">{{ ad.description }}</p>
+                        {% endif %}
+                        {% if ad.link_url and ad.link_text %}
+                        <span class="inline-block bg-primary hover:bg-primary/90 text-white font-bold py-3 px-8 rounded-lg transition-colors">
+                            {{ ad.link_text }}
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+            
+            {% if ad.link_url %}
+            </a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}

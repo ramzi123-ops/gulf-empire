@@ -200,7 +200,10 @@ class OrderItem(models.Model):
     
     def get_total_price(self):
         """Calculate total price for this item"""
+        if self.price is None:
+            return 0
         return self.quantity * self.price
+    get_total_price.short_description = 'المجموع'
     
     def save(self, *args, **kwargs):
         """Capture product details at time of order"""

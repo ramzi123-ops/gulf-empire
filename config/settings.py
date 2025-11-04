@@ -184,16 +184,16 @@ STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', 'whsec_your_webh
 
 # Email Backend
 # For development: Use console backend (prints emails to terminal)
-EMAIL_BACKEND = os.environ.get('ramzi.haidan.dev@gmail.com', 'django.core.mail.backends.console.EmailBackend')
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# For production: Use SMTP (uncomment when ready)
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
-# EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'ramzi.haidan.dev@gmail.com')
-# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-
+# For production: Use SMTP
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'ramzihaidan537@gmail.com')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')  # IMPORTANT: Use App Password from .env file!
+    
 # Default From Email
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'Gulf Emperor <noreply@gulfemperor.com>')
 

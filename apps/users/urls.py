@@ -1,11 +1,12 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from apps.users.views import profile_view, manage_addresses, add_address, edit_address, delete_address
+from apps.users.views import logout_view, register, profile_view, manage_addresses, add_address, edit_address, delete_address
 
 app_name = 'users'
 
 urlpatterns = [
     # Authentication
+    path('register/', register, name='register'),
     path(
         'login/',
         auth_views.LoginView.as_view(
@@ -14,13 +15,7 @@ urlpatterns = [
         ),
         name='login'
     ),
-    path(
-        'logout/',
-        auth_views.LogoutView.as_view(
-            next_page='store:home',
-        ),
-        name='logout'
-    ),
+    path('logout/', logout_view, name='logout'),
     
     # User Profile
     path('profile/', profile_view, name='profile'),
@@ -38,6 +33,7 @@ urlpatterns = [
             template_name='users/password_reset_form.html',
             email_template_name='emails/auth/password_reset_email.txt',
             subject_template_name='emails/auth/password_reset_subject.txt',
+            success_url='/auth/password-reset/done/',
         ),
         name='password_reset'
     ),
@@ -51,7 +47,8 @@ urlpatterns = [
     path(
         'password-reset-confirm/<uidb64>/<token>/',
         auth_views.PasswordResetConfirmView.as_view(
-            template_name='users/password_reset_confirm.html'
+            template_name='users/password_reset_confirm.html',
+            success_url='/auth/password-reset-complete/',
         ),
         name='password_reset_confirm'
     ),

@@ -1,10 +1,63 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate, logout as auth_logout
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator
 from apps.users.models import Address, Profile
+from apps.users.forms import UserRegistrationForm
 from apps.orders.models import Order
+
+
+def logout_view(request):
+    """
+    تسجيل خروج المستخدم
+    Custom logout view that handles GET requests
+    """
+    auth_logout(request)
+    messages.success(request, 'تم تسجيل الخروج بنجاح')
+    return redirect('store:home')
+
+
+def register(request):
+    """
+    تسجيل مستخدم جديد
+    User registration view
+    """
+    # Redirect if already logged in
+    if request.user.is_authenticated:
+        messages.info(request, 'أنت مسجل دخول بالفعل')
+        return redirect('store:home')
+    
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            # Create user
+            user = form.save()
+            
+            # Log the user in
+            login(request, user)
+            
+            # Success message
+            messages.success(
+                request,
+                f'مرحباً {user.first_name}! تم إنشاء حسابك بنجاح'
+            )
+            
+            # Redirect to home or next page
+            next_url = request.GET.get('next', 'store:home')
+            return redirect(next_url)
+        else:
+            # Form has errors - they will be displayed in the template
+            messages.error(request, 'يرجى تصحيح الأخطاء أدناه')
+    else:
+        form = UserRegistrationForm()
+    
+    context = {
+        'form': form,
+    }
+    
+    return render(request, 'users/register.html', context)
 
 
 @login_required

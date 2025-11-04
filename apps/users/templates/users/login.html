@@ -1,4 +1,4 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}تسجيل الدخول - إمبراطور الخليج{% endblock %}
 
@@ -100,7 +100,7 @@
             <div class="text-center">
                 <p class="text-sm text-gray-600">
                     ليس لديك حساب؟
-                    <a href="#" class="font-medium text-primary hover:text-primary-700">
+                    <a href="{% url 'users:register' %}" class="font-medium text-primary hover:text-primary-700">
                         إنشاء حساب جديد
                     </a>
                 </p>

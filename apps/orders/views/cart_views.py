@@ -1,4 +1,4 @@
-﻿from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse
@@ -127,33 +127,22 @@ def update_cart_item(request, item_id):
         # Check against inventory stock
         if cart_item.quantity < cart_item.product.stock:
             cart_item.increase_quantity(1)
-            messages.success(request, 'تم تحديث الكمية')
-        else:
-            messages.error(request, 'لا توجد كمية كافية في المخزون')
     
     elif action == 'decrease':
         cart_item.decrease_quantity(1)
-        if cart_item.quantity > 0:
-            messages.success(request, 'تم تحديث الكمية')
-        else:
-            messages.success(request, 'تم حذف المنتج من السلة')
     
     else:  # set quantity
         try:
             quantity = int(request.POST.get('quantity', 1))
             if quantity < 1:
                 cart_item.delete()
-                messages.success(request, 'تم حذف المنتج من السلة')
-            elif quantity > cart_item.product.stock:
-                messages.error(request, f'لا توجد كمية كافية في المخزون')
-            else:
+            elif quantity <= cart_item.product.stock:
                 cart_item.quantity = quantity
                 cart_item.save()
-                messages.success(request, 'تم تحديث الكمية')
         except (ValueError, TypeError):
-            messages.error(request, 'كمية غير صالحة')
+            pass
     
-    # Reload the page to refresh cart  
+    # Reload the page to refresh cart
     return HttpResponse(headers={'HX-Refresh': 'true'})
 
 
@@ -173,12 +162,9 @@ def remove_from_cart(request, item_id):
     cart = get_cart(request)
     cart_item = get_object_or_404(CartItem, id=item_id, cart=cart)
     
-    product_name = cart_item.product.name
     cart_item.delete()
     
-    messages.success(request, f'تم حذف {product_name} من السلة')
-    
-    # Reload the page to refresh cart  
+    # Reload the page to refresh cart
     return HttpResponse(headers={'HX-Refresh': 'true'})
 
 

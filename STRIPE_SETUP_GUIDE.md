@@ -57,8 +57,8 @@ STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret_here
 
 **Example of what it should look like:**
 ```env
-STRIPE_PUBLISHABLE_KEY=pk_test_51QKxyz789ABCdefGHIjklMNOpqrSTUvwxYZ123456789aBcDeFgHiJkLmNoPqRsTuVwXyZ
-STRIPE_SECRET_KEY=sk_test_51QKxyz789ABCdefGHIjklMNOpqrSTUvwxYZ123456789aBcDeFgHiJkLmNoPqRsTuVwXyZ
+STRIPE_PUBLISHABLE_KEY=
+STRIPE_SECRET_KEY=
 ```
 
 ---

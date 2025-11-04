@@ -1,13 +1,13 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block title %}{{ product.name }} - الإمبراطور الخليجي{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
+<div class="container mx-auto px-4 pt-8 pb-8" style="margin-top: 0 !important; padding-top: 2rem !important;">
     
     <!-- Breadcrumb -->
-    <nav class="flex items-center gap-2 text-sm text-gray-600 mb-8">
+    <nav class="flex items-center gap-2 text-sm text-gray-600 mb-8" style="margin-top: 0 !important;">
         <a href="{% url 'store:product_list' %}" class="hover:text-primary">المنتجات</a>
         <span>‹</span>
         <a href="?category={{ product.category.slug }}" class="hover:text-primary">{{ product.category.name }}</a>

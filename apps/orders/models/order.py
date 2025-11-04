@@ -1,4 +1,4 @@
-﻿from django.db import models
+from django.db import models
 from django.conf import settings
 from apps.store.models import Product
 from apps.users.models import Address
@@ -37,7 +37,9 @@ class Order(models.Model):
         Address,
         on_delete=models.PROTECT,
         related_name='orders',
-        verbose_name='عنوان التوصيل'
+        verbose_name='عنوان التوصيل',
+        null=True,
+        blank=True
     )
     
     # Order details

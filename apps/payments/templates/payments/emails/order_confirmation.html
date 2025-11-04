@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تأكيد الطلب</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .header p {
+            margin: 10px 0 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #1e40af;
+        }
+        .order-summary {
+            background: #f9fafb;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        .order-summary h2 {
+            margin: 0 0 15px;
+            color: #1f2937;
+            font-size: 20px;
+            border-bottom: 2px solid #1e40af;
+            padding-bottom: 10px;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+        .detail-value {
+            color: #1f2937;
+            font-weight: 600;
+        }
+        .total {
+            background: #1e40af;
+            color: white;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .items-list {
+            margin: 20px 0;
+        }
+        .item {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .item:last-child {
+            border-bottom: none;
+        }
+        .item-name {
+            font-weight: 600;
+            color: #1f2937;
+        }
+        .item-details {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .item-price {
+            color: #1e40af;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .button {
+            display: inline-block;
+            background: #1e40af;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 20px 0;
+            font-weight: 600;
+            text-align: center;
+        }
+        .button:hover {
+            background: #1e3a8a;
+        }
+        .footer {
+            background: #f9fafb;
+            padding: 20px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+        .footer a {
+            color: #1e40af;
+            text-decoration: none;
+        }
+        .success-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="success-icon">✓</div>
+            <h1>تم تأكيد طلبك بنجاح!</h1>
+            <p>شكراً لشرائك من إمبراطور الخليج</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <p class="greeting">مرحباً {{ user.get_full_name|default:user.username }},</p>
+            
+            <p>تم استلام طلبك وتأكيد الدفع بنجاح. سيتم معالجة طلبك في أقرب وقت ممكن.</p>
+            
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <h2>تفاصيل الطلب</h2>
+                
+                <div class="detail-row">
+                    <span class="detail-label">رقم الطلب:</span>
+                    <span class="detail-value">{{ order.order_number }}</span>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">تاريخ الطلب:</span>
+                    <span class="detail-value">{{ order.created_at|date:"d/m/Y - h:i A" }}</span>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">عدد المنتجات:</span>
+                    <span class="detail-value">{{ order.get_total_items }}</span>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">حالة الدفع:</span>
+                    <span class="detail-value" style="color: #10b981;">✓ مدفوع</span>
+                </div>
+            </div>
+            
+            <!-- Order Items -->
+            <div class="order-summary">
+                <h2>المنتجات المطلوبة</h2>
+                <div class="items-list">
+                    {% for item in order.items.all %}
+                    <div class="item">
+                        <div>
+                            <div class="item-name">{{ item.product_name }}</div>
+                            <div class="item-details">الكمية: {{ item.quantity }} × {{ item.price }} ر.س</div>
+                        </div>
+                        <div class="item-price">{{ item.get_total_price }} ر.س</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Total -->
+            <div class="total">
+                المجموع الكلي: {{ order.total_price }} ر.س
+            </div>
+            
+            <!-- Notes -->
+            {% if order.notes %}
+            <div class="order-summary">
+                <h2>ملاحظات الطلب</h2>
+                <p style="color: #6b7280; margin: 10px 0;">{{ order.notes }}</p>
+            </div>
+            {% endif %}
+            
+            <!-- Action Button -->
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="#" class="button">تتبع طلبك</a>
+            </div>
+            
+            <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
+                إذا كان لديك أي استفسارات بخصوص طلبك، لا تتردد في التواصل معنا.
+            </p>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>إمبراطور الخليج</strong></p>
+            <p>للاستفسارات: <a href="mailto:support@gulfemperor.com">support@gulfemperor.com</a></p>
+            <p style="margin-top: 15px; color: #9ca3af;">
+                هذا البريد الإلكتروني تم إرساله تلقائياً، يرجى عدم الرد عليه.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-﻿from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.conf import settings
@@ -9,6 +9,11 @@ import logging
 
 from apps.orders.models import Order
 from apps.payments.models import Payment
+from apps.payments.emails import (
+    send_order_confirmation_email,
+    send_payment_failed_email,
+    send_refund_confirmation_email
+)
 
 # Configure Stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -114,8 +119,8 @@ def handle_payment_succeeded(payment_intent):
         
         logger.info(f'Payment succeeded for Order #{order.order_number}')
         
-        # TODO: Send confirmation email to customer
-        # send_order_confirmation_email(order)
+        # Send confirmation email to customer
+        send_order_confirmation_email(order)
         
     except Exception as e:
         logger.error(f'Error handling payment succeeded: {str(e)}')
@@ -154,8 +159,8 @@ def handle_payment_failed(payment_intent):
         
         logger.warning(f'Payment failed for Order #{order.order_number}')
         
-        # TODO: Send payment failed notification
-        # send_payment_failed_email(order)
+        # Send payment failed notification
+        send_payment_failed_email(order)
         
     except Exception as e:
         logger.error(f'Error handling payment failed: {str(e)}')
@@ -217,8 +222,8 @@ def handle_charge_refunded(charge):
         
         logger.info(f'Charge refunded for Order #{order.order_number}')
         
-        # TODO: Send refund confirmation email
-        # send_refund_confirmation_email(order)
+        # Send refund confirmation email
+        send_refund_confirmation_email(order)
         
     except Exception as e:
         logger.error(f'Error handling charge refunded: {str(e)}')

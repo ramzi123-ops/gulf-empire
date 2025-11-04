@@ -1,4 +1,4 @@
-﻿from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import transaction
@@ -7,7 +7,6 @@ from django.conf import settings
 import stripe
 
 from apps.orders.models import Cart, Order, OrderItem
-from apps.users.models import Address
 from apps.payments.models import Payment
 
 # Configure Stripe
@@ -17,7 +16,8 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 @login_required
 def checkout(request):
     """
-    Checkout view - handles address selection and order creation
+    Checkout view - handles order creation and payment initiation
+    No shipping/address required (digital or in-store pickup)
     """
     
     # Get or create cart
@@ -30,49 +30,28 @@ def checkout(request):
     
     # GET request - show checkout page
     if request.method == 'GET':
-        # Get user's addresses
-        addresses = Address.objects.filter(user=request.user)
-        
-        # Check if user has at least one address
-        if not addresses.exists():
-            messages.warning(request, _('Please add a delivery address before checking out.'))
-            return redirect('users:add_address')
-        
         context = {
             'cart': cart,
-            'addresses': addresses,
-            'default_address': addresses.filter(is_default=True).first(),
         }
         
         return render(request, 'orders/checkout.html', context)
     
     # POST request - create order
     elif request.method == 'POST':
-        address_id = request.POST.get('address_id')
         order_notes = request.POST.get('notes', '').strip()
-        
-        # Validate address selection
-        if not address_id:
-            messages.error(request, _('Please select a delivery address.'))
-            return redirect('orders:checkout')
-        
-        # Get the selected address
-        address = get_object_or_404(Address, id=address_id, user=request.user)
         
         try:
             # Create order within a transaction
             with transaction.atomic():
-                # Calculate totals
-                subtotal = cart.get_subtotal()
-                shipping_cost = cart.get_shipping_cost()
-                total = cart.get_total()
+                # Calculate totals (no shipping cost)
+                total = cart.subtotal
                 
                 # Create the order
                 order = Order.objects.create(
                     user=request.user,
-                    address=address,
+                    address=None,  # No shipping address needed
                     total_price=total,
-                    shipping_cost=shipping_cost,
+                    shipping_cost=0,  # No shipping
                     notes=order_notes,
                     status='pending',
                     payment_status='pending'

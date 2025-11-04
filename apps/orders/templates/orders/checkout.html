@@ -10,7 +10,7 @@
     <!-- Header -->
     <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900 mb-2">إتمام الطلب</h1>
-        <p class="text-gray-600">راجع معلومات الطلب واختر عنوان التوصيل</p>
+        <p class="text-gray-600">راجع معلومات طلبك وأضف أي ملاحظات</p>
     </div>
 
     <!-- Checkout Steps Indicator -->
@@ -51,83 +51,8 @@
         
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            <!-- Left Column: Address Selection -->
+            <!-- Left Column: Order Notes -->
             <div class="lg:col-span-2 space-y-6">
-                
-                <!-- Delivery Address Section -->
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                        عنوان التوصيل
-                    </h2>
-                    
-                    <div class="space-y-3">
-                        {% for address in addresses %}
-                        <label class="block cursor-pointer">
-                            <input type="radio" 
-                                   name="address_id" 
-                                   value="{{ address.id }}"
-                                   {% if address.is_default or forloop.first %}checked{% endif %}
-                                   class="sr-only peer">
-                            
-                            <div class="border-2 border-gray-200 rounded-lg p-4 peer-checked:border-primary peer-checked:bg-primary/5 hover:border-gray-300 transition-all">
-                                <div class="flex items-start justify-between">
-                                    <div class="flex-1">
-                                        <div class="flex items-center gap-2 mb-2">
-                                            <h3 class="font-semibold text-gray-900">{{ address.full_name }}</h3>
-                                            {% if address.is_default %}
-                                            <span class="inline-flex items-center px-2 py-1 rounded text-xs font-semibold bg-green-100 text-green-800">
-                                                افتراضي
-                                            </span>
-                                            {% endif %}
-                                        </div>
-                                        
-                                        <p class="text-gray-700 text-sm mb-1">
-                                            {{ address.street_address }}
-                                            {% if address.apartment_number %}, {{ address.apartment_number }}{% endif %}
-                                        </p>
-                                        
-                                        <p class="text-gray-700 text-sm mb-2">
-                                            {{ address.city }}, {{ address.state }}
-                                            {% if address.postal_code %}- {{ address.postal_code }}{% endif %}
-                                        </p>
-                                        
-                                        <p class="text-gray-600 text-sm flex items-center gap-1">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                                            </svg>
-                                            {{ address.phone_number }}
-                                        </p>
-                                    </div>
-                                    
-                                    <!-- Checkmark for selected -->
-                                    <div class="hidden peer-checked:block">
-                                        <div class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </label>
-                        {% endfor %}
-                    </div>
-                    
-                    <!-- Add New Address Button -->
-                    <div class="mt-4">
-                        <a href="{% url 'users:add_address' %}" 
-                           class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-semibold transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                            </svg>
-                            إضافة عنوان جديد
-                        </a>
-                    </div>
-                </div>
                 
                 <!-- Order Notes Section -->
                 <div class="bg-white rounded-lg shadow-sm p-6">
@@ -180,18 +105,8 @@
                     <div class="space-y-3 mb-6 pb-6 border-b border-gray-200">
                         <!-- Subtotal -->
                         <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">المجموع الفرعي</span>
-                            <span class="font-semibold text-gray-900">{{ cart.get_subtotal }} ر.س</span>
-                        </div>
-                        
-                        <!-- Shipping -->
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-600">تكلفة التوصيل</span>
-                            {% if cart.get_subtotal >= 50 %}
-                            <span class="font-semibold text-green-600">مجاناً</span>
-                            {% else %}
-                            <span class="font-semibold text-gray-900">{{ cart.get_shipping_cost }} ر.س</span>
-                            {% endif %}
+                            <span class="text-gray-600">المجموع</span>
+                            <span class="font-semibold text-gray-900">{{ cart.subtotal }} ر.س</span>
                         </div>
                     </div>
                     

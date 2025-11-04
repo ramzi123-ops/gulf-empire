@@ -240,9 +240,10 @@
                                 <span class="font-medium">{{ order.items.count }}</span> منتج - 
                                 <span class="font-bold text-gray-900">{{ order.total_amount }} ر.س</span>
                             </div>
-                            <a href="{% url 'orders:order_detail' order.id %}" class="text-primary hover:text-primary/80 text-sm font-medium">
+                            {# TODO: Create order detail view #}
+                            {# <a href="{% url 'orders:order_detail' order.id %}" class="text-primary hover:text-primary/80 text-sm font-medium">
                                 عرض التفاصيل ←
-                            </a>
+                            </a> #}
                         </div>
                     </div>
                     {% endfor %}

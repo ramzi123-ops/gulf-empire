@@ -11,41 +11,51 @@ import os
 import sys
 
 # ============================================================================
-# Add your project directory to Python path
+# CONFIGURATION - Update these values for your setup
 # ============================================================================
-# Replace 'ramzi77' with your PythonAnywhere username
-project_home = '/home/ramzi77/gulf_emperor'
+USERNAME = 'ramzi77'  # Your PythonAnywhere username
+PROJECT_NAME = 'gulf-empire'  # Your project folder name (NOTE: hyphen not underscore!)
+PYTHON_VERSION = '3.13'  # Python version used in virtual environment
 
+# ============================================================================
+# Project Path Setup
+# ============================================================================
+project_home = f'/home/{USERNAME}/{PROJECT_NAME}'
+
+# Add project directory to Python path (MUST be first)
 if project_home not in sys.path:
     sys.path.insert(0, project_home)
 
 # ============================================================================
-# Set Django settings module
+# Virtual Environment Setup
 # ============================================================================
-os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings'
+# Add virtual environment's site-packages to Python path
+import site
+venv_packages = f'/home/{USERNAME}/{PROJECT_NAME}/venv/lib/python{PYTHON_VERSION}/site-packages'
+
+# Add to site-packages directories
+site.addsitedir(venv_packages)
 
 # ============================================================================
-# Activate virtual environment
+# Environment Variables
 # ============================================================================
-# Replace 'ramzi77' with your PythonAnywhere username
-activate_this = '/home/ramzi77/gulf_emperor/venv/bin/activate_this.py'
-
+# Load .env file before importing Django
 try:
-    with open(activate_this) as f:
-        exec(f.read(), {'__file__': activate_this})
-except FileNotFoundError:
-    # If activate_this.py doesn't exist, try alternative method
+    from dotenv import load_dotenv
+    env_path = os.path.join(project_home, '.env')
+    if os.path.exists(env_path):
+        load_dotenv(env_path)
+except ImportError:
+    # dotenv not available, skip
     pass
 
 # ============================================================================
-# Load environment variables from .env file
+# Django Settings
 # ============================================================================
-from dotenv import load_dotenv
-env_path = os.path.join(project_home, '.env')
-load_dotenv(env_path)
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
 # ============================================================================
-# Import Django WSGI application
+# Django Application
 # ============================================================================
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()

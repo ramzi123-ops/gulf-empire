@@ -45,7 +45,6 @@
     </section>
 
     <!-- All Products Section -->
-    {% if all_products %}
     <section class="py-16 bg-white">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between mb-8">
@@ -53,11 +52,14 @@
                     <h2 class="text-3xl font-bold text-gray-900 mb-2">تسوق الآن</h2>
                     <p class="text-gray-600">اكتشف جميع منتجاتنا</p>
                 </div>
+                {% if all_products %}
                 <a href="{% url 'store:product_list' %}" class="text-primary hover:text-primary/80 font-semibold hidden md:block">
                     عرض الكل ←
                 </a>
+                {% endif %}
             </div>
 
+            {% if all_products %}
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                 {% for product in all_products %}
                 {% include 'store/partials/product_card.html' with product=product %}
@@ -69,9 +71,18 @@
                     عرض جميع المنتجات ←
                 </a>
             </div>
+            {% else %}
+            <!-- Empty State -->
+            <div class="text-center py-16">
+                <svg class="w-24 h-24 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                </svg>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">لا توجد منتجات متاحة حالياً</h3>
+                <p class="text-gray-600 mb-6">سنقوم بإضافة منتجات جديدة قريباً</p>
+            </div>
+            {% endif %}
         </div>
     </section>
-    {% endif %}
 
     <!-- Featured Products Section (مميز) -->
     {% if featured_products %}
@@ -371,6 +382,9 @@
             </div>
         </div>
     </section>
+
+    <!-- Newsletter Subscription -->
+    {% include 'store/partials/newsletter.html' %}
 
     <!-- Footer Advertisement -->
     {% include 'store/partials/ads_footer.html' %}

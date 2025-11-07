@@ -120,6 +120,66 @@
                 }, 300);
             }
         });
+
+        // Wishlist functionality
+        function toggleWishlist(productId, button) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const icon = button.querySelector('.wishlist-icon');
+            const isInWishlist = icon.getAttribute('fill') === 'currentColor';
+            
+            // Toggle visual state
+            if (isInWishlist) {
+                icon.setAttribute('fill', 'none');
+                icon.classList.remove('text-red-500');
+                icon.classList.add('text-gray-400');
+            } else {
+                icon.setAttribute('fill', 'currentColor');
+                icon.classList.remove('text-gray-400');
+                icon.classList.add('text-red-500');
+            }
+            
+            // Save to localStorage
+            let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            if (isInWishlist) {
+                wishlist = wishlist.filter(id => id !== productId);
+            } else {
+                wishlist.push(productId);
+            }
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            
+            // Show feedback
+            const message = isInWishlist ? 'تم الإزالة من المفضلة' : 'تم الإضافة للمفضلة';
+            showToast(message);
+        }
+
+        // Load wishlist state on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            document.querySelectorAll('.wishlist-icon').forEach(icon => {
+                const button = icon.closest('button');
+                const productId = parseInt(button.getAttribute('onclick').match(/\d+/)[0]);
+                if (wishlist.includes(productId)) {
+                    icon.setAttribute('fill', 'currentColor');
+                    icon.classList.remove('text-gray-400');
+                    icon.classList.add('text-red-500');
+                }
+            });
+        });
+
+        // Toast notification function
+        function showToast(message) {
+            const toast = document.getElementById('toast-message');
+            toast.innerHTML = `
+                <div class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in">
+                    ${message}
+                </div>
+            `;
+            setTimeout(() => {
+                toast.innerHTML = '';
+            }, 2000);
+        }
     </script>
 
 </body>

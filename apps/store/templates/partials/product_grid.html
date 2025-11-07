@@ -10,6 +10,7 @@
             <img 
                 src="{{ product.main_image.url }}" 
                 alt="{{ product.name }}"
+                loading="lazy"
                 class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
             
             <!-- Badges -->
@@ -24,6 +25,15 @@
                 <span class="bg-gray-500 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full">نفد</span>
                 {% endif %}
             </div>
+
+            <!-- Wishlist Button -->
+            <button class="absolute top-2 start-2 bg-white/90 hover:bg-white p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                    onclick="toggleWishlist({{ product.id }}, this)"
+                    title="أضف للمفضلة">
+                <svg class="w-4 h-4 text-gray-400 hover:text-red-500 transition-colors wishlist-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                </svg>
+            </button>
         </a>
         
         <!-- Product Info -->
@@ -205,10 +215,13 @@
 
 {% if not products %}
 <div class="bg-white rounded-lg shadow-sm p-12 text-center">
-    <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+    <svg class="mx-auto h-20 w-20 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
     </svg>
-    <h3 class="text-lg font-semibold text-gray-900 mb-2">لم يتم العثور على منتجات</h3>
-    <p class="text-gray-600">جرِّب تعديل معايير البحث أو إزالة الفلاتر</p>
+    <h3 class="text-xl font-semibold text-gray-900 mb-2">لم يتم العثور على منتجات</h3>
+    <p class="text-gray-600 mb-6">جرِّب تعديل معايير البحث أو إزالة الفلاتر</p>
+    <a href="{% url 'store:product_list' %}" class="inline-block text-primary hover:text-primary-700 font-semibold">
+        تصفح جميع المنتجات ←
+    </a>
 </div>
 {% endif %}

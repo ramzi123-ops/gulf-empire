@@ -46,7 +46,7 @@
                            hx-get="?category={{ category.slug }}" 
                            hx-target="#product-grid"
                            hx-include="[name='brand'],[name='search'],[name='min_price'],[name='max_price'],[name='rating']"
-                           class="block py-2 px-3 rounded-lg text-sm transition-colors {% if current_category == category.slug %}bg-primary text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+                           class="block px-3 rounded-lg text-sm transition-colors {% if current_category == category.slug %}bg-primary text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
                             {{ category.name }}
                         </a>
                         {% endfor %}

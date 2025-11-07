@@ -1,7 +1,7 @@
 {% load static %}
 
 {% if hero_ads %}
-<section class="relative overflow-hidden bg-gradient-to-r from-secondary to-secondary-700" dir="rtl">
+<section class="relative overflow-hidden bg-gradient-to-r from-primary to-primary-700" dir="rtl">
     <div class="hero-slider relative">
         {% for ad in hero_ads %}
         <div class="hero-slide {% if forloop.first %}active{% endif %} absolute inset-0 transition-opacity duration-700 {% if not forloop.first %}opacity-0{% endif %}">
@@ -36,7 +36,7 @@
                     <a href="{{ ad.link_url }}" 
                        {% if ad.open_in_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
                        onclick="trackAdClick({{ ad.id }})"
-                       class="inline-block bg-yellow-500 hover:bg-yellow-600 text-secondary font-bold py-3 px-8 rounded-lg transition-colors animate-fade-in-up animation-delay-600">
+                       class="inline-block bg-white hover:bg-gray-100 text-primary font-bold py-3 px-8 rounded-lg transition-colors shadow-lg animate-fade-in-up animation-delay-600">
                         {{ ad.link_text|default:"تسوق الآن" }}
                     </a>
                     {% endif %}
@@ -46,9 +46,26 @@
         {% endfor %}
     </div>
 
+    <!-- Search Bar in Hero -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-full max-w-2xl px-4 z-20 hidden md:block">
+        <form action="{% url 'store:product_list' %}" method="get" class="flex gap-2">
+            <input type="text" 
+                   name="search" 
+                   placeholder="ابحث عن منتج، فئة أو علامة تجارية..."
+                   class="flex-1 px-6 py-4 rounded-lg border-0 focus:ring-2 focus:ring-primary-500 shadow-lg text-gray-900">
+            <button type="submit" 
+                    class="bg-primary hover:bg-primary-700 text-white px-8 py-4 rounded-lg font-bold transition-colors shadow-lg whitespace-nowrap">
+                <svg class="w-5 h-5 md:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <span class="hidden md:inline">بحث</span>
+            </button>
+        </form>
+    </div>
+
     <!-- Slider Controls -->
     {% if hero_ads.count > 1 %}
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex gap-3">
+    <div class="absolute bottom-24 md:bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex gap-3">
         {% for ad in hero_ads %}
         <button class="slider-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-colors {% if forloop.first %}!bg-white{% endif %}" 
                 data-slide="{{ forloop.counter0 }}"></button>

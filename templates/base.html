@@ -36,6 +36,13 @@
         .container:first-child {
             margin-top: 0 !important;
         }
+        /* HTMX Loading Indicator */
+        #loading-indicator {
+            display: none;
+        }
+        .htmx-request #loading-indicator {
+            display: flex !important;
+        }
     </style>
     
     <script src="{% static 'js/htmx.min.js' %}"></script>
@@ -61,6 +68,21 @@
     <!-- Toast Message Container (for HTMX OOB swaps) -->
     <div id="toast-message"></div>
 
+    <!-- HTMX Loading Indicator -->
+    <div id="loading-indicator" class="htmx-indicator fixed top-20 end-4 bg-primary text-white px-4 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2">
+        <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+        <span class="text-sm font-medium">جاري الإضافة...</span>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" 
+            onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+            class="fixed bottom-6 end-6 bg-primary hover:bg-primary-700 text-white p-3 rounded-full shadow-lg opacity-0 transition-all duration-300 z-40 hidden">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+        </svg>
+    </button>
+
     <main style="margin: 0; padding: 0; padding-top: 64px;">
         {% block content %}
         {% endblock %}
@@ -80,6 +102,22 @@
                         toast.innerHTML = '';
                     }
                 }, 5000);
+            }
+        });
+
+        // Back to top button functionality
+        window.addEventListener('scroll', function() {
+            const backToTop = document.getElementById('back-to-top');
+            if (window.scrollY > 300) {
+                backToTop.classList.remove('hidden', 'opacity-0');
+                backToTop.classList.add('opacity-100');
+            } else {
+                backToTop.classList.add('opacity-0');
+                setTimeout(() => {
+                    if (window.scrollY <= 300) {
+                        backToTop.classList.add('hidden');
+                    }
+                }, 300);
             }
         });
     </script>

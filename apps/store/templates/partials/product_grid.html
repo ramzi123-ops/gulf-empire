@@ -29,62 +29,57 @@
         <!-- Product Info -->
         <div class="p-3">
             
-            <!-- Category & Brand -->
-            <div class="flex items-center gap-1 text-[10px] text-gray-500 mb-1">
-                <span class="truncate">{{ product.category.name }}</span>
-                <span>•</span>
-                <span class="truncate">{{ product.brand.name }}</span>
+            <!-- Category -->
+            <div class="text-[10px] text-gray-500 mb-1 truncate">
+                {{ product.category.name }}
             </div>
             
             <!-- Product Name -->
             <a href="{% url 'store:product_detail' product.slug %}" 
-               class="block font-semibold text-sm text-gray-900 hover:text-primary transition-colors mb-1 line-clamp-2 leading-tight">
+               class="block font-medium text-sm text-gray-900 hover:text-primary transition-colors mb-3 line-clamp-2 leading-tight min-h-[2.5rem]">
                 {{ product.name }}
             </a>
             
-            <!-- SKU -->
-            <p class="text-[10px] text-gray-400 mb-2 truncate">{{ product.sku }}</p>
-            
-            <!-- Price -->
-            <div class="mb-2">
-                <div class="flex items-baseline gap-1">
-                    <span class="text-lg font-bold text-primary">{{ product.final_price }}</span>
-                    <span class="text-xs text-gray-600">ر.س</span>
+            <!-- Price & Add to Cart -->
+            <div class="flex items-center justify-between gap-2">
+                <!-- Price -->
+                <div class="flex-1">
+                    <div class="flex items-baseline gap-1">
+                        <span class="text-base font-bold text-gray-900">{{ product.final_price }}</span>
+                        <span class="text-[10px] text-gray-600">ر.س</span>
+                    </div>
+                    {% if product.sale_price %}
+                    <div class="text-[10px] text-gray-400 line-through">{{ product.price }} ر.س</div>
+                    {% endif %}
                 </div>
-                {% if product.sale_price %}
-                <span class="text-[10px] text-gray-400 line-through">{{ product.price }} ر.س</span>
+                
+                <!-- Add to Cart Icon -->
+                {% if product.has_stock %}
+                <form 
+                    hx-post="{% url 'orders:add_to_cart' product.id %}" 
+                    hx-target="#mini-cart" 
+                    hx-swap="outerHTML">
+                    {% csrf_token %}
+                    <button 
+                        type="submit"
+                        class="bg-primary hover:bg-primary-700 text-white p-2 rounded-lg transition-colors"
+                        title="أضف للسلة">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </form>
+                {% else %}
+                <button 
+                    disabled
+                    class="bg-gray-300 text-gray-500 p-2 rounded-lg cursor-not-allowed"
+                    title="غير متوفر">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
                 {% endif %}
             </div>
-            
-            <!-- Stock Status -->
-            {% if product.stock == 0 %}
-            <p class="text-[10px] text-red-600 mb-2">• غير متوفر</p>
-            {% elif product.stock > 0 and product.stock <= product.inventory.low_stock_threshold %}
-            <p class="text-[10px] text-orange-600 mb-2">• {{ product.stock }} متبقي</p>
-            {% elif product.stock > product.inventory.low_stock_threshold %}
-            <p class="text-[10px] text-green-600 mb-2">• متوفر</p>
-            {% endif %}
-            
-            <!-- Add to Cart Form -->
-            {% if product.has_stock %}
-            <form 
-                hx-post="{% url 'orders:add_to_cart' product.id %}" 
-                hx-target="#mini-cart" 
-                hx-swap="outerHTML">
-                {% csrf_token %}
-                <button 
-                    type="submit"
-                    class="w-full bg-primary hover:bg-primary-700 text-white font-medium py-2 px-3 rounded-lg transition-colors text-xs">
-                    أضف للسلة
-                </button>
-            </form>
-            {% else %}
-            <button 
-                disabled
-                class="w-full bg-gray-300 text-gray-500 font-medium py-2 px-3 rounded-lg cursor-not-allowed text-xs">
-                غير متوفر
-            </button>
-            {% endif %}
             
         </div>
         

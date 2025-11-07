@@ -18,7 +18,7 @@
             </div>
 
             {% if categories %}
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 {% for category in categories %}
                 <a href="{% url 'store:product_list' %}?category={{ category.slug }}" class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 text-center group">
                     <div class="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors">
@@ -55,7 +55,7 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                 {% for product in all_products %}
                 {% include 'store/partials/product_card.html' with product=product %}
                 {% endfor %}
@@ -72,7 +72,7 @@
 
     <!-- Featured Products Section (مميز) -->
     {% if featured_products %}
-    <section class="py-16 bg-gradient-to-br from-yellow-50 to-orange-50">
+    <section class="py-16 bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between mb-8">
                 <div>
@@ -84,9 +84,9 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                 {% for product in featured_products %}
-                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="مميز" badge_color="yellow" %}
+                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="مميز" badge_color="primary" %}
                 {% endfor %}
             </div>
 
@@ -104,7 +104,7 @@
 
     <!-- Featured Products with Discount (مميز مع خصم) -->
     {% if featured_sale_products %}
-    <section class="py-16 bg-gradient-to-br from-purple-50 to-pink-50">
+    <section class="py-16 bg-white">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between mb-8">
                 <div>
@@ -116,9 +116,9 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                 {% for product in featured_sale_products %}
-                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="مميز" badge_color="yellow" %}
+                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="مميز" badge_color="primary" %}
                 {% endfor %}
             </div>
 
@@ -133,7 +133,7 @@
 
     <!-- New Arrivals Section (وصل حديثاً) -->
     {% if new_arrivals %}
-    <section class="py-16 bg-gradient-to-br from-blue-50 to-primary/5">
+    <section class="py-16 bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between mb-8">
                 <div>
@@ -145,9 +145,9 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                 {% for product in new_arrivals %}
-                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="جديد" badge_color="green" %}
+                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="جديد" badge_color="primary" %}
                 {% endfor %}
             </div>
 
@@ -169,7 +169,7 @@
                 <p class="text-gray-600">نتعامل مع أفضل العلامات التجارية العالمية</p>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 {% for brand in brands %}
                 <a href="{% url 'store:product_list' %}?brand={{ brand.slug }}" class="bg-gray-50 rounded-lg p-6 hover:shadow-md transition-all group">
                     {% if brand.logo %}
@@ -188,7 +188,7 @@
 
     <!-- Sale Products Section (العروض) -->
     {% if sale_products %}
-    <section class="py-16 bg-gradient-to-br from-red-50 to-orange-50">
+    <section class="py-16 bg-white">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between mb-8">
                 <div>
@@ -200,9 +200,9 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                 {% for product in sale_products %}
-                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="خصم" badge_color="red" %}
+                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="خصم" badge_color="primary" %}
                 {% endfor %}
             </div>
 
@@ -217,7 +217,7 @@
 
     <!-- Most Sold Products Section -->
     {% if most_sold_products %}
-    <section class="py-16 bg-gradient-to-br from-green-50 to-teal-50">
+    <section class="py-16 bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between mb-8">
                 <div>
@@ -229,9 +229,9 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                 {% for product in most_sold_products %}
-                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="الأكثر مبيعاً" badge_color="green" %}
+                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="الأكثر مبيعاً" badge_color="primary" %}
                 {% endfor %}
             </div>
 
@@ -246,7 +246,7 @@
 
     <!-- Coming Soon Section (قريباً) -->
     {% if coming_soon_products %}
-    <section class="py-16 bg-gradient-to-br from-indigo-50 to-blue-50">
+    <section class="py-16 bg-white">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between mb-8">
                 <div>
@@ -255,9 +255,9 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                 {% for product in coming_soon_products %}
-                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="قريباً" badge_color="blue" coming_soon=True %}
+                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="قريباً" badge_color="primary" coming_soon=True %}
                 {% endfor %}
             </div>
         </div>
@@ -278,7 +278,7 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                 {% for product in latest_products %}
                 {% include 'store/partials/product_card.html' with product=product %}
                 {% endfor %}
@@ -333,7 +333,7 @@
     {% endif %}
 
     <!-- Features Section -->
-    <section class="py-16 bg-gradient-to-br from-gray-50 to-gray-100">
+    <section class="py-16 bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="text-center">

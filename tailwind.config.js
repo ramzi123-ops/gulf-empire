@@ -22,6 +22,10 @@ module.exports = {
           900: '#001A20',
         },
       },
+      fontFamily: {
+        sans: ['Tajawal', 'sans-serif'],
+        arabic: ['Tajawal', 'sans-serif'],
+      },
     },
   },
   plugins: [],

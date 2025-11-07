@@ -19,7 +19,7 @@
                     <form hx-get="{% url 'store:product_list' %}" 
                           hx-target="#product-grid" 
                           hx-trigger="submit"
-                          hx-include="[name='category'],[name='brand'],[name='sort']">
+                          hx-include="[name='category'],[name='brand'],[name='sort'],[name='min_price'],[name='max_price'],[name='rating']">
                         <input 
                             type="text" 
                             name="search" 
@@ -37,6 +37,7 @@
                         <a href="{% url 'store:product_list' %}" 
                            hx-get="{% url 'store:product_list' %}" 
                            hx-target="#product-grid"
+                           hx-include="[name='brand'],[name='search'],[name='min_price'],[name='max_price'],[name='rating']"
                            class="block py-2 px-3 rounded-lg text-sm transition-colors {% if not current_category %}bg-primary text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
                             جميع الفئات
                         </a>
@@ -44,6 +45,7 @@
                         <a href="?category={{ category.slug }}" 
                            hx-get="?category={{ category.slug }}" 
                            hx-target="#product-grid"
+                           hx-include="[name='brand'],[name='search'],[name='min_price'],[name='max_price'],[name='rating']"
                            class="block py-2 px-3 rounded-lg text-sm transition-colors {% if current_category == category.slug %}bg-primary text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
                             {{ category.name }}
                         </a>
@@ -64,7 +66,7 @@
                                 {% if current_brand == brand.slug %}checked{% endif %}
                                 hx-get="{% url 'store:product_list' %}" 
                                 hx-target="#product-grid"
-                                hx-include="[name='category'],[name='search']"
+                                hx-include="[name='category'],[name='search'],[name='min_price'],[name='max_price'],[name='rating']"
                                 class="rounded border-gray-300 text-primary focus:ring-primary-500">
                             <span class="text-sm text-gray-700">{{ brand.name }}</span>
                         </label>
@@ -83,7 +85,7 @@
                                 value="true"
                                 hx-get="{% url 'store:product_list' %}" 
                                 hx-target="#product-grid"
-                                hx-include="[name='category'],[name='brand'],[name='search']"
+                                hx-include="[name='category'],[name='brand'],[name='search'],[name='min_price'],[name='max_price'],[name='rating']"
                                 class="rounded border-gray-300 text-primary focus:ring-primary-500">
                             <span class="text-sm text-gray-700">العروض</span>
                         </label>
@@ -94,7 +96,7 @@
                                 value="true"
                                 hx-get="{% url 'store:product_list' %}" 
                                 hx-target="#product-grid"
-                                hx-include="[name='category'],[name='brand'],[name='search']"
+                                hx-include="[name='category'],[name='brand'],[name='search'],[name='min_price'],[name='max_price'],[name='rating']"
                                 class="rounded border-gray-300 text-primary focus:ring-primary-500">
                             <span class="text-sm text-gray-700">المنتجات المميزة</span>
                         </label>
@@ -105,9 +107,96 @@
                                 value="true"
                                 hx-get="{% url 'store:product_list' %}" 
                                 hx-target="#product-grid"
-                                hx-include="[name='category'],[name='brand'],[name='search']"
+                                hx-include="[name='category'],[name='brand'],[name='search'],[name='min_price'],[name='max_price'],[name='rating']"
                                 class="rounded border-gray-300 text-primary focus:ring-primary-500">
                             <span class="text-sm text-gray-700">وصل حديثاً</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Price Range Filter -->
+                <div class="mb-6">
+                    <h3 class="font-semibold text-gray-900 mb-3">السعر</h3>
+                    <form hx-get="{% url 'store:product_list' %}" 
+                          hx-target="#product-grid"
+                          hx-trigger="change"
+                          hx-include="[name='category'],[name='brand'],[name='search'],[name='rating']">
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-xs text-gray-600 mb-1 block">من (﷼)</label>
+                                <input 
+                                    type="number" 
+                                    name="min_price"
+                                    min="0"
+                                    placeholder="0"
+                                    value="{{ request.GET.min_price|default:'' }}"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-600 mb-1 block">إلى (﷼)</label>
+                                <input 
+                                    type="number" 
+                                    name="max_price"
+                                    min="0"
+                                    placeholder="10000"
+                                    value="{{ request.GET.max_price|default:'' }}"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Ratings Filter -->
+                <div class="mb-6">
+                    <h3 class="font-semibold text-gray-900 mb-3">التقييم</h3>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-2 space-x-reverse cursor-pointer">
+                            <input 
+                                type="radio" 
+                                name="rating" 
+                                value="5"
+                                hx-get="{% url 'store:product_list' %}" 
+                                hx-target="#product-grid"
+                                hx-include="[name='category'],[name='brand'],[name='search'],[name='min_price'],[name='max_price']"
+                                class="text-primary focus:ring-primary-500">
+                            <span class="flex items-center gap-1 text-sm">
+                                <span class="flex">
+                                    ★★★★★
+                                </span>
+                                <span class="text-gray-600">(5 نجوم)</span>
+                            </span>
+                        </label>
+                        <label class="flex items-center space-x-2 space-x-reverse cursor-pointer">
+                            <input 
+                                type="radio" 
+                                name="rating" 
+                                value="4"
+                                hx-get="{% url 'store:product_list' %}" 
+                                hx-target="#product-grid"
+                                hx-include="[name='category'],[name='brand'],[name='search'],[name='min_price'],[name='max_price']"
+                                class="text-primary focus:ring-primary-500">
+                            <span class="flex items-center gap-1 text-sm">
+                                <span class="flex">
+                                    ★★★★☆
+                                </span>
+                                <span class="text-gray-600">(4+ نجوم)</span>
+                            </span>
+                        </label>
+                        <label class="flex items-center space-x-2 space-x-reverse cursor-pointer">
+                            <input 
+                                type="radio" 
+                                name="rating" 
+                                value="3"
+                                hx-get="{% url 'store:product_list' %}" 
+                                hx-target="#product-grid"
+                                hx-include="[name='category'],[name='brand'],[name='search'],[name='min_price'],[name='max_price']"
+                                class="text-primary focus:ring-primary-500">
+                            <span class="flex items-center gap-1 text-sm">
+                                <span class="flex">
+                                    ★★★☆☆
+                                </span>
+                                <span class="text-gray-600">(3+ نجوم)</span>
+                            </span>
                         </label>
                     </div>
                 </div>
@@ -127,7 +216,7 @@
                     name="sort" 
                     hx-get="{% url 'store:product_list' %}" 
                     hx-target="#product-grid"
-                    hx-include="[name='category'],[name='brand'],[name='search']"
+                    hx-include="[name='category'],[name='brand'],[name='search'],[name='min_price'],[name='max_price'],[name='rating']"
                     class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm">
                     <option value="newest">الأحدث</option>
                     <option value="oldest">الأقدم</option>

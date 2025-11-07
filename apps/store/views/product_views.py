@@ -1,4 +1,4 @@
-﻿from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q, Avg
@@ -51,6 +51,18 @@ def product_list(request):
         products = products.filter(is_new_arrival=True)
     if request.GET.get('on_sale') == 'true':
         products = products.filter(sale_price__isnull=False)
+
+    # Filter by rating
+    rating = request.GET.get('rating')
+    if rating:
+        try:
+            rating = int(rating)
+            # Get products with average rating >= selected rating
+            products = products.annotate(
+                avg_rating=Avg('reviews__rating')
+            ).filter(avg_rating__gte=rating)
+        except (ValueError, TypeError):
+            pass
 
     # Sorting
     sort_by = request.GET.get('sort', '-created_at')

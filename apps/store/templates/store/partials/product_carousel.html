@@ -1,0 +1,226 @@
+{% load static %}
+
+<!-- Product Carousel Component -->
+<div class="relative group" dir="rtl">
+    
+    <!-- Previous Button (Right side in RTL) -->
+    <button 
+        class="carousel-prev absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 bg-white hover:bg-primary hover:text-white text-gray-700 p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        aria-label="السابق">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+    </button>
+
+    <!-- Carousel Container -->
+    <div class="carousel-container overflow-x-auto scrollbar-hide scroll-smooth" style="scroll-behavior: smooth;">
+        <div class="flex gap-2">
+            {% for product in products %}
+            <div class="carousel-item flex-shrink-0" style="width: calc(20% - 6px);">
+                {% include 'store/partials/product_card.html' with product=product show_badge=show_badge badge_text=badge_text badge_color=badge_color coming_soon=coming_soon %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Next Button (Left side in RTL) -->
+    <button 
+        class="carousel-next absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 bg-white hover:bg-primary hover:text-white text-gray-700 p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        aria-label="التالي">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+    </button>
+
+    <!-- Scroll Indicators (Dots) -->
+    <div class="flex justify-center gap-2 mt-4">
+        <div class="carousel-dots flex gap-1"></div>
+    </div>
+</div>
+
+<style>
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* Responsive carousel item widths */
+@media (max-width: 640px) {
+    .carousel-item {
+        width: calc(50% - 4px) !important; /* 2 items on mobile */
+    }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+    .carousel-item {
+        width: calc(33.333% - 5.33px) !important; /* 3 items on tablet */
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .carousel-item {
+        width: calc(25% - 6px) !important; /* 4 items on small desktop */
+    }
+}
+
+@media (min-width: 1025px) {
+    .carousel-item {
+        width: calc(20% - 6.4px) !important; /* 5 items on large desktop */
+    }
+}
+
+@media (min-width: 1280px) {
+    .carousel-item {
+        width: calc(16.666% - 6.67px) !important; /* 6 items on xl screens */
+    }
+}
+</style>
+
+<script>
+(function() {
+    // Initialize all carousels on the page
+    document.querySelectorAll('.carousel-container').forEach(initCarousel);
+    
+    function initCarousel(container) {
+        const prevBtn = container.parentElement.querySelector('.carousel-prev');
+        const nextBtn = container.parentElement.querySelector('.carousel-next');
+        const dotsContainer = container.parentElement.querySelector('.carousel-dots');
+        
+        if (!prevBtn || !nextBtn) return;
+        
+        // Calculate scroll amount (one item width + gap)
+        function getScrollAmount() {
+            const firstItem = container.querySelector('.carousel-item');
+            if (!firstItem) return 0;
+            const itemWidth = firstItem.offsetWidth;
+            const gap = 8; // gap-2 = 8px
+            return itemWidth + gap;
+        }
+        
+        // Scroll to previous items
+        prevBtn.addEventListener('click', () => {
+            const scrollAmount = getScrollAmount();
+            container.scrollBy({
+                left: scrollAmount, // RTL: positive scrolls right (previous)
+                behavior: 'smooth'
+            });
+        });
+        
+        // Scroll to next items
+        nextBtn.addEventListener('click', () => {
+            const scrollAmount = getScrollAmount();
+            container.scrollBy({
+                left: -scrollAmount, // RTL: negative scrolls left (next)
+                behavior: 'smooth'
+            });
+        });
+        
+        // Update button states
+        function updateButtons() {
+            const scrollLeft = container.scrollLeft;
+            const maxScroll = container.scrollWidth - container.clientWidth;
+            
+            // RTL: scrollLeft is 0 at far right, negative as you scroll left
+            prevBtn.disabled = scrollLeft >= 0;
+            nextBtn.disabled = Math.abs(scrollLeft) >= maxScroll - 10;
+        }
+        
+        // Create dots for scroll indicators
+        function createDots() {
+            if (!dotsContainer) return;
+            const items = container.querySelectorAll('.carousel-item');
+            const visibleItems = Math.floor(container.clientWidth / (items[0]?.offsetWidth || 200));
+            const totalDots = Math.ceil(items.length / visibleItems);
+            
+            dotsContainer.innerHTML = '';
+            
+            if (totalDots <= 1) return; // Don't show dots if everything fits
+            
+            for (let i = 0; i < totalDots; i++) {
+                const dot = document.createElement('button');
+                dot.className = 'w-2 h-2 rounded-full bg-gray-300 hover:bg-primary transition-colors';
+                dot.setAttribute('aria-label', `الانتقال إلى المجموعة ${i + 1}`);
+                dot.addEventListener('click', () => {
+                    const scrollAmount = getScrollAmount() * visibleItems * i;
+                    container.scrollTo({
+                        left: -scrollAmount, // RTL
+                        behavior: 'smooth'
+                    });
+                });
+                dotsContainer.appendChild(dot);
+            }
+            
+            updateActiveDot();
+        }
+        
+        // Update active dot
+        function updateActiveDot() {
+            if (!dotsContainer) return;
+            const dots = dotsContainer.querySelectorAll('button');
+            const items = container.querySelectorAll('.carousel-item');
+            const visibleItems = Math.floor(container.clientWidth / (items[0]?.offsetWidth || 200));
+            const scrollLeft = Math.abs(container.scrollLeft);
+            const scrollAmount = getScrollAmount();
+            const activeDot = Math.floor(scrollLeft / (scrollAmount * visibleItems));
+            
+            dots.forEach((dot, index) => {
+                if (index === activeDot) {
+                    dot.classList.remove('bg-gray-300');
+                    dot.classList.add('bg-primary');
+                } else {
+                    dot.classList.remove('bg-primary');
+                    dot.classList.add('bg-gray-300');
+                }
+            });
+        }
+        
+        // Touch swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        container.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        
+        container.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+        
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    // Swiped left - go next (in RTL, this means scroll left)
+                    nextBtn.click();
+                } else {
+                    // Swiped right - go previous (in RTL, this means scroll right)
+                    prevBtn.click();
+                }
+            }
+        }
+        
+        // Listen to scroll events
+        container.addEventListener('scroll', () => {
+            updateButtons();
+            updateActiveDot();
+        });
+        
+        // Initial setup
+        updateButtons();
+        createDots();
+        
+        // Update on window resize
+        window.addEventListener('resize', () => {
+            updateButtons();
+            createDots();
+        });
+    }
+})();
+</script>

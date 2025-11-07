@@ -60,11 +60,7 @@
             </div>
 
             {% if all_products %}
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-                {% for product in all_products %}
-                {% include 'store/partials/product_card.html' with product=product %}
-                {% endfor %}
-            </div>
+            {% include 'store/partials/product_carousel.html' with products=all_products %}
 
             <div class="text-center mt-8">
                 <a href="{% url 'store:product_list' %}" class="inline-block bg-primary hover:bg-primary/90 text-white font-bold py-3 px-8 rounded-lg transition-colors">
@@ -98,11 +94,7 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-                {% for product in featured_products %}
-                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="مميز" badge_color="primary" %}
-                {% endfor %}
-            </div>
+            {% include 'store/partials/product_carousel.html' with products=featured_products show_badge=True badge_text="مميز" badge_color="primary" %}
 
             <div class="text-center mt-8 md:hidden">
                 <a href="{% url 'store:product_list' %}?featured=true" class="text-primary hover:text-primary/80 font-semibold">
@@ -130,11 +122,7 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-                {% for product in featured_sale_products %}
-                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="مميز" badge_color="primary" %}
-                {% endfor %}
-            </div>
+            {% include 'store/partials/product_carousel.html' with products=featured_sale_products show_badge=True badge_text="مميز" badge_color="primary" %}
 
             <div class="text-center mt-8 md:hidden">
                 <a href="{% url 'store:product_list' %}?featured=true&on_sale=true" class="text-primary hover:text-primary/80 font-semibold">
@@ -159,11 +147,7 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-                {% for product in new_arrivals %}
-                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="جديد" badge_color="primary" %}
-                {% endfor %}
-            </div>
+            {% include 'store/partials/product_carousel.html' with products=new_arrivals show_badge=True badge_text="جديد" badge_color="primary" %}
 
             <div class="text-center mt-8 md:hidden">
                 <a href="{% url 'store:product_list' %}?new_arrival=true" class="text-primary hover:text-primary/80 font-semibold">
@@ -214,11 +198,7 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-                {% for product in sale_products %}
-                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="خصم" badge_color="primary" %}
-                {% endfor %}
-            </div>
+            {% include 'store/partials/product_carousel.html' with products=sale_products show_badge=True badge_text="خصم" badge_color="primary" %}
 
             <div class="text-center mt-8 md:hidden">
                 <a href="{% url 'store:product_list' %}?on_sale=true" class="text-primary hover:text-primary/80 font-semibold">
@@ -243,11 +223,7 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-                {% for product in most_sold_products %}
-                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="الأكثر مبيعاً" badge_color="primary" %}
-                {% endfor %}
-            </div>
+            {% include 'store/partials/product_carousel.html' with products=most_sold_products show_badge=True badge_text="الأكثر مبيعاً" badge_color="primary" %}
 
             <div class="text-center mt-8 md:hidden">
                 <a href="{% url 'store:product_list' %}" class="text-primary hover:text-primary/80 font-semibold">
@@ -269,11 +245,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-                {% for product in coming_soon_products %}
-                {% include 'store/partials/product_card.html' with product=product show_badge=True badge_text="قريباً" badge_color="primary" coming_soon=True %}
-                {% endfor %}
-            </div>
+            {% include 'store/partials/product_carousel.html' with products=coming_soon_products show_badge=True badge_text="قريباً" badge_color="primary" coming_soon=True %}
         </div>
     </section>
     {% endif %}
@@ -292,11 +264,7 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-                {% for product in latest_products %}
-                {% include 'store/partials/product_card.html' with product=product %}
-                {% endfor %}
-            </div>
+            {% include 'store/partials/product_carousel.html' with products=latest_products %}
 
             <div class="text-center mt-8 md:hidden">
                 <a href="{% url 'store:product_list' %}" class="text-primary hover:text-primary/80 font-semibold">

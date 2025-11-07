@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q, Avg
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from apps.store.models import Product, Category, Brand, Review
 
 
@@ -76,17 +77,30 @@ def product_list(request):
     }
     products = products.order_by(valid_sorts.get(sort_by, '-created_at'))
 
+    # Pagination - 15 products per page (3 rows × 5 columns on large screens)
+    paginator = Paginator(products, 15)
+    page = request.GET.get('page', 1)
+    
+    try:
+        products_page = paginator.page(page)
+    except PageNotAnInteger:
+        products_page = paginator.page(1)
+    except EmptyPage:
+        products_page = paginator.page(paginator.num_pages)
+
     # Get all categories and brands for filter sidebar
     categories = Category.objects.filter(is_active=True, parent__isnull=True)
     brands = Brand.objects.filter(is_active=True)
 
     context = {
-        'products': products,
+        'products': products_page,
         'categories': categories,
         'brands': brands,
         'current_category': category_slug,
         'current_brand': brand_slug,
         'search_query': search_query,
+        'paginator': paginator,
+        'page_obj': products_page,
     }
 
     # Check if this is an HTMX request

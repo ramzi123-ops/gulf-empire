@@ -85,12 +85,110 @@
     </div>
     {% endfor %}
 </div>
-{% else %}
+
+<!-- Pagination -->
+<div class="mt-8 border-t border-gray-200 bg-white px-4 py-3 rounded-lg">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <!-- Product count info -->
+        <div>
+            <p class="text-sm text-gray-700">
+                عرض
+                <span class="font-medium">{{ page_obj.start_index }}</span>
+                إلى
+                <span class="font-medium">{{ page_obj.end_index }}</span>
+                من
+                <span class="font-medium">{{ paginator.count }}</span>
+                منتج
+            </p>
+        </div>
+        
+        <!-- Page numbers -->
+        <div>
+            <nav class="flex items-center gap-1" aria-label="Pagination">
+                <!-- First Page Button -->
+                {% if page_obj.number > 2 %}
+                <a href="?page=1"
+                   hx-get="?page=1"
+                   hx-target="#product-grid"
+                   hx-include="[name='category'],[name='brand'],[name='search'],[name='min_price'],[name='max_price'],[name='rating'],[name='sort']"
+                   class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                   title="الصفحة الأولى">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                {% endif %}
+                
+                <!-- Previous Button -->
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}"
+                   hx-get="?page={{ page_obj.previous_page_number }}"
+                   hx-target="#product-grid"
+                   hx-include="[name='category'],[name='brand'],[name='search'],[name='min_price'],[name='max_price'],[name='rating'],[name='sort']"
+                   class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                   title="السابق">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                {% endif %}
+                
+                <!-- Page Numbers -->
+                {% for num in page_obj.paginator.page_range %}
+                    {% if num == 1 or num == page_obj.paginator.num_pages or num == page_obj.number or num == page_obj.number|add:'-1' or num == page_obj.number|add:'-2' or num == page_obj.number|add:'1' or num == page_obj.number|add:'2' %}
+                        {% if page_obj.number == num %}
+                        <span class="inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-primary rounded-lg">{{ num }}</span>
+                        {% else %}
+                        <a href="?page={{ num }}"
+                           hx-get="?page={{ num }}"
+                           hx-target="#product-grid"
+                           hx-include="[name='category'],[name='brand'],[name='search'],[name='min_price'],[name='max_price'],[name='rating'],[name='sort']"
+                           class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">{{ num }}</a>
+                        {% endif %}
+                    {% elif num == page_obj.number|add:'-3' or num == page_obj.number|add:'3' %}
+                        <span class="inline-flex items-center px-2 py-2 text-sm text-gray-700">...</span>
+                    {% endif %}
+                {% endfor %}
+                
+                <!-- Next Button -->
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}"
+                   hx-get="?page={{ page_obj.next_page_number }}"
+                   hx-target="#product-grid"
+                   hx-include="[name='category'],[name='brand'],[name='search'],[name='min_price'],[name='max_price'],[name='rating'],[name='sort']"
+                   class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                   title="التالي">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </a>
+                {% endif %}
+                
+                <!-- Last Page Button -->
+                {% if page_obj.number < page_obj.paginator.num_pages|add:'-1' %}
+                <a href="?page={{ page_obj.paginator.num_pages }}"
+                   hx-get="?page={{ page_obj.paginator.num_pages }}"
+                   hx-target="#product-grid"
+                   hx-include="[name='category'],[name='brand'],[name='search'],[name='min_price'],[name='max_price'],[name='rating'],[name='sort']"
+                   class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                   title="الصفحة الأخيرة">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/>
+                    </svg>
+                </a>
+                {% endif %}
+            </nav>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if not products %}
 <div class="bg-white rounded-lg shadow-sm p-12 text-center">
     <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
     </svg>
     <h3 class="text-lg font-semibold text-gray-900 mb-2">لم يتم العثور على منتجات</h3>
-    <p class="text-gray-600">جرِّب تعديل معايير البحث أو إزالة الفلاتر</p>
+    <p class="text-gray-600">جرِّب تعديل معايير البحث أو إزالة الفلاتر</p>
 </div>
 {% endif %}

@@ -15,6 +15,29 @@
     
     <!-- Remove default margins -->
     <style>
+        /* Saudi Riyal Custom Font */
+        @font-face {
+            font-family: 'saudi_riyal';
+            src: url('{% static "saudi-riyal font/saudi-riyal.woff" %}') format('woff'),
+                 url('{% static "saudi-riyal font/saudi-riyal.ttf" %}') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        .riyal-icon {
+            font-family: 'saudi_riyal';
+            font-style: normal;
+            font-weight: normal;
+            speak: none;
+            display: inline-block;
+            text-decoration: inherit;
+            font-variant: normal;
+            text-transform: none;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
         * {
             margin: 0;
             padding: 0;

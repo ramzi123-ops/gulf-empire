@@ -75,10 +75,10 @@
                 <div class="flex-1">
                     <div class="flex items-baseline gap-1">
                         <span class="text-base font-bold text-primary">{{ product.final_price|floatformat:"0" }}</span>
-                        <span class="text-xs text-gray-600">﷼</span>
+                        <span class="riyal-icon text-sm text-gray-600">&#xE900;</span>
                     </div>
                     {% if product.sale_price %}
-                    <div class="text-[10px] text-gray-400 line-through">{{ product.price|floatformat:"0" }} ﷼</div>
+                    <div class="text-[10px] text-gray-400 line-through">{{ product.price|floatformat:"0" }} <span class="riyal-icon">&#xE900;</span></div>
                     {% endif %}
                 </div>
                 

@@ -115,52 +115,54 @@
                 </div>
 
                 <!-- Price Range Filter -->
-                <div class="mb-6">
+                <div class="mb-5">
                     <h3 class="font-semibold text-gray-900 mb-3">السعر</h3>
                     <form hx-get="{% url 'store:product_list' %}" 
                           hx-target="#product-grid"
                           hx-trigger="change"
                           hx-include="[name='category'],[name='brand'],[name='search'],[name='rating']">
-                        <div class="space-y-3">
+                        <div class="flex items-center gap-1">
                             <div>
-                                <label class="text-xs text-gray-600 mb-1 block">من (﷼)</label>
+                                <label class="text-xs text-gray-600 mb-1 block">من</label>
                                 <input 
                                     type="number" 
                                     name="min_price"
                                     min="0"
                                     placeholder="0"
                                     value="{{ request.GET.min_price|default:'' }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm">
+                                    class="w-20 px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm">
                             </div>
+                            <span class="text-gray-400 mt-5">-</span>
                             <div>
-                                <label class="text-xs text-gray-600 mb-1 block">إلى (﷼)</label>
+                                <label class="text-xs text-gray-600 mb-1 block">إلى</label>
                                 <input 
                                     type="number" 
                                     name="max_price"
                                     min="0"
                                     placeholder="10000"
                                     value="{{ request.GET.max_price|default:'' }}"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm">
+                                    class="w-20 px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm">
                             </div>
                         </div>
                     </form>
                 </div>
 
                 <!-- Ratings Filter -->
-                <div class="mb-6">
-                    <h3 class="font-semibold text-gray-900 mb-3">التقييم</h3>
-                    <div class="space-y-2">
+                <div class="mb-0">
+                    <h3 class="font-semibold text-gray-900 mb-6">التقييم</h3>
+                    <div class="space-y-2" id="rating-filters">
                         <label class="flex items-center space-x-2 space-x-reverse cursor-pointer">
                             <input 
                                 type="radio" 
                                 name="rating" 
                                 value="5"
+                                onclick="toggleRadio(this)"
                                 hx-get="{% url 'store:product_list' %}" 
                                 hx-target="#product-grid"
                                 hx-include="[name='category'],[name='brand'],[name='search'],[name='min_price'],[name='max_price']"
                                 class="text-primary focus:ring-primary-500">
                             <span class="flex items-center gap-1 text-sm">
-                                <span class="flex">
+                                <span class="flex text-yellow-400">
                                     ★★★★★
                                 </span>
                                 <span class="text-gray-600">(5 نجوم)</span>
@@ -171,13 +173,14 @@
                                 type="radio" 
                                 name="rating" 
                                 value="4"
+                                onclick="toggleRadio(this)"
                                 hx-get="{% url 'store:product_list' %}" 
                                 hx-target="#product-grid"
                                 hx-include="[name='category'],[name='brand'],[name='search'],[name='min_price'],[name='max_price']"
                                 class="text-primary focus:ring-primary-500">
                             <span class="flex items-center gap-1 text-sm">
-                                <span class="flex">
-                                    ★★★★☆
+                                <span class="flex text-yellow-400">
+                                    ★★★★<span class="text-gray-300">★</span>
                                 </span>
                                 <span class="text-gray-600">(4+ نجوم)</span>
                             </span>
@@ -187,19 +190,78 @@
                                 type="radio" 
                                 name="rating" 
                                 value="3"
+                                onclick="toggleRadio(this)"
                                 hx-get="{% url 'store:product_list' %}" 
                                 hx-target="#product-grid"
                                 hx-include="[name='category'],[name='brand'],[name='search'],[name='min_price'],[name='max_price']"
                                 class="text-primary focus:ring-primary-500">
                             <span class="flex items-center gap-1 text-sm">
-                                <span class="flex">
-                                    ★★★☆☆
+                                <span class="flex text-yellow-400">
+                                    ★★★<span class="text-gray-300">★★</span>
                                 </span>
                                 <span class="text-gray-600">(3+ نجوم)</span>
                             </span>
                         </label>
+                        <label class="flex items-center space-x-2 space-x-reverse cursor-pointer">
+                            <input 
+                                type="radio" 
+                                name="rating" 
+                                value="2"
+                                onclick="toggleRadio(this)"
+                                hx-get="{% url 'store:product_list' %}" 
+                                hx-target="#product-grid"
+                                hx-include="[name='category'],[name='brand'],[name='search'],[name='min_price'],[name='max_price']"
+                                class="text-primary focus:ring-primary-500">
+                            <span class="flex items-center gap-1 text-sm">
+                                <span class="flex text-yellow-400">
+                                    ★★<span class="text-gray-300">★★★</span>
+                                </span>
+                                <span class="text-gray-600">(2+ نجوم)</span>
+                            </span>
+                        </label>
+                        <label class="flex items-center space-x-2 space-x-reverse cursor-pointer">
+                            <input 
+                                type="radio" 
+                                name="rating" 
+                                value="1"
+                                onclick="toggleRadio(this)"
+                                hx-get="{% url 'store:product_list' %}" 
+                                hx-target="#product-grid"
+                                hx-include="[name='category'],[name='brand'],[name='search'],[name='min_price'],[name='max_price']"
+                                class="text-primary focus:ring-primary-500">
+                            <span class="flex items-center gap-1 text-sm">
+                                <span class="flex text-yellow-400">
+                                    ★<span class="text-gray-300">★★★★</span>
+                                </span>
+                                <span class="text-gray-600">(1+ نجوم)</span>
+                            </span>
+                        </label>
                     </div>
                 </div>
+
+                <script>
+                    let lastChecked = null;
+                    function toggleRadio(radio) {
+                        if (radio === lastChecked) {
+                            radio.checked = false;
+                            lastChecked = null;
+                            // Trigger HTMX to update without rating filter
+                            htmx.ajax('GET', '{% url "store:product_list" %}', {
+                                target: '#product-grid',
+                                swap: 'outerHTML',
+                                values: {
+                                    category: document.querySelector('[name="category"]:checked')?.value || '',
+                                    brand: document.querySelector('[name="brand"]:checked')?.value || '',
+                                    search: document.querySelector('[name="search"]')?.value || '',
+                                    min_price: document.querySelector('[name="min_price"]')?.value || '',
+                                    max_price: document.querySelector('[name="max_price"]')?.value || ''
+                                }
+                            });
+                        } else {
+                            lastChecked = radio;
+                        }
+                    }
+                </script>
 
             </div>
         </aside>

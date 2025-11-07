@@ -78,7 +78,7 @@ def product_list(request):
     products = products.order_by(valid_sorts.get(sort_by, '-created_at'))
 
     # Pagination - 15 products per page (3 rows × 5 columns on large screens)
-    paginator = Paginator(products, 15)
+    paginator = Paginator(products, 20)
     page = request.GET.get('page', 1)
     
     try:

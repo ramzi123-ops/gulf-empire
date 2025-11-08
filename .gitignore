@@ -17,15 +17,14 @@ venv/
 __pycache__/
 
 # Local database (if using SQLite for local dev)
-*.sqlite3
-db.sqlite3
+
 
 # Django-generated static files (for production)
 # This is your STATIC_ROOT directory
-staticfiles/
+
 
 # User-uploaded files
-media/
+
 
 # Test reports
 .coverage

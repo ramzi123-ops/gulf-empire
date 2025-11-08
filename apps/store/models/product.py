@@ -18,7 +18,7 @@ class Product(models.Model):
     slug = models.SlugField(
         max_length=300,
         unique=True,
-        verbose_name="الاسم اللطيف",
+        verbose_name="رابط المنتج (Slug)",
         help_text="يتم إنشاؤه تلقائياً من الاسم"
     )
     sku = models.CharField(

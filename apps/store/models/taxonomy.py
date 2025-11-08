@@ -15,7 +15,7 @@ class Category(models.Model):
     slug = models.SlugField(
         max_length=200,
         unique=True,
-        verbose_name="الاسم اللطيف",
+        verbose_name="رابط الفئة (Slug)",
         help_text="يتم إنشاؤه تلقائياً من الاسم"
     )
     description = models.TextField(
@@ -70,7 +70,7 @@ class Brand(models.Model):
     slug = models.SlugField(
         max_length=200,
         unique=True,
-        verbose_name="الاسم اللطيف",
+        verbose_name="رابط العلامة التجارية (Slug)",
         help_text="يتم إنشاؤه تلقائياً من الاسم"
     )
     logo = models.ImageField(

@@ -247,6 +247,14 @@ class Product(models.Model):
         if self.sale_price and self.price > self.sale_price:
             return int(((self.price - self.sale_price) / self.price) * 100)
         return 0
+    
+    @property
+    def average_rating(self):
+        """Calculate average rating from approved reviews"""
+        from django.db.models import Avg
+        approved_reviews = self.reviews.filter(is_approved=True)
+        avg = approved_reviews.aggregate(Avg('rating'))['rating__avg']
+        return round(avg, 1) if avg else 0
 
 
 class ProductSpecification(models.Model):

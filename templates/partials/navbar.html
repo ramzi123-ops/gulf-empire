@@ -10,17 +10,17 @@
 
             <!-- Navigation Links -->
             <div class="hidden md:flex items-center space-x-reverse space-x-8">
+                <!-- Mega Menu -->
+                {% include 'partials/mega_menu.html' %}
+                
                 <a href="{% url 'store:product_list' %}" class="text-primary hover:text-primary-600 font-medium transition">
-                    المنتجات
+                    جميع المنتجات
                 </a>
-                <a href="#" class="text-primary hover:text-primary-600 font-medium transition">
-                    التصنيفات
+                <a href="{% url 'store:product_list' %}?on_sale=true" class="text-primary hover:text-primary-600 font-medium transition">
+                    العروض الخاصة
                 </a>
-                <a href="#" class="text-primary hover:text-primary-600 font-medium transition">
-                    العروض
-                </a>
-                <a href="#" class="text-primary hover:text-primary-600 font-medium transition">
-                    من نحن
+                <a href="{% url 'store:product_list' %}?new_arrival=true" class="text-primary hover:text-primary-600 font-medium transition">
+                    وصل حديثاً
                 </a>
             </div>
 
@@ -108,26 +108,33 @@
 </nav>
 
 <script>
-    // Mobile menu toggle
-    document.getElementById('mobile-menu-button')?.addEventListener('click', function() {
-        document.getElementById('mobile-menu')?.classList.toggle('hidden');
-    });
-    
-    // User menu dropdown toggle
-    const userMenuButton = document.getElementById('user-menu-button');
-    const userMenuDropdown = document.getElementById('user-menu-dropdown');
-    
-    if (userMenuButton && userMenuDropdown) {
-        userMenuButton.addEventListener('click', function(e) {
-            e.stopPropagation();
-            userMenuDropdown.classList.toggle('hidden');
-        });
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
         
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!userMenuButton.contains(e.target) && !userMenuDropdown.contains(e.target)) {
-                userMenuDropdown.classList.add('hidden');
-            }
-        });
-    }
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+        
+        // User menu dropdown toggle
+        const userMenuButton = document.getElementById('user-menu-button');
+        const userMenuDropdown = document.getElementById('user-menu-dropdown');
+        
+        if (userMenuButton && userMenuDropdown) {
+            userMenuButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                userMenuDropdown.classList.toggle('hidden');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!userMenuButton.contains(e.target) && !userMenuDropdown.contains(e.target)) {
+                    userMenuDropdown.classList.add('hidden');
+                }
+            });
+        }
+    });
 </script>

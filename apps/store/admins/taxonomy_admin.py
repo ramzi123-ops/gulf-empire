@@ -1,4 +1,4 @@
-﻿from django.contrib import admin
+from django.contrib import admin
 from apps.store.models import Category, Brand
 
 
@@ -12,10 +12,13 @@ class CategoryAdmin(admin.ModelAdmin):
         'name',
         'parent',
         'is_active',
+        'show_in_menu',
+        'menu_order',
         'created_at',
     ]
     list_filter = [
         'is_active',
+        'show_in_menu',
         'created_at',
     ]
     search_fields = [
@@ -29,11 +32,16 @@ class CategoryAdmin(admin.ModelAdmin):
         ('المعلومات الأساسية', {
             'fields': ('name', 'slug', 'description', 'parent')
         }),
+        ('إعدادات القائمة الرئيسية', {
+            'fields': ('show_in_menu', 'menu_order', 'icon'),
+            'description': 'تحكم في عرض الفئة في القائمة الرئيسية (Mega Menu)'
+        }),
         ('الحالة', {
             'fields': ('is_active',)
         }),
     )
-    ordering = ['name']
+    ordering = ['menu_order', 'name']
+    list_editable = ['show_in_menu', 'menu_order']
 
 
 @admin.register(Brand)

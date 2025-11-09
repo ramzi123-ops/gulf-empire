@@ -1,4 +1,4 @@
-﻿from django.db import models
+from django.db import models
 from django.utils.text import slugify
 
 
@@ -33,6 +33,22 @@ class Category(models.Model):
     is_active = models.BooleanField(
         default=True,
         verbose_name="نشط"
+    )
+    show_in_menu = models.BooleanField(
+        default=False,
+        verbose_name="إظهار في القائمة الرئيسية",
+        help_text="حدد هذا الخيار لإظهار الفئة في القائمة الرئيسية (Mega Menu)"
+    )
+    menu_order = models.IntegerField(
+        default=0,
+        verbose_name="ترتيب القائمة",
+        help_text="ترتيب عرض الفئة في القائمة الرئيسية (الأصغر أولاً)"
+    )
+    icon = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name="رمز الأيقونة",
+        help_text="اسم أيقونة SVG أو Emoji (اختياري)"
     )
     created_at = models.DateTimeField(
         auto_now_add=True,

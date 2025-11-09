@@ -5,7 +5,9 @@
 # --- Environment ---
 # Ignore the virtual environment folder
 venv/
-
+db.sqlite3
+staticfiles/
+media/
 # Ignore environment variables files
 .env
 .env.*

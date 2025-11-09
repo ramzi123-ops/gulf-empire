@@ -7,7 +7,7 @@ import os
 import sys
 
 # Configuration
-USERNAME = 'ramzi77'
+USERNAME = 'empire77'  # Your PythonAnywhere username
 PROJECT_NAME = 'gulf-empire'  # NOTE: hyphen not underscore!
 PYTHON_VERSION = '3.13'
 

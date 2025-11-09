@@ -4,7 +4,7 @@ WSGI Configuration for PythonAnywhere
 Copy this content to your WSGI configuration file in PythonAnywhere
 Web tab → WSGI configuration file
 
-IMPORTANT: Replace 'ramzi77' with your actual PythonAnywhere username
+IMPORTANT: Replace 'empire77' with your actual PythonAnywhere username
 """
 
 import os
@@ -13,7 +13,7 @@ import sys
 # ============================================================================
 # CONFIGURATION - Update these values for your setup
 # ============================================================================
-USERNAME = 'ramzi77'  # Your PythonAnywhere username
+USERNAME = 'empire77'  # Your PythonAnywhere username
 PROJECT_NAME = 'gulf-empire'  # Your project folder name (NOTE: hyphen not underscore!)
 PYTHON_VERSION = '3.13'  # Python version used in virtual environment
 

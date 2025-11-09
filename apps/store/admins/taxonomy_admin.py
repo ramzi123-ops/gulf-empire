@@ -53,10 +53,12 @@ class BrandAdmin(admin.ModelAdmin):
     list_display = [
         'name',
         'is_active',
+        'show_in_navbar',
         'created_at',
     ]
     list_filter = [
         'is_active',
+        'show_in_navbar',
         'created_at',
     ]
     search_fields = [
@@ -70,8 +72,8 @@ class BrandAdmin(admin.ModelAdmin):
         ('المعلومات الأساسية', {
             'fields': ('name', 'slug', 'logo', 'description')
         }),
-        ('الحالة', {
-            'fields': ('is_active',)
+        ('الحالة والعرض', {
+            'fields': ('is_active', 'show_in_navbar')
         }),
     )
     ordering = ['name']

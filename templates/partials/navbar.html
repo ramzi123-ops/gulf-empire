@@ -1,3 +1,5 @@
+{% load store_tags %}
+
 <nav class="bg-white shadow-md fixed top-0 left-0 right-0 z-50" dir="rtl">
     <div class="container mx-auto px-4">
         <div class="flex justify-between items-center h-16">
@@ -117,6 +119,11 @@
     </div>
 </nav>
 
+<!-- Brands Navigation Row (Outside nav for separate z-index context) -->
+<div class="fixed left-0 right-0 bg-white border-t border-gray-200 overflow-visible" style="top: 64px; z-index: 40;" id="brands-navbar-wrapper">
+    {% brands_navbar %}
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Mobile menu toggle
@@ -145,6 +152,37 @@
                     userMenuDropdown.classList.add('hidden');
                 }
             });
+        }
+        
+        // Disable brands navbar when mega menu is open
+        const brandsNavbar = document.getElementById('brands-navbar-wrapper');
+        if (brandsNavbar) {
+            // Use MutationObserver to watch for mega menu state changes
+            const megaMenuContainer = document.getElementById('mega-menu-container');
+            if (megaMenuContainer) {
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        const megaMenuDropdown = megaMenuContainer.querySelector('[x-show="open"]');
+                        if (megaMenuDropdown) {
+                            const isOpen = megaMenuDropdown.style.display !== 'none' && !megaMenuDropdown.hasAttribute('hidden');
+                            if (isOpen) {
+                                brandsNavbar.style.pointerEvents = 'none';
+                                brandsNavbar.style.opacity = '0.3';
+                            } else {
+                                brandsNavbar.style.pointerEvents = 'auto';
+                                brandsNavbar.style.opacity = '1';
+                            }
+                        }
+                    });
+                });
+                
+                observer.observe(megaMenuContainer, {
+                    attributes: true,
+                    childList: true,
+                    subtree: true,
+                    attributeFilter: ['style', 'hidden']
+                });
+            }
         }
     });
 </script>

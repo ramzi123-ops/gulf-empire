@@ -1,0 +1,128 @@
+{% load static %}
+
+<!-- Brands Navigation Bar Content -->
+<div class="container mx-auto px-4" dir="rtl">
+    <div class="flex items-center justify-center overflow-visible" style="height: 44px;">
+        <div class="hidden md:flex items-center space-x-reverse space-x-6 overflow-visible">
+                {% for brand in brands_with_models %}
+                    <div class="relative group brand-item">
+                        <!-- Brand Name -->
+                        <button class="flex items-center space-x-reverse space-x-1 text-gray-700 hover:text-primary font-semibold transition-colors whitespace-nowrap py-1 px-2">
+                            <span>{{ brand.name }}</span>
+                            <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        
+                        <!-- Dropdown Menu -->
+                        <div class="absolute top-full right-0 mt-1 w-64 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none group-hover:pointer-events-auto" style="z-index: 1000;">
+                            <div class="py-2">
+                                <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
+                                    موديلات {{ brand.name }}
+                                </div>
+                                {% for car_model in brand.car_models.all %}
+                                    <a href="{% url 'store:product_list' %}?brand={{ brand.slug }}&car_model={{ car_model.slug }}" 
+                                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary transition-colors">
+                                        <div class="flex justify-between items-center">
+                                            <span class="font-medium">{{ car_model.name }}</span>
+                                            <span class="text-xs text-gray-500">{{ car_model.year_range_display }}</span>
+                                        </div>
+                                        {% if car_model.generation %}
+                                            <div class="text-xs text-gray-400 mt-1">{{ car_model.generation }}</div>
+                                        {% endif %}
+                                    </a>
+                                {% empty %}
+                                    <div class="px-4 py-2 text-sm text-gray-500">
+                                        لا توجد موديلات متاحة
+                                    </div>
+                                {% endfor %}
+                                
+                                <!-- View All Products for Brand -->
+                                <div class="border-t border-gray-100 mt-2">
+                                    <a href="{% url 'store:product_list' %}?brand={{ brand.slug }}" 
+                                       class="block px-4 py-2 text-sm font-medium text-primary hover:bg-primary-50 transition-colors">
+                                        عرض جميع منتجات {{ brand.name }}
+                                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="text-gray-500 text-sm">
+                        لا توجد ماركات متاحة حالياً
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Mobile Brands Menu -->
+            <div class="md:hidden w-full">
+                <button id="mobile-brands-button" class="w-full flex items-center justify-between px-3 py-2 text-gray-700 hover:text-primary font-semibold transition-colors">
+                    <span>تصفح حسب الماركة</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                
+                <!-- Mobile Dropdown -->
+                <div id="mobile-brands-menu" class="hidden mt-2 bg-white rounded-lg shadow-lg border border-gray-200">
+                    {% for brand in brands_with_models %}
+                        <div class="border-b border-gray-100 last:border-b-0">
+                            <button class="mobile-brand-toggle w-full flex items-center justify-between px-4 py-3 text-left text-gray-700 hover:bg-gray-50" data-brand="{{ brand.slug }}">
+                                <div class="flex items-center space-x-reverse space-x-2">
+                                    <span class="font-medium">{{ brand.name }}</span>
+                                </div>
+                                <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            
+                            <div class="mobile-brand-models hidden bg-gray-50">
+                                {% for car_model in brand.car_models.all %}
+                                    <a href="{% url 'store:product_list' %}?brand={{ brand.slug }}&car_model={{ car_model.slug }}" 
+                                       class="block px-8 py-2 text-sm text-gray-600 hover:text-primary hover:bg-white transition-colors">
+                                        {{ car_model.name }} ({{ car_model.year_range_display }})
+                                    </a>
+                                {% endfor %}
+                                <a href="{% url 'store:product_list' %}?brand={{ brand.slug }}" 
+                                   class="block px-8 py-2 text-sm font-medium text-primary hover:bg-white transition-colors">
+                                    عرض جميع منتجات {{ brand.name }}
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Mobile brands menu toggle
+    const mobileBrandsButton = document.getElementById('mobile-brands-button');
+    const mobileBrandsMenu = document.getElementById('mobile-brands-menu');
+    
+    if (mobileBrandsButton && mobileBrandsMenu) {
+        mobileBrandsButton.addEventListener('click', function() {
+            mobileBrandsMenu.classList.toggle('hidden');
+            const icon = this.querySelector('svg');
+            icon.classList.toggle('rotate-180');
+        });
+    }
+    
+    // Mobile brand toggles
+    const brandToggles = document.querySelectorAll('.mobile-brand-toggle');
+    brandToggles.forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            const brandSlug = this.dataset.brand;
+            const modelsDiv = this.nextElementSibling;
+            const icon = this.querySelector('svg');
+            
+            modelsDiv.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+        });
+    });
+});
+</script>

@@ -103,6 +103,11 @@ class Brand(models.Model):
         default=True,
         verbose_name="نشط"
     )
+    show_in_navbar = models.BooleanField(
+        default=False,
+        verbose_name="إظهار في شريط التنقل",
+        help_text="حدد هذا الخيار لإظهار العلامة التجارية في شريط التنقل العلوي"
+    )
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name="تاريخ الإنشاء"

@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q, Avg
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from apps.store.models import Product, Category, Brand, Review
+from apps.store.models import Product, Category, Brand, Review, CarModel
 
 
 def product_list(request):
@@ -24,7 +24,12 @@ def product_list(request):
     # Filter by brand
     brand_slug = request.GET.get('brand')
     if brand_slug:
-        products = products.filter(brand__slug=brand_slug)
+        products = products.filter(compatible_brands__slug=brand_slug)
+
+    # Filter by car model
+    car_model_slug = request.GET.get('car_model')
+    if car_model_slug:
+        products = products.filter(compatible_car_models__slug=car_model_slug)
 
     # Search functionality
     search_query = request.GET.get('search')
@@ -91,13 +96,16 @@ def product_list(request):
     # Get all categories and brands for filter sidebar
     categories = Category.objects.filter(is_active=True, parent__isnull=True)
     brands = Brand.objects.filter(is_active=True)
+    car_models = CarModel.objects.filter(is_active=True).select_related('brand')
 
     context = {
         'products': products_page,
         'categories': categories,
         'brands': brands,
+        'car_models': car_models,
         'current_category': category_slug,
         'current_brand': brand_slug,
+        'current_car_model': car_model_slug,
         'search_query': search_query,
         'paginator': paginator,
         'page_obj': products_page,

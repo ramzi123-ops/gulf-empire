@@ -7,8 +7,8 @@ from ..models import CarModel
 
 @admin.register(CarModel)
 class CarModelAdmin(admin.ModelAdmin):
-    list_display = ['full_name_display', 'brand', 'year_range_display', 'generation', 'body_type', 'compatible_products_count', 'is_active']
-    list_filter = ['brand', 'is_active', 'body_type', 'year_from', 'created_at']
+    list_display = ['full_name_display', 'brand', 'year_range_display', 'generation', 'body_type', 'compatible_products_count', 'is_active', 'show_in_navbar']
+    list_filter = ['brand', 'is_active', 'show_in_navbar', 'body_type', 'year_from', 'created_at']
     search_fields = ['name', 'brand__name', 'generation', 'body_type', 'engine_types']
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ['created_at', 'updated_at', 'full_name', 'year_range_display']
@@ -28,7 +28,7 @@ class CarModelAdmin(admin.ModelAdmin):
             'fields': ('description',)
         }),
         ('الإعدادات', {
-            'fields': ('is_active',)
+            'fields': ('is_active', 'show_in_navbar')
         }),
         ('معلومات إضافية', {
             'fields': ('full_name', 'year_range_display'),

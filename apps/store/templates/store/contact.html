@@ -21,44 +21,44 @@
             <div class="grid lg:grid-cols-2 gap-12">
                 
                 <!-- Contact Form -->
-                <div class="bg-gray-50 p-8 rounded-xl shadow-sm">
+                <div class="bg-white p-8 rounded-lg shadow-sm">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">أرسل لنا رسالة</h2>
             
                     <form class="space-y-5" method="POST">
                 {% csrf_token %}
                 
                 <div>
-                    <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">الاسم الكامل *</label>
+                    <label for="name" class="block text-sm font-medium text-gray-700 mb-2">الاسم الكامل *</label>
                     <input type="text" id="name" name="name" required
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
                            placeholder="الاسم الكامل">
                 </div>
 
                 <div>
-                    <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">البريد الإلكتروني *</label>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">البريد الإلكتروني *</label>
                     <input type="email" id="email" name="email" required
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
                            placeholder="example@email.com" dir="ltr">
                 </div>
 
                 <div>
-                    <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2">رقم الهاتف</label>
+                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">رقم الهاتف</label>
                     <input type="tel" id="phone" name="phone"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
                            placeholder="+966 5X XXX XXXX" dir="ltr">
                 </div>
 
                 <div>
-                    <label for="subject" class="block text-sm font-semibold text-gray-700 mb-2">الموضوع *</label>
+                    <label for="subject" class="block text-sm font-medium text-gray-700 mb-2">الموضوع *</label>
                     <input type="text" id="subject" name="subject" required
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
                            placeholder="موضوع الرسالة">
                 </div>
 
                 <div>
-                    <label for="message" class="block text-sm font-semibold text-gray-700 mb-2">الرسالة *</label>
+                    <label for="message" class="block text-sm font-medium text-gray-700 mb-2">الرسالة *</label>
                     <textarea id="message" name="message" rows="5" required
-                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all resize-none"
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary resize-none"
                               placeholder="اكتب رسالتك هنا..."></textarea>
                 </div>
 
@@ -73,7 +73,7 @@
                 </div>
 
                 <!-- Contact Info -->
-                <div class="bg-gray-50 p-8 rounded-xl shadow-sm">
+                <div class="bg-white p-8 rounded-lg shadow-sm">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">معلومات التواصل</h2>
             
             <div class="space-y-6">
@@ -175,7 +175,7 @@
     <div class="container mx-auto px-4">
         <div class="max-w-6xl mx-auto">
             <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">موقعنا</h2>
-            <div class="bg-gray-200 rounded-xl overflow-hidden shadow-lg" style="height: 450px;">
+            <div class="bg-gray-200 rounded-lg overflow-hidden shadow-md" style="height: 450px;">
                 <iframe 
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3624.141!2d46.7219!3d24.7136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjTCsDQyJzQ5LjAiTiA0NsKwNDMnMTguOCJF!5e0!3m2!1sen!2ssa!4v1234567890"
                     width="100%" 

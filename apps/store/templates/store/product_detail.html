@@ -8,9 +8,9 @@
     
     <!-- Breadcrumb -->
     <nav class="flex items-center gap-2 text-sm text-gray-600 mb-8" style="margin-top: 0 !important;">
-        <a href="{% url 'store:product_list' %}" class="hover:text-primary">المنتجات</a>
+        <a href="{% url 'store:product_list' %}" class="hover:text-primary-600 transition-colors">المنتجات</a>
         <span>‹</span>
-        <a href="?category={{ product.category.slug }}" class="hover:text-primary">{{ product.category.name }}</a>
+        <a href="?category={{ product.category.slug }}" class="hover:text-primary-600 transition-colors">{{ product.category.name }}</a>
         <span>‹</span>
         <span class="text-gray-900">{{ product.name }}</span>
     </nav>
@@ -66,18 +66,18 @@
                 <!-- Category & Brand -->
                 <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
                     <div class="flex items-center gap-2">
-                        <span class="font-semibold">الفئة:</span>
-                        <a href="?category={{ product.category.slug }}" class="text-primary hover:underline">{{ product.category.name }}</a>
+                        <span class="font-medium">الفئة:</span>
+                        <a href="?category={{ product.category.slug }}" class="text-primary hover:text-primary-600 transition-colors">{{ product.category.name }}</a>
                     </div>
                     <div class="flex items-center gap-2">
-                        <span class="font-semibold">العلامة:</span>
-                        <a href="?brand={{ product.brand.slug }}" class="text-primary hover:underline">{{ product.brand.name }}</a>
+                        <span class="font-medium">العلامة:</span>
+                        <a href="?brand={{ product.brand.slug }}" class="text-primary hover:text-primary-600 transition-colors">{{ product.brand.name }}</a>
                     </div>
                 </div>
                 
                 <!-- SKU -->
                 <p class="text-sm text-gray-600 mb-6">
-                    <span class="font-semibold">رمز المنتج:</span> {{ product.sku }}
+                    <span class="font-medium">رمز المنتج:</span> {{ product.sku }}
                 </p>
                 
                 <!-- Price -->
@@ -86,37 +86,37 @@
                         <span class="text-4xl font-bold text-primary">{{ product.final_price }}</span>
                         <span class="text-2xl text-gray-600">ر.س</span>
                         {% if product.sale_price %}
-                        <span class="text-xl text-gray-500 line-through">{{ product.price }} ر.س</span>
+                        <span class="text-xl text-red-500 line-through decoration-2">{{ product.price }} ر.س</span>
                         {% endif %}
                     </div>
                     {% if product.sale_price %}
-                    <p class="text-sm text-green-600 font-semibold">وفر {{ product.price|floatformat:2|add:"-"|add:product.sale_price|floatformat:2 }} ر.س</p>
+                    <p class="text-sm text-green-600 font-medium">وفر {{ product.price|floatformat:2|add:"-"|add:product.sale_price|floatformat:2 }} ر.س</p>
                     {% endif %}
                 </div>
                 
                 <!-- Stock Status (حالة المخزون) -->
                 <div class="bg-gray-50 rounded-lg p-4 mb-6">
-                    <p class="text-sm font-semibold text-gray-700 mb-2">حالة المخزون</p>
+                    <p class="text-sm font-medium text-gray-700 mb-2">حالة المخزون</p>
                     {% if product.stock == 0 %}
                         <div class="flex items-center gap-2">
                             <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
                             </svg>
-                            <span class="text-red-600 font-semibold">نفذت الكمية</span>
+                            <span class="text-red-600 font-medium">نفذت الكمية</span>
                         </div>
                     {% elif product.stock > 0 and product.stock <= product.inventory.low_stock_threshold %}
                         <div class="flex items-center gap-2">
                             <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                             </svg>
-                            <span class="text-yellow-600 font-semibold">يتبقى {{ product.stock }} فقط!</span>
+                            <span class="text-yellow-600 font-medium">يتبقى {{ product.stock }} فقط!</span>
                         </div>
                     {% elif product.stock > product.inventory.low_stock_threshold %}
                         <div class="flex items-center gap-2">
                             <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                             </svg>
-                            <span class="text-green-600 font-semibold">متوفر</span>
+                            <span class="text-green-600 font-medium">متوفر</span>
                         </div>
                     {% endif %}
                 </div>
@@ -159,20 +159,20 @@
                 <button 
                     onclick="showTab('description')" 
                     id="tab-description"
-                    class="tab-button border-b-2 border-primary text-primary pb-3 font-semibold">
+                    class="tab-button border-b-2 border-primary text-primary pb-3 font-medium">
                     الوصف
                 </button>
                 <button 
                     onclick="showTab('specifications')" 
                     id="tab-specifications"
-                    class="tab-button border-b-2 border-transparent text-gray-600 hover:text-gray-900 pb-3 font-semibold">
+                    class="tab-button border-b-2 border-transparent text-gray-600 hover:text-gray-900 pb-3 font-medium">
                     المواصفات
                 </button>
                 {% if product.compatible_makes or product.compatible_models %}
                 <button 
                     onclick="showTab('compatibility')" 
                     id="tab-compatibility"
-                    class="tab-button border-b-2 border-transparent text-gray-600 hover:text-gray-900 pb-3 font-semibold">
+                    class="tab-button border-b-2 border-transparent text-gray-600 hover:text-gray-900 pb-3 font-medium">
                     التوافق
                 </button>
                 {% endif %}
@@ -191,7 +191,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {% for spec in product.specifications.all %}
                 <div class="flex justify-between items-center py-3 px-4 bg-gray-50 rounded-lg">
-                    <span class="font-semibold text-gray-900">{{ spec.name }}</span>
+                    <span class="font-medium text-gray-900">{{ spec.name }}</span>
                     <span class="text-gray-700">{{ spec.value }}</span>
                 </div>
                 {% endfor %}
@@ -206,19 +206,19 @@
             <div class="space-y-4">
                 {% if product.compatible_makes %}
                 <div>
-                    <h3 class="font-semibold text-gray-900 mb-2">الماركات المتوافقة:</h3>
+                    <h3 class="font-medium text-gray-900 mb-2">الماركات المتوافقة:</h3>
                     <p class="text-gray-700">{{ product.compatible_makes }}</p>
                 </div>
                 {% endif %}
                 {% if product.compatible_models %}
                 <div>
-                    <h3 class="font-semibold text-gray-900 mb-2">الموديلات المتوافقة:</h3>
+                    <h3 class="font-medium text-gray-900 mb-2">الموديلات المتوافقة:</h3>
                     <p class="text-gray-700">{{ product.compatible_models }}</p>
                 </div>
                 {% endif %}
                 {% if product.year_from or product.year_to %}
                 <div>
-                    <h3 class="font-semibold text-gray-900 mb-2">السنوات:</h3>
+                    <h3 class="font-medium text-gray-900 mb-2">السنوات:</h3>
                     <p class="text-gray-700">{{ product.year_from|default:"لا يوجد" }} - {{ product.year_to|default:"لا يوجد" }}</p>
                 </div>
                 {% endif %}
@@ -249,7 +249,7 @@
                         {% endif %}
                     {% endfor %}
                 </div>
-                <span class="text-lg font-semibold text-gray-900">{{ avg_rating|floatformat:1 }}/5</span>
+                <span class="text-lg font-medium text-gray-900">{{ avg_rating|floatformat:1 }}/5</span>
                 <span class="text-gray-600">(من {{ reviews.count }} مراجعة)</span>
             </div>
             {% endif %}
@@ -259,7 +259,7 @@
         {% if user.is_authenticated %}
             {% if not user_has_reviewed %}
             <div class="bg-gray-50 rounded-lg p-6 mb-8 border border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">أضف مراجعتك</h3>
+                <h3 class="text-lg font-bold text-gray-900 mb-4">أضف مراجعتك</h3>
                 <form 
                     hx-post="{% url 'store:add_review' product.id %}" 
                     hx-target="#review-list" 
@@ -299,7 +299,7 @@
                     <!-- Submit Button -->
                     <button 
                         type="submit"
-                        class="bg-primary hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                        class="bg-primary hover:bg-primary-700 text-white font-bold py-3 px-4 rounded-lg transition-colors">
                         إرسال المراجعة
                     </button>
                 </form>
@@ -312,7 +312,7 @@
         {% else %}
         <div class="bg-gray-50 rounded-lg p-6 mb-8 border border-gray-200 text-center">
             <p class="text-gray-700 mb-3">يجب تسجيل الدخول لإضافة مراجعة</p>
-            <a href="{% url 'users:login' %}?next={{ request.path }}" class="inline-block bg-primary hover:bg-primary/90 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+            <a href="{% url 'users:login' %}?next={{ request.path }}" class="inline-block bg-primary hover:bg-primary-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">
                 تسجيل الدخول
             </a>
         </div>
@@ -320,7 +320,7 @@
 
         <!-- Customer Reviews List -->
         <div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">جميع المراجعات</h3>
+            <h3 class="text-lg font-bold text-gray-900 mb-4">جميع المراجعات</h3>
             <div id="review-list" class="space-y-4">
                 {% for review in reviews %}
                     {% include 'store/partials/review_item.html' with review=review %}
@@ -344,13 +344,13 @@
                     <img src="{{ related.main_image.url }}" alt="{{ related.name }}" class="w-full h-48 object-cover">
                 </a>
                 <div class="p-4">
-                    <a href="{% url 'store:product_detail' related.slug %}" class="block font-semibold text-gray-900 hover:text-primary mb-2 line-clamp-2">
+                    <a href="{% url 'store:product_detail' related.slug %}" class="block font-medium text-gray-900 hover:text-primary-600 transition-colors mb-2 line-clamp-2">
                         {{ related.name }}
                     </a>
                     <div class="flex items-center gap-2">
                         <span class="text-lg font-bold text-primary">{{ related.final_price }} ر.س</span>
                         {% if related.sale_price %}
-                        <span class="text-sm text-gray-500 line-through">{{ related.price }} ر.س</span>
+                        <span class="text-sm text-red-500 line-through decoration-2">{{ related.price }} ر.س</span>
                         {% endif %}
                     </div>
                 </div>

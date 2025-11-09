@@ -102,7 +102,7 @@
                         </div>
                     </div>
 
-                    <button onclick="toggleEditMode()" class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-lg transition-colors mt-4">
+                    <button onclick="toggleEditMode()" class="w-full bg-primary hover:bg-primary-700 text-white font-bold py-3 px-4 rounded-lg transition-colors mt-4">
                         تعديل المعلومات
                     </button>
                 </div>
@@ -158,10 +158,10 @@
                     </div>
 
                     <div class="flex gap-2">
-                        <button type="submit" class="flex-1 bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+                        <button type="submit" class="flex-1 bg-primary hover:bg-primary-700 text-white font-bold py-3 px-4 rounded-lg transition-colors">
                             حفظ التغييرات
                         </button>
-                        <button type="button" onclick="toggleEditMode()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors">
+                        <button type="button" onclick="toggleEditMode()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-4 rounded-lg transition-colors">
                             إلغاء
                         </button>
                     </div>
@@ -169,13 +169,13 @@
 
                 <!-- Quick Links -->
                 <div class="mt-6 pt-6 border-t space-y-2">
-                    <a href="{% url 'users:manage_addresses' %}" class="block text-primary hover:underline text-sm">
+                    <a href="{% url 'users:manage_addresses' %}" class="block text-primary hover:text-primary-600 transition-colors text-sm">
                         <svg class="w-4 h-4 inline ms-1" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
                         </svg>
                         إدارة العناوين
                     </a>
-                    <a href="{% url 'users:password_reset' %}" class="block text-primary hover:underline text-sm">
+                    <a href="{% url 'users:password_reset' %}" class="block text-primary hover:text-primary-600 transition-colors text-sm">
                         <svg class="w-4 h-4 inline ms-1" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
                         </svg>
@@ -240,7 +240,7 @@
                                 <span class="font-medium">{{ order.items.count }}</span> منتج - 
                                 <span class="font-bold text-gray-900">{{ order.total_amount }} ر.س</span>
                             </div>
-                            <a href="{% url 'orders:order_detail' order.id %}" class="text-primary hover:text-primary/80 text-sm font-medium">
+                            <a href="{% url 'orders:order_detail' order.id %}" class="text-primary hover:text-primary-600 text-sm font-medium transition-colors">
                                 عرض التفاصيل ←
                             </a>
                         </div>
@@ -276,7 +276,7 @@
                     </svg>
                     <h3 class="text-lg font-semibold text-gray-900 mb-2">لا توجد طلبات بعد</h3>
                     <p class="text-gray-600 mb-4">ابدأ التسوق واستكشف منتجاتنا المميزة</p>
-                    <a href="{% url 'store:product_list' %}" class="inline-block bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-8 rounded-lg transition-colors">
+                    <a href="{% url 'store:product_list' %}" class="inline-block bg-primary hover:bg-primary-700 text-white font-bold py-3 px-8 rounded-lg transition-colors">
                         تصفح المنتجات
                     </a>
                 </div>

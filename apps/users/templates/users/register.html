@@ -14,7 +14,7 @@
         </div>
 
         <!-- Form Card -->
-        <div class="bg-white rounded-lg shadow-md p-8">
+        <div class="bg-white rounded-lg shadow-sm p-8">
             
             {% if messages %}
             <div class="mb-6">
@@ -26,11 +26,11 @@
             </div>
             {% endif %}
 
-            <form method="post" class="space-y-6">
+            <form method="post">
                 {% csrf_token %}
                 
                 <!-- Name -->
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 gap-4 mt-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">الاسم الأول *</label>
                         {{ form.first_name }}
@@ -44,33 +44,33 @@
                 </div>
 
                 <!-- Email -->
-                <div>
+                <div class="mt-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">البريد الإلكتروني *</label>
                     {{ form.email }}
                     {% if form.email.errors %}<p class="mt-1 text-sm text-red-600">{{ form.email.errors.0 }}</p>{% endif %}
                 </div>
 
                 <!-- Phone -->
-                <div>
+                <div class="mt-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">رقم الجوال</label>
                     {{ form.phone_number }}
                     {% if form.phone_number.errors %}<p class="mt-1 text-sm text-red-600">{{ form.phone_number.errors.0 }}</p>{% endif %}
                 </div>
 
                 <!-- Passwords -->
-                <div>
+                <div class="mt-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">كلمة المرور *</label>
                     {{ form.password1 }}
                     {% if form.password1.errors %}<p class="mt-1 text-sm text-red-600">{{ form.password1.errors.0 }}</p>{% endif %}
                 </div>
-                <div>
+                <div class="mt-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">تأكيد كلمة المرور *</label>
                     {{ form.password2 }}
                     {% if form.password2.errors %}<p class="mt-1 text-sm text-red-600">{{ form.password2.errors.0 }}</p>{% endif %}
                 </div>
 
                 <!-- Terms -->
-                <div class="flex items-start">
+                <div class="flex items-start mt-4">
                     {{ form.accept_terms }}
                     <label for="id_accept_terms" class="mr-3 text-sm text-gray-700">
                         أوافق على الشروط والأحكام *
@@ -79,7 +79,7 @@
                 {% if form.accept_terms.errors %}<p class="text-sm text-red-600">{{ form.accept_terms.errors.0 }}</p>{% endif %}
 
                 <!-- Newsletter -->
-                <div class="flex items-start">
+                <div class="flex items-start mt-4">
                     {{ form.newsletter_subscribed }}
                     <label for="id_newsletter_subscribed" class="mr-3 text-sm text-gray-700">
                         الاشتراك في النشرة البريدية
@@ -87,13 +87,13 @@
                 </div>
 
                 <!-- Submit -->
-                <button type="submit" class="w-full py-3 px-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-lg transition-colors">
+                <button type="submit" class="w-full py-3 px-4 bg-primary hover:bg-primary-700 text-white font-bold rounded-lg transition-colors mt-6">
                     إنشاء حساب
                 </button>
 
                 <!-- Login Link -->
-                <p class="text-center text-sm text-gray-600">
-                    لديك حساب؟ <a href="{% url 'users:login' %}" class="text-primary hover:underline">تسجيل الدخول</a>
+                <p class="text-center text-sm text-gray-600 mt-6">
+                    لديك حساب؟ <a href="{% url 'users:login' %}" class="text-primary hover:text-primary-600 transition-colors">تسجيل الدخول</a>
                 </p>
             </form>
         </div>

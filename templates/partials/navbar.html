@@ -9,18 +9,28 @@
             </div>
 
             <!-- Navigation Links -->
-            <div class="hidden md:flex items-center space-x-reverse space-x-8">
+            <div class="hidden md:flex items-center space-x-reverse space-x-6">
+                <a href="{% url 'store:home' %}" class="{% if request.resolver_match.url_name == 'home' %}text-primary{% else %}text-gray-700{% endif %} hover:text-gray-700 font-semibold transition-colors">
+                    الرئيسية
+                </a>
+                
                 <!-- Mega Menu -->
                 {% include 'partials/mega_menu.html' %}
                 
-                <a href="{% url 'store:product_list' %}" class="text-primary hover:text-primary-600 font-medium transition">
-                    جميع المنتجات
+                <a href="{% url 'store:product_list' %}" class="{% if request.resolver_match.url_name == 'product_list' %}text-primary{% else %}text-gray-700{% endif %} hover:text-gray-700 font-semibold transition-colors">
+                    المنتجات
                 </a>
-                <a href="{% url 'store:product_list' %}?on_sale=true" class="text-primary hover:text-primary-600 font-medium transition">
-                    العروض الخاصة
+                
+                <a href="{% url 'store:gallery' %}" class="{% if request.resolver_match.url_name == 'gallery' %}text-primary{% else %}text-gray-700{% endif %} hover:text-gray-700 font-semibold transition-colors">
+                    معرض الصور
                 </a>
-                <a href="{% url 'store:product_list' %}?new_arrival=true" class="text-primary hover:text-primary-600 font-medium transition">
-                    وصل حديثاً
+                
+                <a href="{% url 'store:about' %}" class="{% if request.resolver_match.url_name == 'about' %}text-primary{% else %}text-gray-700{% endif %} hover:text-gray-700 font-semibold transition-colors">
+                    من نحن
+                </a>
+                
+                <a href="{% url 'store:contact' %}" class="{% if request.resolver_match.url_name == 'contact' %}text-primary{% else %}text-gray-700{% endif %} hover:text-gray-700 font-semibold transition-colors">
+                    اتصل بنا
                 </a>
             </div>
 
@@ -87,20 +97,20 @@
         <!-- Mobile Menu -->
         <div class="md:hidden hidden" id="mobile-menu">
             <div class="px-2 pt-2 pb-3 space-y-1 border-t border-gray-200">
-                <a href="{% url 'store:home' %}" class="block px-3 py-2 rounded-md text-primary hover:bg-primary-50 font-medium">
+                <a href="{% url 'store:home' %}" class="block px-3 py-2 rounded-md {% if request.resolver_match.url_name == 'home' %}text-primary bg-primary-50{% else %}text-gray-700{% endif %} hover:bg-gray-100 font-medium">
                     الرئيسية
                 </a>
-                <a href="{% url 'store:product_list' %}" class="block px-3 py-2 rounded-md text-primary hover:bg-primary-50 font-medium">
+                <a href="{% url 'store:product_list' %}" class="block px-3 py-2 rounded-md {% if request.resolver_match.url_name == 'product_list' %}text-primary bg-primary-50{% else %}text-gray-700{% endif %} hover:bg-gray-100 font-medium">
                     المنتجات
                 </a>
-                <a href="#" class="block px-3 py-2 rounded-md text-primary hover:bg-primary-50 font-medium">
-                    التصنيفات
+                <a href="{% url 'store:gallery' %}" class="block px-3 py-2 rounded-md {% if request.resolver_match.url_name == 'gallery' %}text-primary bg-primary-50{% else %}text-gray-700{% endif %} hover:bg-gray-100 font-medium">
+                    معرض الصور
                 </a>
-                <a href="#" class="block px-3 py-2 rounded-md text-primary hover:bg-primary-50 font-medium">
-                    العروض
-                </a>
-                <a href="#" class="block px-3 py-2 rounded-md text-primary hover:bg-primary-50 font-medium">
+                <a href="{% url 'store:about' %}" class="block px-3 py-2 rounded-md {% if request.resolver_match.url_name == 'about' %}text-primary bg-primary-50{% else %}text-gray-700{% endif %} hover:bg-gray-100 font-medium">
                     من نحن
+                </a>
+                <a href="{% url 'store:contact' %}" class="block px-3 py-2 rounded-md {% if request.resolver_match.url_name == 'contact' %}text-primary bg-primary-50{% else %}text-gray-700{% endif %} hover:bg-gray-100 font-medium">
+                    اتصل بنا
                 </a>
             </div>
         </div>

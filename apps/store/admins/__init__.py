@@ -1,4 +1,4 @@
-﻿"""
+"""
 Store App Admin Registration
 
 This file is the entry point for Django's admin autodiscovery.
@@ -13,6 +13,7 @@ from .taxonomy_admin import CategoryAdmin, BrandAdmin
 from .product_admin import ProductAdmin, ProductSpecificationInline
 from .review_admin import ReviewAdmin
 from .media_admin import AdvertisementAdmin, GalleryAdmin
+from .vehicle_admin import CarModelAdmin
 
 # Explicitly export all admin classes
 __all__ = [
@@ -23,4 +24,5 @@ __all__ = [
     'ReviewAdmin',
     'AdvertisementAdmin',
     'GalleryAdmin',
+    'CarModelAdmin',
 ]

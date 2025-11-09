@@ -1,4 +1,4 @@
-﻿from django.contrib import admin
+from django.contrib import admin
 from apps.store.models import Product, ProductSpecification
 from apps.inventory.models import InventoryItem
 
@@ -117,8 +117,8 @@ class ProductAdmin(admin.ModelAdmin):
         }),
         ('التوافق مع المركبات', {
             'fields': (
-                'compatible_makes',
-                'compatible_models',
+                'compatible_brands',
+                'compatible_car_models',
                 'year_from',
                 'year_to',
             ),

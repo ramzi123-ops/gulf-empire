@@ -1,4 +1,4 @@
-﻿from django.db import models
+from django.db import models
 from django.utils.text import slugify
 from django.core.validators import MinValueValidator
 from decimal import Decimal
@@ -125,17 +125,17 @@ class Product(models.Model):
     )
 
     # Vehicle Compatibility (for automotive parts)
-    compatible_makes = models.CharField(
-        max_length=500,
+    compatible_brands = models.ManyToManyField(
+        Brand,
         blank=True,
-        verbose_name="الماركات المتوافقة",
-        help_text="مثال: تويوتا، نيسان، هيونداي"
+        related_name='compatible_products',
+        verbose_name="الماركات المتوافقة"
     )
-    compatible_models = models.CharField(
-        max_length=500,
+    compatible_car_models = models.ManyToManyField(
+        'CarModel',
         blank=True,
-        verbose_name="الموديلات المتوافقة",
-        help_text="مثال: كامري 2015-2020، التيما 2018-2022"
+        related_name='compatible_products',
+        verbose_name="الموديلات المتوافقة"
     )
     year_from = models.PositiveIntegerField(
         null=True,

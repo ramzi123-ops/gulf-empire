@@ -2,6 +2,7 @@ from .taxonomy import Category, Brand
 from .product import Product, ProductSpecification
 from .review import Review
 from .media import Advertisement, Gallery
+from .vehicle import CarModel
 
 __all__ = [
     'Category',
@@ -11,4 +12,5 @@ __all__ = [
     'Review',
     'Advertisement',
     'Gallery',
+    'CarModel',
 ]

@@ -39,7 +39,7 @@ node_modules/
 
 # Compiled Tailwind CSS output
 # We only want to track the *source* in `assets/css/input.css`
-static/css/output.css
+
 
 # NPM/Yarn log files
 npm-debug.log*

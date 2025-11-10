@@ -6,11 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}الإمبراطور الخليجي{% endblock %}</title>
     
-    <!-- Tajawal Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
-    
     <link href="{% static 'css/output.css' %}" rel="stylesheet">
     
     <!-- Alpine.js for interactive components -->
@@ -23,11 +18,68 @@
             display: none !important;
         }
         
+        /* Tajawal Font - Local Files */
+        @font-face {
+            font-family: 'Tajawal';
+            src: url('{% static "fonts/Tajawal/Tajawal-ExtraLight.ttf" %}') format('truetype');
+            font-weight: 200;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Tajawal';
+            src: url('{% static "fonts/Tajawal/Tajawal-Light.ttf" %}') format('truetype');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Tajawal';
+            src: url('{% static "fonts/Tajawal/Tajawal-Regular.ttf" %}') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Tajawal';
+            src: url('{% static "fonts/Tajawal/Tajawal-Medium.ttf" %}') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Tajawal';
+            src: url('{% static "fonts/Tajawal/Tajawal-Bold.ttf" %}') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Tajawal';
+            src: url('{% static "fonts/Tajawal/Tajawal-ExtraBold.ttf" %}') format('truetype');
+            font-weight: 800;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Tajawal';
+            src: url('{% static "fonts/Tajawal/Tajawal-Black.ttf" %}') format('truetype');
+            font-weight: 900;
+            font-style: normal;
+            font-display: swap;
+        }
+        
         /* Saudi Riyal Custom Font */
         @font-face {
             font-family: 'saudi_riyal';
-            src: url('{% static "saudi-riyal font/saudi-riyal.woff" %}') format('woff'),
-                 url('{% static "saudi-riyal font/saudi-riyal.ttf" %}') format('truetype');
+            src: url('{% static "fonts/saudi-riyal font/saudi-riyal.woff" %}') format('woff'),
+                 url('{% static "fonts/saudi-riyal font/saudi-riyal.ttf" %}') format('truetype');
             font-weight: normal;
             font-style: normal;
             font-display: swap;

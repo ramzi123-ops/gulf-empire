@@ -31,11 +31,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-wiijaxo4^c=ge!_@bw8p2
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 # Allowed Hosts
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
-
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,empire776.pythonanywhere.com').split(',')
 # CSRF Trusted Origins (for PythonAnywhere and production)
 CSRF_TRUSTED_ORIGINS = [
-    'https://empire77.pythonanywhere.com',
+    'https://empire776.pythonanywhere.com',
 ]
 
 

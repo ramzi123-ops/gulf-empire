@@ -1,9 +1,9 @@
 {% load static %}
 
-<!-- Brands Navigation Bar Content -->
+<!-- Brands Navigation Bar Content (Desktop only) -->
 <div class="container mx-auto px-4" dir="rtl">
     <div class="flex items-center justify-center overflow-visible" style="height: 44px;">
-        <div class="hidden md:flex items-center space-x-reverse space-x-6 overflow-visible">
+        <div class="flex items-center space-x-reverse space-x-6 overflow-visible">
                 {% for brand in brands_with_models %}
                     <div class="relative group brand-item">
                         <!-- Brand Name -->
@@ -56,73 +56,6 @@
                     </div>
                 {% endfor %}
             </div>
-            
-            <!-- Mobile Brands Menu -->
-            <div class="md:hidden w-full">
-                <button id="mobile-brands-button" class="w-full flex items-center justify-between px-3 py-2 text-gray-700 hover:text-primary font-semibold transition-colors">
-                    <span>تصفح حسب الماركة</span>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                
-                <!-- Mobile Dropdown -->
-                <div id="mobile-brands-menu" class="hidden mt-2 bg-white rounded-lg shadow-lg border border-gray-200">
-                    {% for brand in brands_with_models %}
-                        <div class="border-b border-gray-100 last:border-b-0">
-                            <button class="mobile-brand-toggle w-full flex items-center justify-between px-4 py-3 text-left text-gray-700 hover:bg-gray-50" data-brand="{{ brand.slug }}">
-                                <div class="flex items-center space-x-reverse space-x-2">
-                                    <span class="font-medium">{{ brand.name }}</span>
-                                </div>
-                                <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                            </button>
-                            
-                            <div class="mobile-brand-models hidden bg-gray-50">
-                                {% for car_model in brand.car_models.all %}
-                                    <a href="{% url 'store:product_list' %}?brand={{ brand.slug }}&car_model={{ car_model.slug }}" 
-                                       class="block px-8 py-2 text-sm text-gray-600 hover:text-primary hover:bg-white transition-colors">
-                                        {{ car_model.name }} ({{ car_model.year_range_display }})
-                                    </a>
-                                {% endfor %}
-                                <a href="{% url 'store:product_list' %}?brand={{ brand.slug }}" 
-                                   class="block px-8 py-2 text-sm font-medium text-primary hover:bg-white transition-colors">
-                                    عرض جميع منتجات {{ brand.name }}
-                                </a>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
         </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Mobile brands menu toggle
-    const mobileBrandsButton = document.getElementById('mobile-brands-button');
-    const mobileBrandsMenu = document.getElementById('mobile-brands-menu');
-    
-    if (mobileBrandsButton && mobileBrandsMenu) {
-        mobileBrandsButton.addEventListener('click', function() {
-            mobileBrandsMenu.classList.toggle('hidden');
-            const icon = this.querySelector('svg');
-            icon.classList.toggle('rotate-180');
-        });
-    }
-    
-    // Mobile brand toggles
-    const brandToggles = document.querySelectorAll('.mobile-brand-toggle');
-    brandToggles.forEach(toggle => {
-        toggle.addEventListener('click', function() {
-            const brandSlug = this.dataset.brand;
-            const modelsDiv = this.nextElementSibling;
-            const icon = this.querySelector('svg');
-            
-            modelsDiv.classList.toggle('hidden');
-            icon.classList.toggle('rotate-180');
-        });
-    });
-});
-</script>

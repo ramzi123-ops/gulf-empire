@@ -50,7 +50,7 @@
                 <div class="flex items-center justify-between">
                     <div class="text-sm text-gray-600">
                         <span class="font-medium">{{ order.get_total_items }}</span> منتج - 
-                        <span class="font-bold text-gray-900">{{ order.total_price }} ر.س</span>
+                        <span class="font-bold text-gray-900">{{ order.total_price }} <span class="riyal-icon">&#xE900;</span></span>
                     </div>
                     
                     <a href="{% url 'orders:order_detail' order.id %}" 

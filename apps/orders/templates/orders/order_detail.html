@@ -73,13 +73,13 @@
                                 {% endif %}
                                 <div class="flex items-center gap-4 mt-2">
                                     <span class="text-sm text-gray-600">الكمية: {{ item.quantity }}</span>
-                                    <span class="text-sm text-gray-600">السعر: {{ item.price }} ر.س</span>
+                                    <span class="text-sm text-gray-600">السعر: {{ item.price }} <span class="riyal-icon">&#xE900;</span></span>
                                 </div>
                             </div>
                             
                             <!-- Item Total -->
                             <div class="text-right">
-                                <p class="text-lg font-bold text-gray-900">{{ item.get_total_price }} ر.س</p>
+                                <p class="text-lg font-bold text-gray-900">{{ item.get_total_price }} <span class="riyal-icon">&#xE900;</span></p>
                             </div>
                         </div>
                         {% endfor %}
@@ -111,20 +111,20 @@
                     <div class="space-y-3">
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-gray-600">المجموع الفرعي</span>
-                            <span class="font-semibold text-gray-900">{{ order.get_subtotal }} ر.س</span>
+                            <span class="font-semibold text-gray-900">{{ order.get_subtotal }} <span class="riyal-icon">&#xE900;</span></span>
                         </div>
                         
                         {% if order.shipping_cost > 0 %}
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-gray-600">تكلفة التوصيل</span>
-                            <span class="font-semibold text-gray-900">{{ order.shipping_cost }} ر.س</span>
+                            <span class="font-semibold text-gray-900">{{ order.shipping_cost }} <span class="riyal-icon">&#xE900;</span></span>
                         </div>
                         {% endif %}
                         
                         <div class="border-t border-gray-200 pt-3">
                             <div class="flex justify-between items-center">
                                 <span class="text-lg font-bold text-gray-900">المجموع الكلي</span>
-                                <span class="text-2xl font-bold text-primary">{{ order.total_price }} ر.س</span>
+                                <span class="text-2xl font-bold text-primary">{{ order.total_price }} <span class="riyal-icon">&#xE900;</span></span>
                             </div>
                         </div>
                     </div>

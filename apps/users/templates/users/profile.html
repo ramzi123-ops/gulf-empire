@@ -238,7 +238,7 @@
                         <div class="flex items-center justify-between">
                             <div class="text-sm text-gray-600">
                                 <span class="font-medium">{{ order.items.count }}</span> منتج - 
-                                <span class="font-bold text-gray-900">{{ order.total_amount }} ر.س</span>
+                                <span class="font-bold text-gray-900">{{ order.total_amount }} <span class="riyal-icon">&#xE900;</span></span>
                             </div>
                             <a href="{% url 'orders:order_detail' order.id %}" class="text-primary hover:text-primary-600 text-sm font-medium transition-colors">
                                 عرض التفاصيل ←

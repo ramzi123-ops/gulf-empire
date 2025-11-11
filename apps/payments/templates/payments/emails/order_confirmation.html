@@ -196,9 +196,9 @@
                     <div class="item">
                         <div>
                             <div class="item-name">{{ item.product_name }}</div>
-                            <div class="item-details">الكمية: {{ item.quantity }} × {{ item.price }} ر.س</div>
+                            <div class="item-details">الكمية: {{ item.quantity }} × {{ item.price }} <span class="riyal-icon">&#xE900;</span></div>
                         </div>
-                        <div class="item-price">{{ item.get_total_price }} ر.س</div>
+                        <div class="item-price">{{ item.get_total_price }} <span class="riyal-icon">&#xE900;</span></div>
                     </div>
                     {% endfor %}
                 </div>
@@ -206,7 +206,7 @@
             
             <!-- Total -->
             <div class="total">
-                المجموع الكلي: {{ order.total_price }} ر.س
+                المجموع الكلي: {{ order.total_price }} <span class="riyal-icon">&#xE900;</span>
             </div>
             
             <!-- Notes -->

@@ -84,13 +84,13 @@
                 <div class="bg-gray-50 rounded-lg p-6 mb-6">
                     <div class="flex items-center gap-3 mb-2">
                         <span class="text-4xl font-bold text-primary">{{ product.final_price }}</span>
-                        <span class="text-2xl text-gray-600">ر.س</span>
+                        <span class="text-2xl text-gray-600"><span class="riyal-icon">&#xE900;</span></span>
                         {% if product.sale_price %}
-                        <span class="text-xl text-red-500 line-through decoration-2">{{ product.price }} ر.س</span>
+                        <span class="text-xl text-red-500 line-through decoration-2">{{ product.price }} <span class="riyal-icon">&#xE900;</span></span>
                         {% endif %}
                     </div>
                     {% if product.sale_price %}
-                    <p class="text-sm text-green-600 font-medium">وفر {{ product.price|floatformat:2|add:"-"|add:product.sale_price|floatformat:2 }} ر.س</p>
+                    <p class="text-sm text-green-600 font-medium">وفر {{ product.price|floatformat:2|add:"-"|add:product.sale_price|floatformat:2 }} <span class="riyal-icon">&#xE900;</span></p>
                     {% endif %}
                 </div>
                 
@@ -348,9 +348,9 @@
                         {{ related.name }}
                     </a>
                     <div class="flex items-center gap-2">
-                        <span class="text-lg font-bold text-primary">{{ related.final_price }} ر.س</span>
+                        <span class="text-lg font-bold text-primary">{{ related.final_price }} <span class="riyal-icon">&#xE900;</span></span>
                         {% if related.sale_price %}
-                        <span class="text-sm text-red-500 line-through decoration-2">{{ related.price }} ر.س</span>
+                        <span class="text-sm text-red-500 line-through decoration-2">{{ related.price }} <span class="riyal-icon">&#xE900;</span></span>
                         {% endif %}
                     </div>
                 </div>

@@ -42,8 +42,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 INSTALLED_APPS = [
     'django_daisy',
-    # 'jazzmin',
-    # 'jet',
+
     'django.contrib.admin',
     'django.contrib.humanize',  
     'django.contrib.auth',
@@ -51,6 +50,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',  # Required for allauth
+
+    # Django Allauth - TEMPORARILY COMMENTED OUT UNTIL PACKAGE IS INSTALLED
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 
     "django_htmx",
     "tailwind",
@@ -80,6 +86,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',  # Required for django-allauth - COMMENTED OUT
     'django_htmx.middleware.HtmxMiddleware',  # HTMX middleware
 ]
 
@@ -252,3 +259,41 @@ DAISY_SETTINGS = {
         },
     },
 }
+
+# ==============================================================================
+# DJANGO-ALLAUTH CONFIGURATION (Google OAuth)
+# ==============================================================================
+
+SITE_ID = 2  # Changed to match the actual Site ID in database
+
+# Authentication Backends
+AUTHENTICATION_BACKENDS = [
+    # Django's default auth backend
+    'django.contrib.auth.backends.ModelBackend',
+    # Allauth's authentication backend
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# Allauth Settings (Updated for latest version)
+ACCOUNT_LOGIN_METHODS = {'email'}  # Login with email only
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']  # Required signup fields
+ACCOUNT_EMAIL_VERIFICATION = 'optional'  # Change to 'mandatory' for production
+ACCOUNT_UNIQUE_EMAIL = True
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_EMAIL_REQUIRED = True
+
+# Google OAuth Callback
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+    }
+}
+
+# Redirect after social login
+SOCIALACCOUNT_LOGIN_ON_GET = True

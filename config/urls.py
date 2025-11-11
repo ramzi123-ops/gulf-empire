@@ -1,4 +1,4 @@
-﻿"""
+"""
 URL configuration for config project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -25,10 +25,10 @@ admin.site.site_title = 'إمبراطور الخليج'
 admin.site.index_title = 'لوحة إدارة إمبراطور الخليج'
 
 urlpatterns = [
-    # path(r'jet/', include('jet.urls', 'jet')),
     path('admin/', admin.site.urls),
     path('dashboard/', include('apps.dashboard.urls')),
     path('auth/', include('apps.users.urls')),
+    path('accounts/', include('allauth.urls')),  # Django-allauth URLs for Google OAuth
     path('orders/', include('apps.orders.urls')),
     path('payments/', include('apps.payments.urls')),
     path('', include('apps.store.urls')),

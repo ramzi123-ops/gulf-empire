@@ -55,7 +55,7 @@
                                 
                                 <!-- Price -->
                                 <td class="px-6 py-6 text-center">
-                                    <span class="text-base font-medium text-gray-900">{{ item.unit_price }} ر.س</span>
+                                    <span class="text-base font-medium text-gray-900">{{ item.unit_price }} <span class="riyal-icon">&#xE900;</span></span>
                                 </td>
                                 
                                 <!-- Quantity -->
@@ -74,7 +74,7 @@
                                             </button>
                                         </form>
                                         
-                                        <span class="w-12 text-center font-medium">{{ item.quantity }}</span>
+                                        <span id="quantity-{{ item.id }}" class="w-12 text-center font-medium">{{ item.quantity }}</span>
                                         
                                         <form hx-post="{% url 'orders:update_cart_item' item.id %}" 
                                               hx-target="#cart-totals"
@@ -93,7 +93,7 @@
                                 
                                 <!-- Total -->
                                 <td class="px-6 py-6 text-center">
-                                    <span class="text-base font-bold text-primary">{{ item.total_price }} ر.س</span>
+                                    <span id="total-{{ item.id }}" class="text-base font-bold text-primary">{{ item.total_price }} <span class="riyal-icon">&#xE900;</span></span>
                                 </td>
                                 
                                 <!-- Remove Button -->

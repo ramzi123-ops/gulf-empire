@@ -3,47 +3,42 @@
     <!-- Header -->
     <h2 class="text-xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-200">ملخص الطلب</h2>
     
-    <!-- Summary Items -->
-    <div class="space-y-4 mb-6">
-        
+    <!-- Cart Items -->
+    <div class="space-y-4 mb-6 max-h-[300px] overflow-y-auto">
+        {% for item in cart.items.all %}
+        <div class="flex items-center gap-3 pb-4 border-b border-gray-100 last:border-0">
+            <img src="{{ item.product.main_image.url }}" 
+                 alt="{{ item.product.name }}"
+                 class="w-16 h-16 object-cover rounded-lg border border-gray-200">
+            
+            <div class="flex-1 min-w-0">
+                <h3 class="text-sm font-semibold text-gray-900 line-clamp-2">{{ item.product.name }}</h3>
+                <p class="text-sm text-gray-600 mt-1">
+                    <span class="font-semibold">{{ item.quantity }}x</span> 
+                    {{ item.unit_price }} <span class="riyal-icon">&#xE900;</span>
+                </p>
+            </div>
+            
+            <div class="text-sm font-bold text-primary">
+                {{ item.total_price }} <span class="riyal-icon">&#xE900;</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Summary Totals -->
+    <div class="space-y-3 mb-6 pb-6 border-b border-gray-200">
         <!-- Subtotal -->
-        <div class="flex justify-between items-center">
-            <span class="text-gray-600">المجموع الفرعي</span>
-            <span class="font-medium text-gray-900">{{ cart.get_subtotal }} ر.س</span>
+        <div class="flex justify-between items-center text-sm">
+            <span class="text-gray-600">المجموع</span>
+            <span class="font-semibold text-gray-900">{{ cart.subtotal }} <span class="riyal-icon">&#xE900;</span></span>
         </div>
-        
-        <!-- Shipping -->
-        <div class="flex justify-between items-center">
-            <span class="text-gray-600">تكلفة التوصيل</span>
-            {% if cart.get_subtotal >= 50 %}
-            <span class="font-medium text-green-600">مجاناً</span>
-            {% else %}
-            <span class="font-medium text-gray-900">{{ cart.get_shipping_cost }} ر.س</span>
-            {% endif %}
-        </div>
-        
-        <!-- Free Shipping Banner -->
-        {% if cart.get_subtotal < 50 %}
-        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
-            <p class="text-sm text-blue-800">
-                <span class="font-semibold">احصل على توصيل مجاني!</span><br>
-                أضف منتجات بقيمة <span class="font-bold">{{ cart.get_free_shipping_remaining }} ر.س</span> أخرى
-            </p>
-        </div>
-        {% endif %}
-        
-        <!-- Total Items -->
-        <div class="flex justify-between items-center pt-4 border-t border-gray-200">
-            <span class="text-gray-600">عدد المنتجات</span>
-            <span class="font-medium text-gray-900">{{ cart.get_total_items }}</span>
-        </div>
-        
     </div>
     
     <!-- Total -->
-    <div class="flex justify-between items-center py-4 border-t border-gray-200 mb-6">
+    <div class="flex justify-between items-center mb-6">
         <span class="text-lg font-bold text-gray-900">المجموع الكلي</span>
-        <span class="text-2xl font-bold text-primary">{{ cart.get_total }} ر.س</span>
+        <span class="text-2xl font-bold text-primary">{{ cart.get_total }} <span class="riyal-icon">&#xE900;</span></span>
     </div>
     
     <!-- Checkout Button -->

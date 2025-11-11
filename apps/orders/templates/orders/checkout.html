@@ -90,12 +90,12 @@
                                 <h3 class="text-sm font-semibold text-gray-900 line-clamp-2">{{ item.product.name }}</h3>
                                 <p class="text-sm text-gray-600 mt-1">
                                     <span class="font-semibold">{{ item.quantity }}x</span> 
-                                    {{ item.unit_price }} ر.س
+                                    {{ item.unit_price }} <span class="riyal-icon">&#xE900;</span>
                                 </p>
                             </div>
                             
                             <div class="text-sm font-bold text-primary">
-                                {{ item.total_price }} ر.س
+                                {{ item.total_price }} <span class="riyal-icon">&#xE900;</span>
                             </div>
                         </div>
                         {% endfor %}
@@ -106,14 +106,14 @@
                         <!-- Subtotal -->
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-gray-600">المجموع</span>
-                            <span class="font-semibold text-gray-900">{{ cart.subtotal }} ر.س</span>
+                            <span class="font-semibold text-gray-900">{{ cart.subtotal }} <span class="riyal-icon">&#xE900;</span></span>
                         </div>
                     </div>
                     
                     <!-- Total -->
                     <div class="flex justify-between items-center mb-6">
                         <span class="text-lg font-bold text-gray-900">المجموع الكلي</span>
-                        <span class="text-2xl font-bold text-primary">{{ cart.get_total }} ر.س</span>
+                        <span class="text-2xl font-bold text-primary">{{ cart.get_total }} <span class="riyal-icon">&#xE900;</span></span>
                     </div>
                     
                     <!-- Submit Button -->

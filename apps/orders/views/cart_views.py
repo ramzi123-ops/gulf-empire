@@ -114,8 +114,36 @@ def update_cart_item(request, item_id):
         except (ValueError, TypeError):
             pass
     
-    # Reload the page to refresh cart
-    return HttpResponse(headers={'HX-Refresh': 'true'})
+    # Refresh cart to get updated values
+    cart.refresh_from_db()
+    cart_item.refresh_from_db()
+    
+    # Build response with cart totals and OOB swaps for quantity and total
+    from django.template.loader import render_to_string
+    from django.urls import reverse
+    
+    cart_totals_html = render_to_string('orders/partials/cart_totals.html', {'cart': cart}, request=request)
+    
+    # Add OOB swaps for the updated quantity and total
+    oob_quantity = f'<span id="quantity-{cart_item.id}" hx-swap-oob="true" class="w-12 text-center font-medium">{cart_item.quantity}</span>'
+    oob_total = f'<span id="total-{cart_item.id}" hx-swap-oob="true" class="text-base font-bold text-primary">{cart_item.total_price} <span class="riyal-icon">&#xE900;</span></span>'
+    
+    # Update mini-cart icon
+    cart_url = reverse('orders:cart')
+    oob_mini_cart = f'''
+    <div id="mini-cart" hx-swap-oob="true" class="relative">
+        <a href="{cart_url}" class="text-primary hover:text-primary-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {cart.total_items}
+            </span>
+        </a>
+    </div>
+    '''
+    
+    return HttpResponse(cart_totals_html + oob_quantity + oob_total + oob_mini_cart)
 
 
 @require_POST
@@ -129,15 +157,41 @@ def remove_from_cart(request, item_id):
         item_id: CartItem ID to remove
         
     Returns:
-        Rendered cart partial
+        Empty response for row removal + OOB swap for cart totals
     """
     cart = get_cart(request)
     cart_item = get_object_or_404(CartItem, id=item_id, cart=cart)
     
     cart_item.delete()
     
-    # Reload the page to refresh cart
-    return HttpResponse(headers={'HX-Refresh': 'true'})
+    # Refresh cart to get updated values
+    cart.refresh_from_db()
+    
+    # Return empty response for the deleted row + OOB swap for cart totals
+    from django.template.loader import render_to_string
+    from django.urls import reverse
+    
+    cart_totals_html = render_to_string('orders/partials/cart_totals.html', {'cart': cart}, request=request)
+    
+    # Add OOB swap attribute to cart totals
+    cart_totals_with_oob = cart_totals_html.replace('<div id="cart-totals"', '<div id="cart-totals" hx-swap-oob="true"')
+    
+    # Update mini-cart icon
+    cart_url = reverse('orders:cart')
+    oob_mini_cart = f'''
+    <div id="mini-cart" hx-swap-oob="true" class="relative">
+        <a href="{cart_url}" class="text-primary hover:text-primary-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {cart.total_items}
+            </span>
+        </a>
+    </div>
+    '''
+    
+    return HttpResponse(cart_totals_with_oob + oob_mini_cart)
 
 
 def view_cart(request):

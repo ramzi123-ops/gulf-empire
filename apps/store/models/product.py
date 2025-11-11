@@ -249,6 +249,13 @@ class Product(models.Model):
         return 0
     
     @property
+    def savings_amount(self):
+        """Calculate savings amount if sale price is set"""
+        if self.sale_price and self.price > self.sale_price:
+            return self.price - self.sale_price
+        return 0
+    
+    @property
     def average_rating(self):
         """Calculate average rating from approved reviews"""
         from django.db.models import Avg

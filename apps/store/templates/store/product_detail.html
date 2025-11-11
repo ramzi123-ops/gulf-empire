@@ -90,7 +90,7 @@
                         {% endif %}
                     </div>
                     {% if product.sale_price %}
-                    <p class="text-sm text-green-600 font-medium">وفر {{ product.price|floatformat:2|add:"-"|add:product.sale_price|floatformat:2 }} <span class="riyal-icon">&#xE900;</span></p>
+                    <p class="text-sm text-green-600 font-medium">وفر {{ product.savings_amount }} <span class="riyal-icon">&#xE900;</span></p>
                     {% endif %}
                 </div>
                 

@@ -22,21 +22,34 @@ def add_to_cart(request, product_id):
     # Get the product
     product = get_object_or_404(Product, id=product_id, is_active=True)
     
-    # Check if product has stock using inventory system
+    # Check if product is in stock
     if not product.has_stock:
-        # Return error message via HTMX OOB swap
-        error_html = '''
+        # Return error message via HTMX OOB swap AND keep cart icon
+        cart = get_cart(request)
+        from django.urls import reverse
+        cart_url = reverse('orders:cart')
+        error_html = f'''
         <div id="toast-notification" hx-swap-oob="true" class="fixed top-24 start-1/2 -translate-x-1/2 bg-white text-red-600 px-6 py-4 rounded-lg shadow-lg z-50 flex items-center gap-3 min-w-80 border-2 border-red-200">
             <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
-            <span class="text-base font-medium">المنتج غير متوفر حالياً</span>
+            <p class="text-base font-semibold">المنتج غير متوفر في المخزون</p>
+        </div>
+        <div id="mini-cart" hx-swap-oob="true" class="relative">
+            <a href="{cart_url}" class="text-primary hover:text-primary-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {cart.total_items}
+                </span>
+            </a>
         </div>
         <script>
-            setTimeout(() => {
+            setTimeout(() => {{
                 const toast = document.getElementById('toast-notification');
                 if(toast) toast.remove();
-            }, 3000);
+            }}, 3000);
         </script>
         '''
         return HttpResponse(error_html)
@@ -59,7 +72,9 @@ def add_to_cart(request, product_id):
     
     # Validate against inventory stock
     if new_total > product.stock:
-        # Return error message with available quantity
+        # Return error message with available quantity AND keep cart icon
+        from django.urls import reverse
+        cart_url = reverse('orders:cart')
         error_html = f'''
         <div id="toast-notification" hx-swap-oob="true" class="fixed top-24 start-1/2 -translate-x-1/2 bg-white text-red-600 px-6 py-4 rounded-lg shadow-lg z-50 min-w-96 border-2 border-red-200">
             <div class="flex items-start gap-3">
@@ -71,6 +86,16 @@ def add_to_cart(request, product_id):
                     <p class="text-sm mt-1 text-red-500">لديك {quantity_in_cart} في السلة بالفعل</p>
                 </div>
             </div>
+        </div>
+        <div id="mini-cart" hx-swap-oob="true" class="relative">
+            <a href="{cart_url}" class="text-primary hover:text-primary-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {cart.total_items}
+                </span>
+            </a>
         </div>
         <script>
             setTimeout(() => {{

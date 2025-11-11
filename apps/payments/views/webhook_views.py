@@ -117,6 +117,29 @@ def handle_payment_succeeded(payment_intent):
         order.status = 'confirmed'  # Move from pending to confirmed
         order.save()
         
+        # CRITICAL: Deduct inventory for each order item
+        for order_item in order.items.all():
+            try:
+                inventory = order_item.product.inventory
+                success = inventory.remove_stock(order_item.quantity)
+                if not success:
+                    # Critical error - insufficient inventory after payment!
+                    logger.critical(
+                        f'INVENTORY MISMATCH: Failed to deduct {order_item.quantity} units '
+                        f'of {order_item.product.sku} for Order #{order.order_number}. '
+                        f'Current stock: {inventory.quantity}'
+                    )
+                else:
+                    logger.info(
+                        f'Deducted {order_item.quantity} units of {order_item.product.sku}. '
+                        f'Remaining: {inventory.quantity}'
+                    )
+            except Exception as e:
+                # Log but don't fail the payment - inventory issue needs manual resolution
+                logger.error(
+                    f'Error deducting inventory for {order_item.product.sku}: {str(e)}'
+                )
+        
         logger.info(f'Payment succeeded for Order #{order.order_number}')
         
         # Send confirmation email to customer
@@ -219,6 +242,25 @@ def handle_charge_refunded(charge):
         order.payment_status = 'refunded'
         order.status = 'cancelled'
         order.save()
+        
+        # CRITICAL: Restore inventory for each order item
+        for order_item in order.items.all():
+            try:
+                inventory = order_item.product.inventory
+                success = inventory.add_stock(order_item.quantity)
+                if success:
+                    logger.info(
+                        f'Restored {order_item.quantity} units of {order_item.product.sku}. '
+                        f'New stock: {inventory.quantity}'
+                    )
+                else:
+                    logger.error(
+                        f'Failed to restore {order_item.quantity} units of {order_item.product.sku}'
+                    )
+            except Exception as e:
+                logger.error(
+                    f'Error restoring inventory for {order_item.product.sku}: {str(e)}'
+                )
         
         logger.info(f'Charge refunded for Order #{order.order_number}')
         

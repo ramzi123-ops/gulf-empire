@@ -24,8 +24,22 @@ def add_to_cart(request, product_id):
     
     # Check if product has stock using inventory system
     if not product.has_stock:
-        # Return empty response - product not available
-        return HttpResponse('')
+        # Return error message via HTMX OOB swap
+        error_html = '''
+        <div id="toast-notification" hx-swap-oob="true" class="fixed top-24 start-1/2 -translate-x-1/2 bg-white text-red-600 px-6 py-4 rounded-lg shadow-lg z-50 flex items-center gap-3 min-w-80 border-2 border-red-200">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+            <span class="text-base font-medium">المنتج غير متوفر حالياً</span>
+        </div>
+        <script>
+            setTimeout(() => {
+                const toast = document.getElementById('toast-notification');
+                if(toast) toast.remove();
+            }, 3000);
+        </script>
+        '''
+        return HttpResponse(error_html)
     
     # Get or create the cart
     cart = get_cart(request)
@@ -45,8 +59,27 @@ def add_to_cart(request, product_id):
     
     # Validate against inventory stock
     if new_total > product.stock:
-        # Return empty response - insufficient stock
-        return HttpResponse('')
+        # Return error message with available quantity
+        error_html = f'''
+        <div id="toast-notification" hx-swap-oob="true" class="fixed top-24 start-1/2 -translate-x-1/2 bg-white text-red-600 px-6 py-4 rounded-lg shadow-lg z-50 min-w-96 border-2 border-red-200">
+            <div class="flex items-start gap-3">
+                <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+                <div class="flex-1">
+                    <p class="text-base font-semibold">الكمية المتوفرة: {product.stock} فقط</p>
+                    <p class="text-sm mt-1 text-red-500">لديك {quantity_in_cart} في السلة بالفعل</p>
+                </div>
+            </div>
+        </div>
+        <script>
+            setTimeout(() => {{
+                const toast = document.getElementById('toast-notification');
+                if(toast) toast.remove();
+            }}, 4000);
+        </script>
+        '''
+        return HttpResponse(error_html)
     
     # Add or update cart item
     if cart_item:
@@ -100,6 +133,31 @@ def update_cart_item(request, item_id):
         # Check against inventory stock
         if cart_item.quantity < cart_item.product.stock:
             cart_item.increase_quantity(1)
+        else:
+            # Stock limit reached - show notification
+            error_html = f'''
+            <div id="toast-notification" hx-swap-oob="true" class="fixed top-24 start-1/2 -translate-x-1/2 bg-white text-red-600 px-6 py-4 rounded-lg shadow-lg z-50 min-w-96 border-2 border-red-200">
+                <div class="flex items-start gap-3">
+                    <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                    <div class="flex-1">
+                        <p class="text-base font-semibold">وصلت للحد الأقصى المتوفر</p>
+                        <p class="text-sm mt-1 text-red-500">المتوفر: {cart_item.product.stock} فقط</p>
+                    </div>
+                </div>
+            </div>
+            <script>
+                setTimeout(() => {{
+                    const toast = document.getElementById('toast-notification');
+                    if(toast) toast.remove();
+                }}, 3000);
+            </script>
+            '''
+            # Still need to return cart totals even when limit reached
+            from django.template.loader import render_to_string
+            cart_totals_html = render_to_string('orders/partials/cart_totals.html', {'cart': cart}, request=request)
+            return HttpResponse(cart_totals_html + error_html)
     
     elif action == 'decrease':
         # decrease_quantity will delete the item if quantity reaches 0

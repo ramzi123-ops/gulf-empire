@@ -39,6 +39,25 @@ def checkout(request):
         order_notes = request.POST.get('notes', '').strip()
         
         try:
+            # CRITICAL: Validate stock availability before creating order
+            stock_errors = []
+            for cart_item in cart.items.all():
+                product = cart_item.product
+                if not product.has_stock:
+                    stock_errors.append(f'{product.name} - نفد من المخزون')
+                elif cart_item.quantity > product.stock:
+                    stock_errors.append(
+                        f'{product.name} - المتوفر فقط {product.stock} قطعة'
+                    )
+            
+            if stock_errors:
+                # Stock validation failed - redirect back to cart with errors
+                from django.contrib import messages
+                for error in stock_errors:
+                    messages.error(request, error)
+                messages.error(request, 'الرجاء تحديث السلة قبل المتابعة')
+                return redirect('orders:cart')
+            
             # Create order within a transaction
             with transaction.atomic():
                 # Calculate totals (no shipping cost)

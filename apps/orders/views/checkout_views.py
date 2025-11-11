@@ -7,6 +7,7 @@ import stripe
 
 from apps.orders.models import Cart, Order, OrderItem
 from apps.payments.models import Payment
+from apps.users.models import Address
 
 # Configure Stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -16,7 +17,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 def checkout(request):
     """
     Checkout view - handles order creation and payment initiation
-    No shipping/address required (digital or in-store pickup)
+    Collects delivery address and contact information
     """
     
     # Get or create cart
@@ -28,8 +29,12 @@ def checkout(request):
     
     # GET request - show checkout page
     if request.method == 'GET':
+        # Get user's saved addresses
+        user_addresses = Address.objects.filter(user=request.user).order_by('-is_default', '-created_at')
+        
         context = {
             'cart': cart,
+            'user_addresses': user_addresses,
         }
         
         return render(request, 'orders/checkout.html', context)
@@ -37,6 +42,20 @@ def checkout(request):
     # POST request - create order
     elif request.method == 'POST':
         order_notes = request.POST.get('notes', '').strip()
+        
+        # Get delivery address fields
+        full_name = request.POST.get('full_name', '').strip()
+        phone_number = request.POST.get('phone_number', '').strip()
+        city = request.POST.get('city', '').strip()
+        state = request.POST.get('state', '').strip()
+        street = request.POST.get('street', '').strip()
+        additional_info = request.POST.get('additional_info', '').strip()
+        
+        # Validate required fields
+        if not all([full_name, phone_number, city, street]):
+            from django.contrib import messages
+            messages.error(request, 'الرجاء تعبئة جميع الحقول المطلوبة')
+            return redirect('orders:checkout')
         
         try:
             # CRITICAL: Validate stock availability before creating order
@@ -60,13 +79,27 @@ def checkout(request):
             
             # Create order within a transaction
             with transaction.atomic():
+                # Create delivery address
+                delivery_address = Address.objects.create(
+                    user=request.user,
+                    label="طلب",  # Order address
+                    full_name=full_name,
+                    phone_number=phone_number,
+                    street=street,
+                    city=city,
+                    state=state,
+                    additional_info=additional_info,
+                    country="السعودية",
+                    is_default=False
+                )
+                
                 # Calculate totals (no shipping cost)
                 total = cart.subtotal
                 
                 # Create the order
                 order = Order.objects.create(
                     user=request.user,
-                    address=None,  # No shipping address needed
+                    address=delivery_address,  # Link delivery address
                     total_price=total,
                     shipping_cost=0,  # No shipping
                     notes=order_notes,

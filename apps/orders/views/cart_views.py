@@ -94,6 +94,7 @@ def update_cart_item(request, item_id):
     
     # Get action (increase, decrease, or set)
     action = request.POST.get('action', 'set')
+    item_was_deleted = False
     
     if action == 'increase':
         # Check against inventory stock
@@ -101,13 +102,17 @@ def update_cart_item(request, item_id):
             cart_item.increase_quantity(1)
     
     elif action == 'decrease':
+        # decrease_quantity will delete the item if quantity reaches 0
         cart_item.decrease_quantity(1)
+        # Check if item still exists (not deleted)
+        item_was_deleted = not CartItem.objects.filter(id=item_id).exists()
     
     else:  # set quantity
         try:
             quantity = int(request.POST.get('quantity', 1))
             if quantity < 1:
                 cart_item.delete()
+                item_was_deleted = True
             elif quantity <= cart_item.product.stock:
                 cart_item.quantity = quantity
                 cart_item.save()
@@ -116,13 +121,38 @@ def update_cart_item(request, item_id):
     
     # Refresh cart to get updated values
     cart.refresh_from_db()
-    cart_item.refresh_from_db()
     
-    # Build response with cart totals and OOB swaps for quantity and total
+    # Build response with cart totals and OOB swaps
     from django.template.loader import render_to_string
     from django.urls import reverse
     
     cart_totals_html = render_to_string('orders/partials/cart_totals.html', {'cart': cart}, request=request)
+    
+    # If item was deleted, remove the row + update cart totals and mini-cart
+    if item_was_deleted:
+        # Update mini-cart icon
+        cart_url = reverse('orders:cart')
+        oob_mini_cart = f'''
+        <div id="mini-cart" hx-swap-oob="true" class="relative">
+            <a href="{cart_url}" class="text-primary hover:text-primary-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {cart.total_items}
+                </span>
+            </a>
+        </div>
+        '''
+        # OOB swap to remove the cart row
+        oob_remove_row = f'<div id="cart-item-{item_id}" hx-swap-oob="delete"></div>'
+        
+        # Add OOB swap to cart totals
+        cart_totals_with_oob = cart_totals_html.replace('<div id="cart-totals"', '<div id="cart-totals" hx-swap-oob="true"')
+        return HttpResponse(cart_totals_with_oob + oob_mini_cart + oob_remove_row)
+    
+    # Otherwise, item still exists - update quantity and total
+    cart_item.refresh_from_db()
     
     # Add OOB swaps for the updated quantity and total
     oob_quantity = f'<span id="quantity-{cart_item.id}" hx-swap-oob="true" class="w-12 text-center font-medium">{cart_item.quantity}</span>'

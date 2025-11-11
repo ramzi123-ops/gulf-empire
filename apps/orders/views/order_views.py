@@ -3,7 +3,6 @@ Order management views - order detail, tracking, etc.
 """
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.utils.translation import gettext as _
 
 from apps.orders.models import Order

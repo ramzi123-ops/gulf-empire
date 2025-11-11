@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.db import transaction
 from django.utils.translation import gettext as _
 from django.conf import settings
@@ -25,7 +24,6 @@ def checkout(request):
     
     # Check if cart is empty
     if not cart.items.exists():
-        messages.warning(request, _('Your cart is empty. Please add items before checking out.'))
         return redirect('store:product_list')
     
     # GET request - show checkout page
@@ -106,7 +104,6 @@ def checkout(request):
                 return redirect('payments:payment_process', order_id=order.id)
         
         except Exception as e:
-            messages.error(request, _('An error occurred while creating your order. Please try again.'))
             # Log the error for debugging
             import logging
             logger = logging.getLogger(__name__)

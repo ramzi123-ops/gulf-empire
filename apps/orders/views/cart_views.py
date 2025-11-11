@@ -1,5 +1,4 @@
 from django.shortcuts import render, get_object_or_404
-from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse
 from apps.store.models import Product
@@ -25,17 +24,8 @@ def add_to_cart(request, product_id):
     
     # Check if product has stock using inventory system
     if not product.has_stock:
-        # Return HTMX OOB error toast
-        error_html = '''
-        <div hx-swap-oob="true" id="toast-message" 
-             class="fixed top-4 start-4 z-50 flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg shadow-lg">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-            </svg>
-            <span class="font-semibold">عذراً، هذا المنتج غير متوفر حالياً</span>
-        </div>
-        '''
-        return HttpResponse(error_html)
+        # Return empty response - product not available
+        return HttpResponse('')
     
     # Get or create the cart
     cart = get_cart(request)
@@ -55,43 +45,25 @@ def add_to_cart(request, product_id):
     
     # Validate against inventory stock
     if new_total > product.stock:
-        # Return HTMX OOB error toast
-        error_html = '''
-        <div hx-swap-oob="true" id="toast-message" 
-             class="fixed top-4 start-4 z-50 flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg shadow-lg">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-            </svg>
-            <span class="font-semibold">لا توجد كمية كافية في المخزون</span>
-        </div>
-        '''
-        return HttpResponse(error_html)
+        # Return empty response - insufficient stock
+        return HttpResponse('')
     
     # Add or update cart item
     if cart_item:
         cart_item.increase_quantity(quantity)
-        messages.success(request, f'تم تحديث كمية {product.name} في السلة')
     else:
         CartItem.objects.create(
             cart=cart,
             product=product,
             quantity=quantity
         )
-        messages.success(request, f'تمت إضافة {product.name} إلى السلة')
     
-    # Return updated cart icon with success message
+    # Return updated cart icon only
     from django.urls import reverse
     cart_url = reverse('orders:cart')
-    success_html = f'''
-    <div hx-swap-oob="true" id="toast-message" 
-         class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 flex items-center gap-3 bg-green-50 border border-green-200 text-green-700 px-6 py-4 rounded-lg shadow-lg">
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-        </svg>
-        <span class="font-semibold">تمت الإضافة إلى السلة بنجاح</span>
-    </div>
+    response_html = f'''
     <div id="mini-cart" hx-swap-oob="true" class="relative">
-        <a href="{cart_url}" class="text-gray-700 hover:text-blue-600">
+        <a href="{cart_url}" class="text-primary hover:text-primary-600">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
             </svg>
@@ -101,7 +73,7 @@ def add_to_cart(request, product_id):
         </a>
     </div>
     '''
-    return HttpResponse(success_html)
+    return HttpResponse(response_html)
 
 
 @require_POST

@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout as auth_logout
-from django.contrib import messages
 from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator
 from apps.users.models import Address, Profile
@@ -15,7 +14,6 @@ def logout_view(request):
     Custom logout view that handles GET requests
     """
     auth_logout(request)
-    messages.success(request, 'تم تسجيل الخروج بنجاح')
     return redirect('store:home')
 
 
@@ -26,7 +24,6 @@ def register(request):
     """
     # Redirect if already logged in
     if request.user.is_authenticated:
-        messages.info(request, 'أنت مسجل دخول بالفعل')
         return redirect('store:home')
     
     if request.method == 'POST':
@@ -38,18 +35,12 @@ def register(request):
             # Log the user in
             login(request, user)
             
-            # Success message
-            messages.success(
-                request,
-                f'مرحباً {user.first_name}! تم إنشاء حسابك بنجاح'
-            )
-            
             # Redirect to home or next page
             next_url = request.GET.get('next', 'store:home')
             return redirect(next_url)
         else:
             # Form has errors - they will be displayed in the template
-            messages.error(request, 'يرجى تصحيح الأخطاء أدناه')
+            pass
     else:
         form = UserRegistrationForm()
     
@@ -92,7 +83,6 @@ def profile_view(request):
             profile.avatar = request.FILES['avatar']
         
         profile.save()
-        messages.success(request, 'تم تحديث الملف الشخصي بنجاح')
         return redirect('users:profile')
     
     # Get user orders with pagination
@@ -161,7 +151,6 @@ def add_address(request):
         
         # Validate required fields
         if not all([label, full_name, phone_number, street, city]):
-            messages.error(request, 'يرجى ملء جميع الحقول المطلوبة')
             return render(request, 'users/partials/address_form.html', {
                 'action': 'add',
                 'errors': ['يرجى ملء جميع الحقول المطلوبة']
@@ -183,8 +172,6 @@ def add_address(request):
             additional_info=additional_info,
             is_default=is_default
         )
-        
-        messages.success(request, 'تمت إضافة العنوان بنجاح')
         
         # If HTMX request, return updated address list and clear form
         if request.htmx:
@@ -229,7 +216,6 @@ def edit_address(request, address_id):
         
         # Validate required fields
         if not all([address.label, address.full_name, address.phone_number, address.street, address.city]):
-            messages.error(request, 'يرجى ملء جميع الحقول المطلوبة')
             return render(request, 'users/partials/address_form.html', {
                 'action': 'edit',
                 'address': address,
@@ -237,7 +223,6 @@ def edit_address(request, address_id):
             })
         
         address.save()
-        messages.success(request, 'تم تحديث العنوان بنجاح')
         
         # If HTMX request, return updated address list and clear form
         if request.htmx:
@@ -258,8 +243,6 @@ def delete_address(request, address_id):
     """
     address = get_object_or_404(Address, id=address_id, user=request.user)
     address.delete()
-    
-    messages.success(request, 'تم حذف العنوان بنجاح')
     
     # If HTMX request, return updated address list
     if request.htmx:

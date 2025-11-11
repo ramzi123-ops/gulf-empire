@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.db.models import Q, Avg
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from apps.store.models import Product, Category, Brand, Review, CarModel
@@ -180,7 +179,6 @@ def add_review(request, product_id):
 
     # Check if user has already reviewed this product
     if Review.objects.filter(product=product, user=request.user).exists():
-        messages.error(request, 'لقد قمت بمراجعة هذا المنتج من قبل')
         return redirect('store:product_detail', slug=product.slug)
 
     # Get form data
@@ -189,7 +187,6 @@ def add_review(request, product_id):
 
     # Validate
     if not rating or not comment:
-        messages.error(request, 'يرجى ملء جميع الحقول')
         return redirect('store:product_detail', slug=product.slug)
 
     try:
@@ -197,7 +194,6 @@ def add_review(request, product_id):
         if rating < 1 or rating > 5:
             raise ValueError
     except (ValueError, TypeError):
-        messages.error(request, 'التقييم غير صالح')
         return redirect('store:product_detail', slug=product.slug)
 
     # Create review
@@ -212,5 +208,4 @@ def add_review(request, product_id):
     if request.htmx:
         return render(request, 'store/partials/review_item.html', {'review': review})
 
-    messages.success(request, 'تم إضافة مراجعتك بنجاح!')
     return redirect('store:product_detail', slug=product.slug)

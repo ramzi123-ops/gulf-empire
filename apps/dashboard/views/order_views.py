@@ -1,6 +1,5 @@
-﻿from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.utils.translation import gettext as _
@@ -86,7 +85,6 @@ def dashboard_order_detail(request, order_id):
     if request.method == 'POST':
         # Verify user has permission to update status
         if not can_update_status:
-            messages.error(request, 'ليس لديك صلاحية لتحديث حالة الطلب.')
             return redirect('dashboard:order_detail', order_id=order.id)
         
         new_status = request.POST.get('status')
@@ -98,17 +96,10 @@ def dashboard_order_detail(request, order_id):
             order.status = new_status
             order.save()
             
-            messages.success(
-                request,
-                f'تم تحديث حالة الطلب من "{old_status}" إلى "{new_status}"'
-            )
-            
             # TODO: Send status update email to customer
             # send_order_status_update_email(order, old_status, new_status)
             
             return redirect('dashboard:order_detail', order_id=order.id)
-        else:
-            messages.error(request, 'الحالة المختارة غير صحيحة.')
     
     # Get order status history (if tracking model exists)
     # For now, we'll just show current status

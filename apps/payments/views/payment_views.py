@@ -1,6 +1,5 @@
-﻿from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.utils.translation import gettext as _
 from django.conf import settings
 
@@ -18,14 +17,12 @@ def payment_process(request, order_id):
     
     # Check if order is already paid
     if order.payment_status == 'paid':
-        messages.info(request, _('This order has already been paid.'))
         return redirect('users:order_detail', order_id=order.id)
     
     # Get client_secret from session
     client_secret = request.session.get('payment_intent_client_secret')
     
     if not client_secret:
-        messages.error(request, _('Payment session expired. Please try again.'))
         return redirect('orders:checkout')
     
     context = {
@@ -65,5 +62,4 @@ def payment_cancelled(request):
     Payment cancelled view - shown when user cancels payment
     """
     
-    messages.warning(request, _('Payment was cancelled. You can try again from your orders.'))
     return redirect('users:account')

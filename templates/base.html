@@ -155,9 +155,6 @@
 
     {% include "partials/navbar.html" %}
     
-    <!-- Toast Message Container (for HTMX OOB swaps) -->
-    <div id="toast-message"></div>
-
     <!-- HTMX Loading Indicator -->
     <div id="loading-indicator" class="htmx-indicator fixed top-20 end-4 bg-primary text-white px-4 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2">
         <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
@@ -182,19 +179,7 @@
     
     {% block extra_js %}{% endblock %}
     
-    <!-- Auto-hide toast messages after 5 seconds -->
     <script>
-        document.body.addEventListener('htmx:afterSwap', function(event) {
-            if (event.detail.target.id === 'toast-message') {
-                setTimeout(function() {
-                    const toast = document.getElementById('toast-message');
-                    if (toast) {
-                        toast.innerHTML = '';
-                    }
-                }, 5000);
-            }
-        });
-
         // Back to top button functionality
         window.addEventListener('scroll', function() {
             const backToTop = document.getElementById('back-to-top');
@@ -238,10 +223,6 @@
                 wishlist.push(productId);
             }
             localStorage.setItem('wishlist', JSON.stringify(wishlist));
-            
-            // Show feedback
-            const message = isInWishlist ? 'تم الإزالة من المفضلة' : 'تم الإضافة للمفضلة';
-            showToast(message);
         }
 
         // Load wishlist state on page load
@@ -257,19 +238,6 @@
                 }
             });
         });
-
-        // Toast notification function
-        function showToast(message) {
-            const toast = document.getElementById('toast-message');
-            toast.innerHTML = `
-                <div class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in">
-                    ${message}
-                </div>
-            `;
-            setTimeout(() => {
-                toast.innerHTML = '';
-            }, 2000);
-        }
     </script>
 
 </body>

@@ -50,7 +50,7 @@ class UserRegistrationForm(UserCreationForm):
         required=False,
         widget=forms.TextInput(attrs={
             'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all',
-            'placeholder': '05xxxxxxxx',
+            'placeholder': '+966xxxxxxxxx أو 05xxxxxxxx',
             'dir': 'ltr',
         }),
         label='رقم الجوال (اختياري)'
@@ -108,20 +108,42 @@ class UserRegistrationForm(UserCreationForm):
     
     def clean_phone_number(self):
         """
-        Validate phone number format (Saudi numbers)
+        Validate phone number format (International numbers accepted)
         """
         phone = self.cleaned_data.get('phone_number')
         if phone:
-            # Remove spaces and special characters
-            phone = phone.replace(' ', '').replace('-', '').replace('+', '')
+            # Remove spaces and dashes for validation
+            phone_cleaned = phone.replace(' ', '').replace('-', '')
             
-            # Check if it's a valid Saudi number format
-            if not phone.startswith('05') and not phone.startswith('9665'):
-                raise ValidationError('يرجى إدخال رقم جوال سعودي صحيح (يبدأ بـ 05)')
+            # Check if starts with + (international format)
+            if phone_cleaned.startswith('+'):
+                # Remove + for further validation
+                phone_digits = phone_cleaned[1:]
+                
+                # Validate it contains only digits after +
+                if not phone_digits.isdigit():
+                    raise ValidationError('رقم الجوال غير صحيح. استخدم الصيغة: +966xxxxxxxxx')
+                
+                # Check reasonable length (7-15 digits for international numbers)
+                if len(phone_digits) < 7 or len(phone_digits) > 15:
+                    raise ValidationError('رقم الجوال غير صحيح. يجب أن يحتوي على 7-15 رقماً')
+                
+                return phone_cleaned
             
-            # Check length
-            if len(phone) not in [10, 12]:  # 05xxxxxxxx or 9665xxxxxxxx
-                raise ValidationError('رقم الجوال غير صحيح')
+            # If no +, check local Saudi format
+            else:
+                phone_digits = phone_cleaned.replace('+', '')
+                
+                # Validate contains only digits
+                if not phone_digits.isdigit():
+                    raise ValidationError('رقم الجوال يجب أن يحتوي على أرقام فقط')
+                
+                # Accept Saudi local format (05xxxxxxxx) or international (9665xxxxxxxx)
+                # Or any other format with 7-15 digits
+                if len(phone_digits) < 7 or len(phone_digits) > 15:
+                    raise ValidationError('رقم الجوال غير صحيح')
+                
+                return phone_cleaned
         
         return phone
     

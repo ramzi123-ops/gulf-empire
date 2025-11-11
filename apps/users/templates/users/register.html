@@ -70,18 +70,25 @@
                 </div>
 
                 <!-- Terms -->
-                <div class="flex items-start mt-4">
-                    {{ form.accept_terms }}
-                    <label for="id_accept_terms" class="mr-3 text-sm text-gray-700">
-                        أوافق على الشروط والأحكام *
+                <div class="flex items-center mt-6">
+                    <input type="checkbox" 
+                           name="accept_terms" 
+                           id="id_accept_terms" 
+                           required
+                           class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                    <label for="id_accept_terms" class="mr-3 text-sm text-gray-700 cursor-pointer">
+                        أوافق على <a href="#" class="text-primary hover:underline">الشروط والأحكام</a> *
                     </label>
                 </div>
-                {% if form.accept_terms.errors %}<p class="text-sm text-red-600">{{ form.accept_terms.errors.0 }}</p>{% endif %}
+                {% if form.accept_terms.errors %}<p class="mt-1 text-sm text-red-600">{{ form.accept_terms.errors.0 }}</p>{% endif %}
 
                 <!-- Newsletter -->
-                <div class="flex items-start mt-4">
-                    {{ form.newsletter_subscribed }}
-                    <label for="id_newsletter_subscribed" class="mr-3 text-sm text-gray-700">
+                <div class="flex items-center mt-4">
+                    <input type="checkbox" 
+                           name="newsletter_subscribed" 
+                           id="id_newsletter_subscribed"
+                           class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                    <label for="id_newsletter_subscribed" class="mr-3 text-sm text-gray-700 cursor-pointer">
                         الاشتراك في النشرة البريدية
                     </label>
                 </div>

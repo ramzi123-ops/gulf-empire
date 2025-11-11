@@ -13,10 +13,10 @@
     </button>
 
     <!-- Carousel Container -->
-    <div class="carousel-container overflow-x-auto scrollbar-hide scroll-smooth" style="scroll-behavior: smooth;">
+    <div class="carousel-container overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory" style="scroll-behavior: smooth;">
         <div class="flex gap-2">
             {% for product in products %}
-            <div class="carousel-item flex-shrink-0" style="width: calc(20% - 6px);">
+            <div class="carousel-item flex-shrink-0 snap-start" style="width: calc(20% - 6px);">
                 {% include 'store/partials/product_card.html' with product=product show_badge=show_badge badge_text=badge_text badge_color=badge_color coming_soon=coming_soon %}
             </div>
             {% endfor %}
@@ -92,13 +92,29 @@
         
         if (!prevBtn || !nextBtn) return;
         
-        // Calculate scroll amount (one item width + gap)
+        // Calculate scroll amount (multiple items based on screen size)
         function getScrollAmount() {
             const firstItem = container.querySelector('.carousel-item');
             if (!firstItem) return 0;
             const itemWidth = firstItem.offsetWidth;
             const gap = 8; // gap-2 = 8px
-            return itemWidth + gap;
+            const singleItemScroll = itemWidth + gap;
+            
+            // Scroll multiple items based on viewport width
+            const viewportWidth = window.innerWidth;
+            let itemsToScroll = 3; // Default: scroll 3 items
+            
+            if (viewportWidth < 640) {
+                itemsToScroll = 2; // Mobile: scroll 2 items (shows 2 at a time)
+            } else if (viewportWidth < 768) {
+                itemsToScroll = 2; // Small tablet: scroll 2 items
+            } else if (viewportWidth < 1024) {
+                itemsToScroll = 3; // Tablet: scroll 3 items
+            } else {
+                itemsToScroll = 4; // Desktop: scroll 4 items
+            }
+            
+            return singleItemScroll * itemsToScroll;
         }
         
         // Scroll to previous items
@@ -192,16 +208,16 @@
         }, { passive: true });
         
         function handleSwipe() {
-            const swipeThreshold = 50;
+            const swipeThreshold = 30; // Reduced from 50 to 30 for more responsive swiping
             const diff = touchStartX - touchEndX;
             
             if (Math.abs(diff) > swipeThreshold) {
                 if (diff > 0) {
-                    // Swiped left - go next (in RTL, this means scroll left)
-                    nextBtn.click();
-                } else {
-                    // Swiped right - go previous (in RTL, this means scroll right)
+                    // Swiped left - go to previous items (scroll right in RTL)
                     prevBtn.click();
+                } else {
+                    // Swiped right - go to next items (scroll left in RTL)
+                    nextBtn.click();
                 }
             }
         }

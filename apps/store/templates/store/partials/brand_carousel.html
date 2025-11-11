@@ -13,10 +13,10 @@
     </button>
 
     <!-- Carousel Container -->
-    <div class="carousel-container overflow-x-auto scrollbar-hide scroll-smooth" style="scroll-behavior: smooth;">
+    <div class="carousel-container overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory" style="scroll-behavior: smooth;">
         <div class="flex gap-4">
             {% for brand in brands %}
-            <div class="carousel-item flex-shrink-0" style="width: calc(16.666% - 13.33px);">
+            <div class="carousel-item flex-shrink-0 snap-start" style="width: calc(16.666% - 13.33px);">
                 <a href="{% url 'store:product_list' %}?brand={{ brand.slug }}" class="bg-gray-50 rounded-lg p-6 hover:shadow-md transition-all group block">
                     {% if brand.logo %}
                     <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" loading="lazy" class="w-full h-20 object-contain grayscale group-hover:grayscale-0 transition-all">
@@ -194,16 +194,16 @@
         }, { passive: true });
         
         function handleSwipe() {
-            const swipeThreshold = 50;
+            const swipeThreshold = 30; // Reduced for more responsive swiping
             const diff = touchStartX - touchEndX;
             
             if (Math.abs(diff) > swipeThreshold) {
                 if (diff > 0) {
-                    // Swiped left - go next (in RTL, this means scroll left)
-                    nextBtn.click();
-                } else {
-                    // Swiped right - go previous (in RTL, this means scroll right)
+                    // Swiped left - go to previous items (scroll right in RTL)
                     prevBtn.click();
+                } else {
+                    // Swiped right - go to next items (scroll left in RTL)
+                    nextBtn.click();
                 }
             }
         }

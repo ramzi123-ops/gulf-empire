@@ -13,10 +13,10 @@
     </button>
 
     <!-- Carousel Container -->
-    <div class="carousel-container overflow-x-auto scrollbar-hide scroll-smooth" style="scroll-behavior: smooth;">
+    <div class="carousel-container overflow-x-auto scrollbar-hide scroll-smooth snap-x snap-mandatory" style="scroll-behavior: smooth;">
         <div class="flex gap-4">
             {% for category in categories %}
-            <div class="carousel-item flex-shrink-0" style="width: calc(16.666% - 13.33px);">
+            <div class="carousel-item flex-shrink-0 snap-start" style="width: calc(16.666% - 13.33px);">
                 <a href="{% url 'store:product_list' %}?category={{ category.slug }}" class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 text-center group block">
                     <div class="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                         <svg class="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 20 20">
@@ -194,16 +194,16 @@
         }, { passive: true });
         
         function handleSwipe() {
-            const swipeThreshold = 50;
+            const swipeThreshold = 30; // Reduced for more responsive swiping
             const diff = touchStartX - touchEndX;
             
             if (Math.abs(diff) > swipeThreshold) {
                 if (diff > 0) {
-                    // Swiped left - go next (in RTL, this means scroll left)
-                    nextBtn.click();
-                } else {
-                    // Swiped right - go previous (in RTL, this means scroll right)
+                    // Swiped left - go to previous items (scroll right in RTL)
                     prevBtn.click();
+                } else {
+                    // Swiped right - go to next items (scroll left in RTL)
+                    nextBtn.click();
                 }
             }
         }

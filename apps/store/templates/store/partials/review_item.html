@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 
 <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
     <!-- Review Header -->
@@ -6,12 +6,12 @@
         <div class="flex items-center gap-3">
             <!-- User Avatar -->
             <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-bold text-lg">
-                {{ review.user.username|slice:":1"|upper }}
+                {{ review.user.get_full_name|default:review.user.username|slice:":1"|upper }}
             </div>
             
             <!-- User Info -->
             <div>
-                <p class="font-semibold text-gray-900">{{ review.user.username }}</p>
+                <p class="font-semibold text-gray-900">{{ review.user.get_full_name|default:review.user.username }}</p>
                 <p class="text-sm text-gray-500">{{ review.created_at|date:"d/m/Y" }}</p>
             </div>
         </div>

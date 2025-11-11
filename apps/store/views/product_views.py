@@ -37,9 +37,11 @@ def product_list(request):
             Q(name__icontains=search_query) |
             Q(description__icontains=search_query) |
             Q(sku__icontains=search_query) |
-            Q(compatible_makes__icontains=search_query) |
-            Q(compatible_models__icontains=search_query)
-        )
+            Q(brand__name__icontains=search_query) |
+            Q(category__name__icontains=search_query) |
+            Q(compatible_brands__name__icontains=search_query) |
+            Q(compatible_car_models__name__icontains=search_query)
+        ).distinct()
 
     # Filter by price range
     min_price = request.GET.get('min_price')
